@@ -1,0 +1,146 @@
+#!/usr/bin/perl
+
+# Copyright 2007, 2008 Kevin Ryde
+
+# This file is part of Gtk2-Ex-WidgetBits.
+#
+# Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 3, or (at your option) any later
+# version.
+#
+# Gtk2-Ex-WidgetBits is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+# or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
+
+use strict;
+use warnings;
+use Gtk2::Ex::SyncCall;
+use Test::More tests => 11;
+
+ok ($Gtk2::Ex::SyncCall::VERSION >= 3);
+ok (Gtk2::Ex::SyncCall->VERSION  >= 3);
+
+sub main_iterations {
+  my $count = 0;
+  while (Gtk2->events_pending) {
+    $count++;
+    Gtk2->main_iteration_do (0);
+  }
+  print "main_iterations(): ran $count events/iterations\n";
+}
+
+sub make_timeout {
+  require Glib::Ex::SourceIds;
+  return Glib::Ex::SourceIds->new
+    (Glib::Timeout->add (120_000,   # 2 minutes
+                         sub { diag "Oops, timeout"; exit 1; }));
+}
+
+SKIP: {
+  require Gtk2;
+  if (! Gtk2->init_check) { skip 'due to no DISPLAY available', 9; }
+
+  # one callback
+  {
+    my $called = 0;
+    my $toplevel = Gtk2::Window->new('toplevel');
+    $toplevel->realize;
+    my $timeout = make_timeout ();
+    Gtk2::Ex::SyncCall->sync ($toplevel, sub { $called = 1;
+                                               Gtk2->main_quit });
+    Gtk2->main;
+    is ($called, 1, 'sync callback runs');
+
+    $toplevel->destroy;
+  }
+
+  # callback on destroy
+  {
+    my $called = 0;
+    my $toplevel = Gtk2::Window->new('toplevel');
+    $toplevel->realize;
+    Gtk2::Ex::SyncCall->sync ($toplevel, sub { $called = 1; });
+    $toplevel->destroy;
+    is ($called, 1,
+        'callbacks run when widget destroyed');
+    my $display = $toplevel->get_display;
+    is (undef, $display->{'Gtk2::Ex::SyncCall'});
+  }
+
+  # callback on unrealize, and then as normal when re-realize
+  {
+    my $called = 0;
+    my $toplevel = Gtk2::Window->new('toplevel');
+    $toplevel->realize;
+    Gtk2::Ex::SyncCall->sync ($toplevel, sub { $called = 1; });
+    $toplevel->unrealize;
+    is ($called, 1,
+        'callbacks run when widget unrealized');
+    my $display = $toplevel->get_display;
+    is (undef, $display->{'Gtk2::Ex::SyncCall'},
+        'no data left behind on GdkDisplay');
+
+    $called = 0;
+    $toplevel->realize;
+    Gtk2::Ex::SyncCall->sync ($toplevel, sub { $called = 1;
+                                               Gtk2->main_quit });
+    my $timeout = make_timeout ();
+    Gtk2->main;
+    is ($called, 1,
+        'callback runs when widget re-realized');
+    $toplevel->destroy;
+  }
+
+  # two callbacks in order
+  {
+    my $toplevel = Gtk2::Window->new('toplevel');
+    $toplevel->realize;
+    my $timeout = make_timeout ();
+    my @called;
+    Gtk2::Ex::SyncCall->sync ($toplevel, sub { push @called, 'one' });
+    Gtk2::Ex::SyncCall->sync ($toplevel, sub { push @called, 'two';
+                                               Gtk2->main_quit });
+    Gtk2->main;
+    is_deeply (\@called, [ 'one', 'two' ],
+               'two syncs run in order');
+
+    $toplevel->destroy;
+  }
+
+  # error trapped, further sync runs
+  {
+    my $toplevel = Gtk2::Window->new('toplevel');
+    $toplevel->realize;
+    my $timeout = make_timeout ();
+
+    my $called = 0;
+    my $called_handler = sub {
+      $called++;
+      Gtk2->main_quit;
+    };
+    my $install_call = sub {
+      Gtk2::Ex::SyncCall->sync ($toplevel, $called_handler);
+      return 0; # remove source
+    };
+    Glib->install_exception_handler (sub {
+                                       Glib::Idle->add ($install_call);
+                                     });
+    Gtk2::Ex::SyncCall->sync ($toplevel, sub { die });
+    Gtk2::Ex::SyncCall->sync ($toplevel, sub { die });
+    Gtk2->main;
+    is ($called, 1,
+        'new sync runs ok after an error');
+
+    $toplevel->destroy;
+  }
+
+  is_deeply ([ Gtk2::Window->list_toplevels ], [ ],
+             'no stray toplevels left by tests');
+}
+
+exit 0;

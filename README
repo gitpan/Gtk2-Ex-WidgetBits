@@ -1,0 +1,35 @@
+Copyright 2008 Kevin Ryde
+
+This file is part of Gtk2-Ex-WidgetBits.
+
+Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License as
+published by the Free Software Foundation; either version 3, or (at
+your option) any later version.
+
+Gtk2-Ex-WidgetBits is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
+
+
+
+This is some helpers for working with Gtk2 widgets and stuff.
+
+* Gtk2::Ex::WidgetBits -- misc funcs
+
+* Gtk2::Ex::GdkBits -- misc funcs
+
+* Gtk2::Ex::KeySnooper -- oop style key snooper hook
+
+* Gtk2::Ex::SyncCall -- callback after server sync
+
+
+The only prerequisite is Gtk2-Perl.  The WidgetBits home page is
+
+    http://www.geocities.com/user42_kevin/gtk2-ex-widgetbits/index.html
+
+Bug reports to the author at user42@zip.com.au please.
