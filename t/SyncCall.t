@@ -20,10 +20,10 @@
 use strict;
 use warnings;
 use Gtk2::Ex::SyncCall;
-use Test::More tests => 11;
+use Test::More tests => 12;
 
-ok ($Gtk2::Ex::SyncCall::VERSION >= 3);
-ok (Gtk2::Ex::SyncCall->VERSION  >= 3);
+ok ($Gtk2::Ex::SyncCall::VERSION >= 4);
+ok (Gtk2::Ex::SyncCall->VERSION  >= 4);
 
 sub main_iterations {
   my $count = 0;
@@ -34,23 +34,18 @@ sub main_iterations {
   print "main_iterations(): ran $count events/iterations\n";
 }
 
-sub make_timeout {
-  require Glib::Ex::SourceIds;
-  return Glib::Ex::SourceIds->new
-    (Glib::Timeout->add (120_000,   # 2 minutes
-                         sub { diag "Oops, timeout"; exit 1; }));
-}
-
 SKIP: {
   require Gtk2;
-  if (! Gtk2->init_check) { skip 'due to no DISPLAY available', 9; }
+  if (! Gtk2->init_check) { skip 'due to no DISPLAY available', 10; }
+
+  my $timer_id = Glib::Timeout->add (120_000,   # 2 minutes in milliseconds
+                                     sub { diag "Oops, timeout"; exit 1; });
 
   # one callback
   {
     my $called = 0;
     my $toplevel = Gtk2::Window->new('toplevel');
     $toplevel->realize;
-    my $timeout = make_timeout ();
     Gtk2::Ex::SyncCall->sync ($toplevel, sub { $called = 1;
                                                Gtk2->main_quit });
     Gtk2->main;
@@ -89,7 +84,6 @@ SKIP: {
     $toplevel->realize;
     Gtk2::Ex::SyncCall->sync ($toplevel, sub { $called = 1;
                                                Gtk2->main_quit });
-    my $timeout = make_timeout ();
     Gtk2->main;
     is ($called, 1,
         'callback runs when widget re-realized');
@@ -100,7 +94,6 @@ SKIP: {
   {
     my $toplevel = Gtk2::Window->new('toplevel');
     $toplevel->realize;
-    my $timeout = make_timeout ();
     my @called;
     Gtk2::Ex::SyncCall->sync ($toplevel, sub { push @called, 'one' });
     Gtk2::Ex::SyncCall->sync ($toplevel, sub { push @called, 'two';
@@ -116,7 +109,6 @@ SKIP: {
   {
     my $toplevel = Gtk2::Window->new('toplevel');
     $toplevel->realize;
-    my $timeout = make_timeout ();
 
     my $called = 0;
     my $called_handler = sub {
@@ -141,6 +133,8 @@ SKIP: {
 
   is_deeply ([ Gtk2::Window->list_toplevels ], [ ],
              'no stray toplevels left by tests');
+
+  ok (Glib::Source->remove ($timer_id), 'remove timeout');
 }
 
 exit 0;

@@ -22,8 +22,8 @@ use warnings;
 use Gtk2::Ex::WidgetBits;
 use Test::More tests => 11;
 
-ok ($Gtk2::Ex::WidgetBits::VERSION >= 3);
-ok (Gtk2::Ex::WidgetBits->VERSION  >= 3);
+ok ($Gtk2::Ex::WidgetBits::VERSION >= 4);
+ok (Gtk2::Ex::WidgetBits->VERSION  >= 4);
 
 sub main_iterations {
   my $count = 0;

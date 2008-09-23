@@ -16,5 +16,8 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+Version 4, September 2008
+    - don't use SourceIds in SyncCall.t
+
 Version 3, September 2008
     - first collected up version (SyncCall version 2 was in Gtk2-Ex-Dragger)

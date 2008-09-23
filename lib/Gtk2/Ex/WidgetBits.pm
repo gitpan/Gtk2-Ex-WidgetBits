@@ -21,7 +21,7 @@ use warnings;
 use Carp;
 use Gtk2;
 
-our $VERSION = 3;
+our $VERSION = 4;
 
 sub get_root_position {
   my ($widget) = @_;

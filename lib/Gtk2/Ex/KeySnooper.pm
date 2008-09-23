@@ -20,7 +20,7 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 3;
+our $VERSION = 4;
 
 sub new {
   my ($class, $func, $userdata) = @_;
@@ -94,7 +94,7 @@ the same as a C<key-press-event> signal handler return.  For example
     sub myfunc {
       my ($widget, $event, $userdata) = @_;
       if ($event->type eq 'key-press') {
-        if ($event->keyval eq MY_DESIRED_KEYVAL) {
+        if ($event->keyval == MY_DESIRED_KEYVAL) {
           do_something();
           return 1;  # don't propagate event further
         }
