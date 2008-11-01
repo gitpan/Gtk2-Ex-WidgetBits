@@ -21,7 +21,7 @@ use warnings;
 use Carp;
 use Gtk2;
 
-our $VERSION = 4;
+our $VERSION = 5;
 
 
 # The loop here is similar to what gtk_widget_translate_coordinates() does
@@ -66,12 +66,12 @@ Gtk2::Ex::GdkBits - miscellaneous Gdk helpers
 
 =item C<($x,$y) = Gtk2::Ex::GdkBits::window_get_root_position ($window)>
 
-Return two values C<$x,$y> which is the top left corner of C<$window> in
+Return two values C<$x,$y> which are the top left corner of C<$window> in
 root window coordinates.
 
 This is the same as C<< $window->get_origin >>, but it's implemented with
-C<< $window->get_position >> calls so it uses the most recently recorded
-window positions rather than an X server round-trip.
+C<< $window->get_position >> calls and thus uses the most recently recorded
+window positions rather than making an X server round-trip.
 
 =cut
 

@@ -20,7 +20,7 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 4;
+our $VERSION = 5;
 
 sub new {
   my ($class, $func, $userdata) = @_;
@@ -61,7 +61,7 @@ Gtk2::Ex::KeySnooper -- keyboard snooper as object
  use Gtk2::Ex::KeySnooper;
  my $snooper = Gtk2::Ex::KeySnooper->new (\&myfunc, $mydata);
 
- # disconnected when destroyed
+ # myfunc disconnected when object destroyed
  $snooper = undef;
         
 =head1 DESCRIPTION
@@ -81,13 +81,13 @@ C<< Gtk2->key_snooper_remove >> at the right places.
 =item C<< $ks = Gtk2::Ex::KeySnooper->new ($func, $userdata) >>
 
 Create and return a KeySnooper object calling the given C<$func>.  The calls
-made are per C<< Gtk2->key_snooper_install >>, ie.
+made are the same as C<< Gtk2->key_snooper_install >>, ie.
 
     $stop = &$func ($widget,$event,$userdata)
 
 where C<$func> should return true if it wants to stop event processing,
-ie. to consume the event, or false to let it propagate to other handlers,
-the same as a C<key-press-event> signal handler return.  For example
+ie. to consume the event, or false to let it propagate to other handlers
+(the same as event signal handler returns).  For example
 
     my $snooper = Gtk2::Ex::KeySnooper->new (\&myfunc, $mydata);
 

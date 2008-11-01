@@ -33,6 +33,10 @@ WriteMakefile
                     # any version should be ok
                     'Gtk2' => 0,
 
+                    # my Glib-Ex-ObjectBits
+                    # only for SyncCall actually
+                    'Glib::Ex::SignalIds' => 0,
+
                     # actually Gtk2-Perl requires perl 5.8, which has
                     # Scalar::Util builtin already
                     'Scalar::Util' => 0,

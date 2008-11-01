@@ -28,7 +28,8 @@ This is some helpers for working with Gtk2 widgets and stuff.
 * Gtk2::Ex::SyncCall -- callback after server sync
 
 
-The only prerequisite is Gtk2-Perl.  The WidgetBits home page is
+The prerequisites are Gtk2-Perl any Glib-Ex-ObjectBits.
+The WidgetBits home page is
 
     http://www.geocities.com/user42_kevin/gtk2-ex-widgetbits/index.html
 

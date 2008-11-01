@@ -21,7 +21,7 @@ use warnings;
 use Carp;
 use Gtk2;
 
-our $VERSION = 4;
+our $VERSION = 5;
 
 sub get_root_position {
   my ($widget) = @_;
@@ -128,8 +128,8 @@ See L<Gtk2::Gdk::Display> for the basic C<warp_pointer> which operates in
 root window coordinates.  The code here converts using C<get_root_position>
 above, so there's no server round-trip.
 
-(Incidentally the underlying C<XWarpPointer> operates relative to any given
-window, not just the root, but Gtk doesn't make that feature available.)
+(Incidentally the underlying C<XWarpPointer> operates relative to any
+window, not just the root, but Gdk doesn't make that feature available.)
 
 =item C<< $mm = Gtk2::Ex::WidgetBits::xy_distance_mm ($widget, $x1,$y1, $x2,$y2) >>
 

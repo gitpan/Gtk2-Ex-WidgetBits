@@ -27,7 +27,7 @@ Bugs: mailto:user42@zip.com.au
 
 Package: libgtk2-ex-widgetbits-perl
 Architecture: all
-Depends: libgtk2-perl
+Depends: libgtk2-perl, libglib-ex-objectbits-perl (>= 2)
 Replaces: libgtk2-ex-dragger-perl (<< 3)
 Description: Gtk2 widget helper bits
  A selection of widget helpers for Gtk2-Perl.

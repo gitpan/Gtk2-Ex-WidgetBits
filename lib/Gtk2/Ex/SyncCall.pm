@@ -22,7 +22,7 @@ use Carp;
 use Gtk2;
 
 # version 2 was in with Gtk2-Ex-Dragger ...
-our $VERSION = 4;
+our $VERSION = 5;
 
 # set this to 1 for some diagnostic prints
 use constant DEBUG => 0;
@@ -125,7 +125,7 @@ instead of blocking.
 
 A sync like this is a good way to wait for the server to finish doing
 drawing or similar you've already sent, before attempting more.  It's up to
-you to choose a good point in your program to do that, but the key thing is
+you to choose a good point in your program to do that, but the aim will be
 not to hammer the server with more animation, updating text, window sizing
 or whatever than it can keep up with.
 
@@ -137,10 +137,10 @@ ready for further syncs on that same display.  An unrealize or destroy of
 the widget will call pending callbacks and then reset ready for a different
 widget on subsequent syncs.
 
-It's a good idea if C<$widget> isn't your top-level C<Gtk2::Window> widget,
+It's a good idea if C<$widget> isn't a top-level C<Gtk2::Window> widget,
 because generally the window manager listens for property changes on that.
-Property name C<"Gtk2::Ex::SyncCall"> will be ignored by the window manager,
-but it's a little wasteful for it to see unnecessary change events.
+The property name C<"Gtk2::Ex::SyncCall"> will be ignored by the window
+manager, but it's a little wasteful for it to see unnecessary change events.
 
 (There's various alternatives to this approach.  Something not directly
 involving a widget could be better, the widget then only indicating the
@@ -169,7 +169,7 @@ reply comes back.
 Within a callback a new C<sync> can be initiated.  This results in a new
 synchronising message sent to the server and the new callback runs when the
 reply is received.  Chained syncs like this arise quite naturally if you've
-got an animation or similar which are being held back by the speed of the
+got an animation or similar which is being held back by the speed of the
 server.
 
 =back
