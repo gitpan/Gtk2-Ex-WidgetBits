@@ -20,7 +20,7 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 5;
+our $VERSION = 6;
 
 sub new {
   my ($class, $func, $userdata) = @_;
@@ -63,7 +63,7 @@ Gtk2::Ex::KeySnooper -- keyboard snooper as object
 
  # myfunc disconnected when object destroyed
  $snooper = undef;
-        
+
 =head1 DESCRIPTION
 
 A C<Gtk2::Ex::KeySnooper> object installs a given function as a key snooper

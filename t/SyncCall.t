@@ -22,8 +22,8 @@ use warnings;
 use Gtk2::Ex::SyncCall;
 use Test::More tests => 12;
 
-ok ($Gtk2::Ex::SyncCall::VERSION >= 5);
-ok (Gtk2::Ex::SyncCall->VERSION  >= 5);
+ok ($Gtk2::Ex::SyncCall::VERSION >= 6);
+ok (Gtk2::Ex::SyncCall->VERSION  >= 6);
 
 sub main_iterations {
   my $count = 0;

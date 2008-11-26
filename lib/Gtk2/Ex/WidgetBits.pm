@@ -21,7 +21,7 @@ use warnings;
 use Carp;
 use Gtk2;
 
-our $VERSION = 5;
+our $VERSION = 6;
 
 sub get_root_position {
   my ($widget) = @_;
@@ -145,8 +145,8 @@ the screen.
 
 =head1 SEE ALSO
 
-L<Gtk2::Ex::GdkBits>, L<Gtk2::Ex::KeySnooper>, L<Gtk2::Ex::SyncCall>,
-L<Gtk2::Widget>, L<Gtk2::Ex::WidgetCursor>.
+L<Gtk2::Ex::GdkBits>, L<Gtk2::Ex::KeySnooper>, L<Gtk2::Ex::TreeModelBits>,
+L<Gtk2::Ex::SyncCall>, L<Gtk2::Widget>, L<Gtk2::Ex::WidgetCursor>.
 
 =head1 HOME PAGE
 

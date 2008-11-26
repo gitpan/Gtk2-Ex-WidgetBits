@@ -20,10 +20,10 @@
 use strict;
 use warnings;
 use Gtk2::Ex::WidgetBits;
-use Test::More tests => 11;
+use Test::More tests => 13;
 
-ok ($Gtk2::Ex::WidgetBits::VERSION >= 5);
-ok (Gtk2::Ex::WidgetBits->VERSION  >= 5);
+ok ($Gtk2::Ex::WidgetBits::VERSION >= 6);
+ok (Gtk2::Ex::WidgetBits->VERSION  >= 6);
 
 sub main_iterations {
   my $count = 0;
@@ -36,12 +36,13 @@ sub main_iterations {
 
 SKIP: {
   require Gtk2;
-  if (! Gtk2->init_check) { skip 'due to no DISPLAY available', 9; }
+  if (! Gtk2->init_check) { skip 'due to no DISPLAY available', 11; }
 
   # get_root_position()
   #
   {
-    my $toplevel = Gtk2::Window->new('toplevel');
+    # use popup to stop any window manager moving
+    my $toplevel = Gtk2::Window->new('popup');
     is_deeply ([ Gtk2::Ex::WidgetBits::get_root_position ($toplevel) ],
                [], 'get_root_position() on unrealized');
 
@@ -73,7 +74,7 @@ SKIP: {
   #
   {
     my $toplevel = Gtk2::Window->new('toplevel');
-    eval { Gtk2::Ex::WidgetBits::warp_pointer ($toplevel, 10, 20); };
+    ok (! eval { Gtk2::Ex::WidgetBits::warp_pointer ($toplevel, 10, 20); 1 });
     like ($@, qr/Cannot warp on unrealized/);
 
     $toplevel->show_all;
@@ -91,7 +92,7 @@ SKIP: {
   #
   {
     my $label = Gtk2::Label->new ('foo');
-    eval { Gtk2::Ex::WidgetBits::xy_distance_mm ($label, 10,10, 20,20) };
+    ok (!eval{ Gtk2::Ex::WidgetBits::xy_distance_mm($label, 10,10, 20,20); 1});
     like ($@, qr/not on a screen/);
   }
   {

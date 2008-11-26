@@ -22,8 +22,8 @@ use warnings;
 use Gtk2::Ex::KeySnooper;
 use Test::More tests => 9;
 
-ok ($Gtk2::Ex::KeySnooper::VERSION >= 5);
-ok (Gtk2::Ex::KeySnooper->VERSION  >= 5);
+ok ($Gtk2::Ex::KeySnooper::VERSION >= 6);
+ok (Gtk2::Ex::KeySnooper->VERSION  >= 6);
 
 SKIP: {
   require Gtk2;

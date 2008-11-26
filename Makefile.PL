@@ -55,10 +55,11 @@ HERE
 sub MY::postamble {
   return <<'MAKE_FRAG';
 
-LINT_FILES = $(TO_INST_PM) t/*.t examples/*.pl devel/*.pl
+LINT_FILES = $(TO_INST_PM) t/*.t
+# examples/*.pl devel/*.pl
 lint:
+	-podchecker $(LINT_FILES)
 	for i in $(LINT_FILES); do perl -MO=Lint $$i; done
-	podchecker $(LINT_FILES)
 pc:
 	perlcritic $(LINT_FILES)
 
