@@ -20,7 +20,7 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 6;
+our $VERSION = 7;
 
 use constant DEBUG => 0;
 

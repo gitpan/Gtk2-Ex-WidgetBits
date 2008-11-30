@@ -16,6 +16,9 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+Version 7, November 2008
+    - allow for older Gtk in the TreeModel tests
+
 Version 6, November 2008
     - new TreeModelBits
 

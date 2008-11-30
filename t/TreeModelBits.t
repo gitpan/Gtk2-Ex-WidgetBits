@@ -24,8 +24,27 @@ use Gtk2::Ex::TreeModelBits;
 
 use Test::More tests => 13;
 
-ok ($Gtk2::Ex::TreeModelBits::VERSION >= 6);
-ok (Gtk2::Ex::TreeModelBits->VERSION  >= 6);
+ok ($Gtk2::Ex::TreeModelBits::VERSION >= 7);
+ok (Gtk2::Ex::TreeModelBits->VERSION  >= 7);
+
+diag ("Perl-Gtk2 version ",Gtk2->VERSION);
+diag ("Perl-Glib version ",Glib->VERSION);
+diag ("Compiled against Glib version ",
+      Glib::MAJOR_VERSION(), ".",
+      Glib::MINOR_VERSION(), ".",
+      Glib::MICRO_VERSION(), ".");
+diag ("Running on       Glib version ",
+      Glib::major_version(), ".",
+      Glib::minor_version(), ".",
+      Glib::micro_version(), ".");
+diag ("Compiled against Gtk version ",
+      Gtk2::MAJOR_VERSION(), ".",
+      Gtk2::MINOR_VERSION(), ".",
+      Gtk2::MICRO_VERSION(), ".");
+diag ("Running on       Gtk version ",
+      Gtk2::major_version(), ".",
+      Gtk2::minor_version(), ".",
+      Gtk2::micro_version(), ".");
 
 
 #------------------------------------------------------------------------------
@@ -36,11 +55,11 @@ ok (Gtk2::Ex::TreeModelBits->VERSION  >= 6);
   is_deeply ([ Gtk2::Ex::TreeModelBits::column_contents ($store, 1) ],
              [],
              'column_contents empty');
-  $store->insert_with_values (0, 0=>'one', 1=>100);
+  $store->set ($store->insert(0), 0=>'one', 1=>100);
   is_deeply ([ Gtk2::Ex::TreeModelBits::column_contents ($store, 1) ],
              [ 100 ],
              'column_contents 1');
-  $store->insert_with_values (1, 0=>'two', 1=>200);
+  $store->set ($store->insert(1), 0=>'two', 1=>200);
   is_deeply ([ Gtk2::Ex::TreeModelBits::column_contents ($store, 0) ],
              [ 'one', 'two' ],
              'column_contents 2 text');
@@ -59,21 +78,21 @@ ok (Gtk2::Ex::TreeModelBits->VERSION  >= 6);
 }
 {
   my $store = Gtk2::ListStore->new ('Glib::String');
-  $store->insert_with_values (0, 0=>'one');
+  $store->set ($store->insert(0), 0=>'one');
   Gtk2::Ex::TreeModelBits::remove_matching_rows ($store, sub { return 1; });
   is ($store->iter_n_children(undef), 0);
 }
 {
   my $store = Gtk2::ListStore->new ('Glib::String');
-  $store->insert_with_values (0, 0=>'one');
-  $store->insert_with_values (1, 0=>'two');
+  $store->set ($store->insert(0), 0=>'one');
+  $store->set ($store->insert(1), 0=>'two');
   Gtk2::Ex::TreeModelBits::remove_matching_rows ($store, sub { return 1; });
   is ($store->iter_n_children(undef), 0);
 }
 {
   my $store = Gtk2::ListStore->new ('Glib::String');
-  $store->insert_with_values (0, 0=>'one');
-  $store->insert_with_values (1, 0=>'two');
+  $store->set ($store->insert(0), 0=>'one');
+  $store->set ($store->insert(1), 0=>'two');
   Gtk2::Ex::TreeModelBits::remove_matching_rows
       ($store, sub { my ($store, $iter) = @_;
                      my $value = $store->get_value ($iter, 0);
@@ -82,8 +101,8 @@ ok (Gtk2::Ex::TreeModelBits->VERSION  >= 6);
 }
 {
   my $store = Gtk2::ListStore->new ('Glib::String');
-  $store->insert_with_values (0, 0=>'one');
-  $store->insert_with_values (1, 0=>'two');
+  $store->set ($store->insert(0), 0=>'one');
+  $store->set ($store->insert(1), 0=>'two');
   Gtk2::Ex::TreeModelBits::remove_matching_rows
       ($store, sub { my ($store, $iter) = @_;
                      my $value = $store->get_value ($iter, 0);
@@ -97,7 +116,7 @@ sub tree_insert {
   $path->up;
   my $pos = $indices->[-1];
   my $iter = ($path->get_depth == 0 ? undef : $treestore->get_iter ($path));
-  $treestore->insert_with_values ($iter, $pos, 0 => $value);
+  $treestore->set ($treestore->insert($iter,$pos), 0 => $value);
 }
 
 {
