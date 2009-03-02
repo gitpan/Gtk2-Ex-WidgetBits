@@ -1,5 +1,3 @@
-#!/usr/bin/make -f
-
 # Copyright 2008, 2009 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
@@ -17,7 +15,28 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/perlmodule.mk
+use strict;
+use warnings;
+use Gtk2 '-init';
+use Gtk2::Ex::SyncCall;
 
-DEB_INSTALL_EXAMPLES_libgtk2-ex-widgetbits-perl = examples/*
+my $toplevel = Gtk2::Window->new('toplevel');
+
+$toplevel->show_all;
+
+if (1) {
+  Gtk2::Ex::SyncCall->next ($toplevel, sub { print "hello\n"; });
+  Gtk2::Ex::SyncCall->next ($toplevel, sub { print "world\n"; });
+}
+
+if (1) {
+  Glib::Timeout->add
+      (1000, sub {
+         Gtk2::Ex::SyncCall->next ($toplevel, sub { print "one\n"; });
+         Gtk2::Ex::SyncCall->next ($toplevel, sub { print "two\n"; });
+         return 1;
+       });
+}
+
+Gtk2->main;
+exit 0;

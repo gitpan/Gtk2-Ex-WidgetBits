@@ -1,4 +1,4 @@
-# Copyright 2008 Kevin Ryde
+# Copyright 2008, 2009 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -22,7 +22,7 @@ use Carp;
 use Gtk2;
 
 # version 2 was in with Gtk2-Ex-Dragger ...
-our $VERSION = 7;
+our $VERSION = 8;
 
 # set this to 1 for some diagnostic prints
 use constant DEBUG => 0;
@@ -83,7 +83,7 @@ sub _do_property_notify {
   }
   # even though $sync_call_atom is supposed to be for us alone, propagate it
   # anyway in case someone else is monitoring what happens
-  return 0;  # propagate event
+  return 0;  # Gtk2::EVENT_PROPAGATE
 }
 
 # 'unrealize' or 'destroy' signal on the sync widget
@@ -191,7 +191,7 @@ L<http://www.geocities.com/user42_kevin/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 
-Copyright 2008 Kevin Ryde
+Copyright 2008, 2009 Kevin Ryde
 
 Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

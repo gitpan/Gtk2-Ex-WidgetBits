@@ -1,10 +1,10 @@
-# Copyright 2007, 2008 Kevin Ryde
+# Copyright 2007, 2008, 2009 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
 # Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as published
-# by the Free Software Foundation; either version 2, or (at your option) any
+# by the Free Software Foundation; either version 3, or (at your option) any
 # later version.
 #
 # Gtk2-Ex-WidgetBits is distributed in the hope that it will be useful,
@@ -21,7 +21,7 @@ use warnings;
 use Carp;
 use Gtk2;
 
-our $VERSION = 7;
+our $VERSION = 8;
 
 
 # The loop here is similar to what gtk_widget_translate_coordinates() does
@@ -99,7 +99,7 @@ L<http://www.geocities.com/user42_kevin/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 
-Copyright 2008 Kevin Ryde
+Copyright 2008, 2009 Kevin Ryde
 
 Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

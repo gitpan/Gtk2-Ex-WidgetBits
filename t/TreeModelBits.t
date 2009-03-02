@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2008 Kevin Ryde
+# Copyright 2008, 2009 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -22,11 +22,21 @@ use strict;
 use warnings;
 use Gtk2::Ex::TreeModelBits;
 
-use Test::More tests => 13;
+use Test::More tests => 15;
 
-ok ($Gtk2::Ex::TreeModelBits::VERSION >= 7);
-ok (Gtk2::Ex::TreeModelBits->VERSION  >= 7);
+my $want_version = 8;
+ok ($Gtk2::Ex::TreeModelBits::VERSION >= $want_version,
+    'VERSION variable');
+ok (Gtk2::Ex::TreeModelBits->VERSION  >= $want_version,
+    'VERSION class method');
+ok (eval { Gtk2::Ex::TreeModelBits->VERSION($want_version); 1 },
+    "VERSION class check $want_version");
+{ my $check_version = $want_version + 1000;
+  ok (! eval { Gtk2::Ex::TreeModelBits->VERSION($check_version); 1 },
+      "VERSION class check $check_version");
+}
 
+require Gtk2;
 diag ("Perl-Gtk2 version ",Gtk2->VERSION);
 diag ("Perl-Glib version ",Glib->VERSION);
 diag ("Compiled against Glib version ",

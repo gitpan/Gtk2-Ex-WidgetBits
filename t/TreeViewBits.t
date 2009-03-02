@@ -1,4 +1,4 @@
-#!/usr/bin/make -f
+#!/usr/bin/perl
 
 # Copyright 2008, 2009 Kevin Ryde
 
@@ -17,7 +17,23 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/perlmodule.mk
 
-DEB_INSTALL_EXAMPLES_libgtk2-ex-widgetbits-perl = examples/*
+use strict;
+use warnings;
+use Gtk2::Ex::TreeViewBits;
+
+use Test::More tests => 4;
+
+my $want_version = 8;
+ok ($Gtk2::Ex::TreeViewBits::VERSION >= $want_version,
+    'VERSION variable');
+ok (Gtk2::Ex::TreeViewBits->VERSION  >= $want_version,
+    'VERSION class method');
+ok (eval { Gtk2::Ex::TreeViewBits->VERSION($want_version); 1 },
+    "VERSION class check $want_version");
+{ my $check_version = $want_version + 1000;
+  ok (! eval { Gtk2::Ex::TreeViewBits->VERSION($check_version); 1 },
+      "VERSION class check $check_version");
+}
+
+exit 0;

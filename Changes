@@ -1,4 +1,4 @@
-Copyright 2008 Kevin Ryde
+Copyright 2008, 2009 Kevin Ryde
 
 This file is part of Gtk2-Ex-WidgetBits.
 
@@ -16,6 +16,9 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+Version 8, March 2009
+    - new TreeViewBits
+
 Version 7, November 2008
     - allow for older Gtk in the TreeModel tests
 
@@ -29,4 +32,5 @@ Version 4, September 2008
     - don't use SourceIds in SyncCall.t
 
 Version 3, September 2008
-    - first collected up version (SyncCall version 2 was in Gtk2-Ex-Dragger)
+    - first collected up version: GdkBits, KeySnooper, SyncCall, WidgetBits
+      (SyncCall version 2 was in Gtk2-Ex-Dragger)
