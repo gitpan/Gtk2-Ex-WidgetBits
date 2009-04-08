@@ -19,6 +19,8 @@
 ~$
 # emacs locks
 (^|/)\.#
+# emacs autosave
+(^|/)#
 
 # own dists
 ^Gtk2-Ex-
@@ -32,12 +34,11 @@
 ^Makefile$
 ^blib
 ^pm_to_blib
+^TAGS$
 
-\#
 \.bak$
 ^MakeMaker-\d
 ^other
 ^backup
 ^dist-deb
 ^junk
-TAGS

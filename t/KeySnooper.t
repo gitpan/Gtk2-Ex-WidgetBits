@@ -22,7 +22,7 @@ use warnings;
 use Gtk2::Ex::KeySnooper;
 use Test::More tests => 11;
 
-my $want_version = 8;
+my $want_version = 9;
 ok ($Gtk2::Ex::KeySnooper::VERSION >= $want_version,
     'VERSION variable');
 ok (Gtk2::Ex::KeySnooper->VERSION  >= $want_version,

@@ -13,6 +13,7 @@ lib/Gtk2/Ex/GdkBits.pm
 lib/Gtk2/Ex/KeySnooper.pm
 lib/Gtk2/Ex/SyncCall.pm
 lib/Gtk2/Ex/TreeModelBits.pm
+lib/Gtk2/Ex/TreeModelFilter/Change.pm
 lib/Gtk2/Ex/TreeViewBits.pm
 lib/Gtk2/Ex/WidgetBits.pm
 Makefile.PL
@@ -25,6 +26,7 @@ t/KeySnooper.t
 t/pod.t
 t/SyncCall.t
 t/TreeModelBits.t
+t/TreeModelFilter-Change.t
 t/TreeViewBits.t
 t/WidgetBits.t
 META.yml                                 Module meta-data (added by MakeMaker)

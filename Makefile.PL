@@ -31,11 +31,12 @@ WriteMakefile
    SIGN         => 1,
 
    PREREQ_PM    => {
-                    # any version should be ok
-                    'Gtk2' => 0,
+                    # 1.200 for $iter->set() in TreeModelFilter::Change
+                    # remove(), and also 1.200 is a good idea for bug fixes
+                    'Gtk2' => 1.200,
 
                     # my Glib-Ex-ObjectBits
-                    # only for SyncCall actually
+                    # only used by SyncCall actually
                     'Glib::Ex::SignalIds' => 0,
                    },
 

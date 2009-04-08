@@ -22,7 +22,7 @@ use warnings;
 use Gtk2::Ex::SyncCall;
 use Test::More tests => 14;
 
-my $want_version = 8;
+my $want_version = 9;
 ok ($Gtk2::Ex::SyncCall::VERSION >= $want_version,
     'VERSION variable');
 ok (Gtk2::Ex::SyncCall->VERSION  >= $want_version,
@@ -60,7 +60,7 @@ sub main_iterations {
     $count++;
     Gtk2->main_iteration_do (0);
   }
-  print "main_iterations(): ran $count events/iterations\n";
+  diag "main_iterations(): ran $count events/iterations\n";
 }
 
 #-----------------------------------------------------------------------------

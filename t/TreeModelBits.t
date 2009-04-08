@@ -24,7 +24,7 @@ use Gtk2::Ex::TreeModelBits;
 
 use Test::More tests => 15;
 
-my $want_version = 8;
+my $want_version = 9;
 ok ($Gtk2::Ex::TreeModelBits::VERSION >= $want_version,
     'VERSION variable');
 ok (Gtk2::Ex::TreeModelBits->VERSION  >= $want_version,
