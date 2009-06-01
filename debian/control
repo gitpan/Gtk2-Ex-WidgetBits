@@ -16,9 +16,9 @@
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# "libtest-pod-perl (>= 1.00)" could be in Build-Depends for more
-# tests, but it's optional and just makes the build tools drag in more
-# stuff.
+# Build-Depends could have the "maximum_tests" modules from
+# Makefile.PL for more tests, but they're optional author tests really
+# wouldjust make the build tools drag in more stuff.
 
 Source: libgtk2-ex-widgetbits-perl
 Section: perl

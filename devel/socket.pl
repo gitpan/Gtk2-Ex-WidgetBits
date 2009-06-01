@@ -1,6 +1,4 @@
-#!/usr/bin/perl
-
-# Copyright 2008, 2009 Kevin Ryde
+# Copyright 2009 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -20,20 +18,32 @@
 
 use strict;
 use warnings;
-use Gtk2::Ex::TreeViewBits;
+use Gtk2 '-init';
+use Gtk2::Ex::WidgetBits;
 
-use Test::More tests => 4;
+use FindBin;
+my $progname = $FindBin::Script;
 
-my $want_version = 10;
-cmp_ok ($Gtk2::Ex::TreeViewBits::VERSION, '>=', $want_version,
-        'VERSION variable');
-cmp_ok (Gtk2::Ex::TreeViewBits->VERSION,  '>=', $want_version,
-        'VERSION class method');
-ok (eval { Gtk2::Ex::TreeViewBits->VERSION($want_version); 1 },
-    "VERSION class check $want_version");
-{ my $check_version = $want_version + 1000;
-  ok (! eval { Gtk2::Ex::TreeViewBits->VERSION($check_version); 1 },
-      "VERSION class check $check_version");
-}
 
+my $toplevel = Gtk2::Window->new ('toplevel');
+$toplevel->set_default_size (200, 100);
+$toplevel->signal_connect (destroy => sub { Gtk2->main_quit });
+
+my $eventbox = Gtk2::EventBox->new;
+$toplevel->add ($eventbox);
+
+my $vbox = Gtk2::VBox->new;
+$eventbox->add ($vbox);
+
+my $socket = Gtk2::Socket->new;
+$vbox->pack_start ($socket, 1,1,0);
+
+$toplevel->show_all;
+my $id = $socket->get_id;
+print "id $id\n";
+
+my $plug_prog = File::Spec->catfile ($FindBin::Bin, 'plug.pl');
+system ("$^X $plug_prog $id &");
+
+Gtk2->main;
 exit 0;

@@ -16,24 +16,31 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+Version 10, June 2009
+    - new Gtk2::Ex::ActionTooltips
+
 Version 9, April 2009
-    - new TreeModelFilter::Change
+    - new Gtk2::Ex::TreeModelFilter::Change
 
 Version 8, March 2009
-    - new TreeViewBits
+    - new Gtk2::Ex::TreeViewBits
 
 Version 7, November 2008
     - allow for older Gtk in the TreeModel tests
 
 Version 6, November 2008
-    - new TreeModelBits
+    - new Gtk2::Ex::TreeModelBits
 
 Version 5, November 2008
-    - forgot dependency on SignalIds
+    - forgot dependency on Glib::Ex::SignalIds
 
 Version 4, September 2008
-    - don't use SourceIds in SyncCall.t
+    - don't use Glib::Ex::SourceIds in SyncCall.t
 
 Version 3, September 2008
-    - first collected up version: GdkBits, KeySnooper, SyncCall, WidgetBits
+    - first collected up version, comprising
+          Gtk2::Ex::GdkBits
+          Gtk2::Ex::KeySnooper
+          Gtk2::Ex::SyncCall
+          Gtk2::Ex::WidgetBits
       (SyncCall version 2 was in Gtk2-Ex-Dragger)

@@ -15,40 +15,47 @@ not run its Makefile.PL or Build.PL.
 Hash: SHA1
 
 SHA1 8624bcdae55baeef00cd11d5dfcfa60f68710a02 COPYING
-SHA1 45acfd64163b08f0ebbe6d6234b81a4387d18218 Changes
-SHA1 cb46bdf38cd4902fdd8243e55f123ea5cd19d453 MANIFEST
+SHA1 3cd3d38b192ef8e4f2557214cf2b1acd59195297 Changes
+SHA1 c71f707ca52de4e1330222006472373f0875bfad MANIFEST
 SHA1 541b32785f97e26046131a38d7c3446dfb2c282c MANIFEST.SKIP
-SHA1 8b07c4d741a7d651e192e59b1edb25ec91c3d4a4 META.yml
-SHA1 09f6c79d36bd4df281371d69e52ffa56b2ff5f05 Makefile.PL
-SHA1 9d3c6de4425aaab687ecdb7bb863b51c691f16e0 README
-SHA1 9fe18a6eee2183f2d00802286c1cb2e2ae136d72 debian/changelog
+SHA1 29b3989e9b9b1b34e6078e544dcf49eed4eb7323 META.yml
+SHA1 9a0714cdf0ec2e3b210410309a9ff8ceb971e12d Makefile.PL
+SHA1 e7f2e006280d29459fed8ef5bea2bcbdff123864 README
+SHA1 472f93868bc029be19877feba12f7953fb55c349 debian/changelog
 SHA1 ac3478d69a3c81fa62e60f5c3696165a4e5e6ac4 debian/compat
-SHA1 9b82e8b793aeb92db7ae41fb8be6c5cc8e4f04d6 debian/control
+SHA1 d5d265443af2c78ae32b792f238ce8d3a6e86e3e debian/control
 SHA1 2db070e8264ac686aff7c3dfb58ff951bdf97901 debian/copyright
 SHA1 304d3b2825f05090883b48807bb5e24468a22614 debian/rules
 SHA1 c788af269fafc5711ec8a5fe1324c3b3bf0f74ac debian/watch
+SHA1 b26c5965924f1e91aef91467b29614923ab386a8 devel/plug.pl
+SHA1 cccae0ea9fd7060e8c8de3b489a67dd747427320 devel/socket.pl
 SHA1 e85441e9c0df3ebde2579aa256daaec2a47092b5 devel/synccall.pl
 SHA1 06ff7025e0ffec6fd4b5478b9d4bb5d66bf9eb29 devel/treeview-scroll.pl
+SHA1 a9ef822e3cad6e4f959405f5e0e7dbb35415afae examples/action-tooltips.pl
 SHA1 cf66fa9378b7bf9215e019ec352d8ed8b9cbfeaf examples/treeview-toggle-expand.pl
-SHA1 733c969381cbcd8c73c72416405609642e7828ba lib/Gtk2/Ex/GdkBits.pm
-SHA1 4f71705f433c3fe3033dfbd5fceed075dc45e0f7 lib/Gtk2/Ex/KeySnooper.pm
-SHA1 18352e3deb98b61232ce37c22b26a94bdbececf3 lib/Gtk2/Ex/SyncCall.pm
-SHA1 0314fb80fa813474bc2a9b3c19bf958ce919a871 lib/Gtk2/Ex/TreeModelBits.pm
-SHA1 3b2b5de088aab89eb68ce9058a3daf2e56a1b1f1 lib/Gtk2/Ex/TreeModelFilter/Change.pm
-SHA1 f784baa96f3de86445f7315453e4b837e6c8b132 lib/Gtk2/Ex/TreeViewBits.pm
-SHA1 604f7f315969c1e8d2935bd850620ae553852aa5 lib/Gtk2/Ex/WidgetBits.pm
-SHA1 cc67151d37c1324dd46bbf8d37b085950954ce8c t/GdkBits.t
-SHA1 59feef483d91a3dfb90f471c789a508d12c5a3b8 t/KeySnooper.t
-SHA1 36460de5d44a69169d22d78aced48e857115622c t/SyncCall.t
-SHA1 89d166076eb96851b1a008aec64b5b7e3622c22b t/TreeModelBits.t
-SHA1 a1abc3c637b65c651f733eb6556687cb3c41d459 t/TreeModelFilter-Change.t
-SHA1 371f373660a9f70e03429ae319c48c279c07e939 t/TreeViewBits.t
-SHA1 d25ade14f1ab7228948d7daf2dbf22bde5787b64 t/WidgetBits.t
-SHA1 a661a39e55a4127aecb1b97a631c4f01f7dce8c6 t/pod.t
+SHA1 ab391600207eebca0d164ef4339da1f7883b6188 lib/Gtk2/Ex/ActionTooltips.pm
+SHA1 f1c50ea2f1941bec13a5573d49823fbf68baf1ca lib/Gtk2/Ex/GdkBits.pm
+SHA1 83bab3997579c93b067fc15b4c58ec21191cfdf8 lib/Gtk2/Ex/KeySnooper.pm
+SHA1 2cba21b75b4e8fcf6ba39829124482387ce76333 lib/Gtk2/Ex/SyncCall.pm
+SHA1 4cd762ae33daf596bc4b223d5fd6ffc80ea74f4d lib/Gtk2/Ex/TreeModelBits.pm
+SHA1 b3523e3bd28bcc38fc48fe3aaa54f6e5720a0691 lib/Gtk2/Ex/TreeModelFilter/Change.pm
+SHA1 ce793eab3a3d05cacc381bbc72989d6e85684e2d lib/Gtk2/Ex/TreeViewBits.pm
+SHA1 49d217acd62407e687c220e34807cc4832b25db5 lib/Gtk2/Ex/WidgetBits.pm
+SHA1 4e343608834cc334c282e8aac763f04766da6e1f t/0-META-read.t
+SHA1 c2d28b665a07a9afb22d4736ae038a0a81701b51 t/0-Test-Pod.t
+SHA1 1ca294949007397f7928e494900d203365bb41f6 t/0-Test-YAML-Meta.t
+SHA1 c64127e742c765906cb02d526aceba39da9e3ca6 t/ActionTooltips.t
+SHA1 139e9a21c6ca24d6005cb13d7e6255ed518b9f48 t/GdkBits.t
+SHA1 f0e7ce6ec6501074cdaa28787693db21ba115552 t/KeySnooper.t
+SHA1 c64558ff66cd724606255923552433798ecd3b34 t/SyncCall.t
+SHA1 6cb559d35ed9ffb2395ae8eb1494dfcffea9cd00 t/TreeModelBits.t
+SHA1 3cda456f9f334580f99929c41d64a0bde45d7705 t/TreeModelFilter-Change.t
+SHA1 f132d54bddca48466244895f9b448eed283ab911 t/TreeViewBits.t
+SHA1 a959a82a16200846fe3f86d6bcc97a2b2554a768 t/WidgetBits.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.9 (GNU/Linux)
 
-iD8DBQFJ3TZiLFMCIV9q3ToRAjtaAKCHbqznhgB2IeGl+L9j4SDhhCFCtwCgicUN
-xnZFsv27D0Me8LvL/rQaO14=
-=ixPT
+iD8DBQFKJF8FLFMCIV9q3ToRAixJAKCw21Nfh6zG5kPDo4FnimoZnXLqZACfU5vl
+COPtWpZBpTs9Ivn+msBfiOQ=
+=mT5O
 -----END PGP SIGNATURE-----

@@ -21,12 +21,25 @@ use warnings;
 use Carp;
 use Gtk2;
 
-our $VERSION = 9;
+our $VERSION = 10;
 
+# get_root_position() might be done as
+#
+#     my $toplevel = $widget->get_toplevel;
+#     my $window = $toplevel->window || return; # if unrealized
+#     return $widget->translate_coordinates ($toplevel,
+#                                            $window->get_position);
+#
+# if it can be assumed the toplevel widget of a hierarchy has its window a
+# child of the root window (after possible window manager frame).  Or
+# alternately just get_toplevel() could eliminate the 'no-window' test if it
+# can be assumed the toplevel is a windowed widget.  All of which is of
+# course true of GtkWindow, and probably ends up right for GtkPlug too, but
+# could a custom toplevel widget do something tricky?
+#
 sub get_root_position {
   my ($widget) = @_;
   my $window = $widget->window || return; # if unrealized
-
   require Gtk2::Ex::GdkBits;
   my ($x, $y) = Gtk2::Ex::GdkBits::window_get_root_position ($window);
   if ($widget->flags & 'no-window') {

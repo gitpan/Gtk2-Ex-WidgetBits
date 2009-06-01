@@ -41,8 +41,17 @@ WriteMakefile
                    },
 
    EXTRA_META => <<'HERE',
-recommends:
-    Test::Pod: 1.00
+optional_features:
+    maximum_tests:
+        description: Have "make test" do as much as possible.
+        requires:
+            Test::Pod: 0
+            Test::YAML::Meta: 0
+            YAML: 0
+            YAML::Tiny: 0
+            YAML::Syck: 0
+            YAML::XS: 0
+            Parse::CPAN::Meta: 0
 no_index:
     directory:
         - devel
@@ -67,7 +76,7 @@ unused:
 	for i in $(LINT_FILES); do perl -Mwarnings::unused -I lib $$i; done
 
 myman:
-	mv MANIFEST MANIFEST.old
+	-mv MANIFEST MANIFEST.old
 	touch SIGNATURE
 	(make manifest 2>&1; diff -u MANIFEST.old MANIFEST) |less
 

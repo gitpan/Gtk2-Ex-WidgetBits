@@ -43,11 +43,11 @@ use strict;
 use warnings;
 use Test::More tests => 6;
 
-my $want_version = 9;
-ok ($Gtk2::Ex::TreeModelFilter::Change::VERSION >= $want_version,
-    'VERSION variable');
-ok (Gtk2::Ex::TreeModelFilter::Change->VERSION  >= $want_version,
-    'VERSION class method');
+my $want_version = 10;
+cmp_ok ($Gtk2::Ex::TreeModelFilter::Change::VERSION, '>=', $want_version,
+        'VERSION variable');
+cmp_ok (Gtk2::Ex::TreeModelFilter::Change->VERSION,  '>=', $want_version,
+        'VERSION class method');
 ok (eval { Gtk2::Ex::TreeModelFilter::Change->VERSION($want_version); 1 },
     "VERSION class check $want_version");
 { my $check_version = $want_version + 1000;
@@ -64,7 +64,7 @@ ok (eval { Gtk2::Ex::TreeModelFilter::Change->VERSION($want_version); 1 },
   isa_ok ($iter, 'Gtk2::TreeIter');
 
   $filter->set ($iter, 0, 'foo');
-  is ($child_set_called, 1);
+  is ($child_set_called, 1, 'child set() called');
 }
 
 exit 0;

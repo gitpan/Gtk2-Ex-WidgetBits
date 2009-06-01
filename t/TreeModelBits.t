@@ -24,11 +24,11 @@ use Gtk2::Ex::TreeModelBits;
 
 use Test::More tests => 15;
 
-my $want_version = 9;
-ok ($Gtk2::Ex::TreeModelBits::VERSION >= $want_version,
-    'VERSION variable');
-ok (Gtk2::Ex::TreeModelBits->VERSION  >= $want_version,
-    'VERSION class method');
+my $want_version = 10;
+cmp_ok ($Gtk2::Ex::TreeModelBits::VERSION, '>=', $want_version,
+        'VERSION variable');
+cmp_ok (Gtk2::Ex::TreeModelBits->VERSION,  '>=', $want_version,
+        'VERSION class method');
 ok (eval { Gtk2::Ex::TreeModelBits->VERSION($want_version); 1 },
     "VERSION class check $want_version");
 { my $check_version = $want_version + 1000;

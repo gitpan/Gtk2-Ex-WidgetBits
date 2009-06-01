@@ -20,7 +20,7 @@ use strict;
 use warnings;
 use Carp;
 
-our $VERSION = 9;
+our $VERSION = 10;
 
 use constant DEBUG => 0;
 

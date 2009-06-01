@@ -6,9 +6,13 @@ debian/control
 debian/copyright
 debian/rules
 debian/watch
+devel/plug.pl
+devel/socket.pl
 devel/synccall.pl
 devel/treeview-scroll.pl
+examples/action-tooltips.pl
 examples/treeview-toggle-expand.pl
+lib/Gtk2/Ex/ActionTooltips.pm
 lib/Gtk2/Ex/GdkBits.pm
 lib/Gtk2/Ex/KeySnooper.pm
 lib/Gtk2/Ex/SyncCall.pm
@@ -21,9 +25,12 @@ MANIFEST			This list of files
 MANIFEST.SKIP
 README
 SIGNATURE
+t/0-META-read.t
+t/0-Test-Pod.t
+t/0-Test-YAML-Meta.t
+t/ActionTooltips.t
 t/GdkBits.t
 t/KeySnooper.t
-t/pod.t
 t/SyncCall.t
 t/TreeModelBits.t
 t/TreeModelFilter-Change.t
