@@ -16,12 +16,13 @@
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 package Gtk2::Ex::GdkBits;
+use 5.008;
 use strict;
 use warnings;
 use Carp;
 use Gtk2;
 
-our $VERSION = 10;
+our $VERSION = 11;
 
 
 # The loop here is similar to what gtk_widget_translate_coordinates() does
@@ -95,7 +96,7 @@ L<Gtk2::Ex::WidgetBits>, L<Gtk2::Gdk>
 
 =head1 HOME PAGE
 
-L<http://www.geocities.com/user42_kevin/gtk2-ex-widgetbits/index.html>
+L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 

@@ -23,6 +23,8 @@ This is some helpers for working with Gtk2 widgets and stuff.
 
 * Gtk2::Ex::ActionTooltips -- action tooltips on menu items
 
+* Gtk2::Ex::EntryBits -- misc funcs
+
 * Gtk2::Ex::GdkBits -- misc funcs
 
 * Gtk2::Ex::TreeModelBits -- misc funcs
@@ -31,12 +33,14 @@ This is some helpers for working with Gtk2 widgets and stuff.
 
 * Gtk2::Ex::KeySnooper -- oop style key snooper hook
 
-* Gtk2::Ex::SyncCall -- callback after server sync
+* Gtk2::Ex::Statusbar::MessageUntilKey - message displayed until keypress
+
+* Gtk2::Ex::SyncCall -- callback after X server sync
 
 * Gtk2::Ex::TreeModelFilter::Change -- propagate insert etc to child model
 
 
-The prerequisites are Gtk2-Perl any Glib-Ex-ObjectBits.
+The prerequisites are Gtk2-Perl, Glib-Ex-ObjectBits and Scope::Guard.
 The WidgetBits home page is
 
-  http://www.geocities.com/user42_kevin/gtk2-ex-widgetbits/index.html
+  http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html

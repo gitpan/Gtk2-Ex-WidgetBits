@@ -16,13 +16,14 @@
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 package Gtk2::Ex::SyncCall;
+use 5.008;
 use strict;
 use warnings;
 use Carp;
 use Gtk2;
 
 # version 2 was in with Gtk2-Ex-Dragger ...
-our $VERSION = 10;
+our $VERSION = 11;
 
 # set this to 1 for some diagnostic prints
 use constant DEBUG => 0;
@@ -111,6 +112,8 @@ __END__
 
 Gtk2::Ex::SyncCall -- server sync callback
 
+=for test_synopsis my ($widget)
+
 =head1 SYNOPSIS
 
  use Gtk2::Ex::SyncCall;
@@ -187,7 +190,7 @@ L<Gtk2::Widget>, L<Gtk2::Gdk::Display>, L<Gtk2::Ex::WidgetBits>
 
 =head1 HOME PAGE
 
-L<http://www.geocities.com/user42_kevin/gtk2-ex-widgetbits/index.html>
+L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 

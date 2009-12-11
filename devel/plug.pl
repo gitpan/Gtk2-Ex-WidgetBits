@@ -1,3 +1,5 @@
+#!/usr/bin/perl
+
 # Copyright 2009 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
@@ -51,7 +53,7 @@ Glib::Idle->add
        printf "%s %7X  %d,%d\n", $window, $window->XID, $x,$y;
        $window = $window->get_parent || last;
      }
-     return Glib::SOURCE_REMOVE;
+     return 0; # Glib::SOURCE_REMOVE;
    });
 
 Glib::Idle->add
@@ -63,7 +65,7 @@ Glib::Idle->add
        printf "%s %7X  %d,%d\n", $widget, $window->XID, $x,$y;
        $widget = $widget->get_parent || last;
      }
-     return Glib::SOURCE_REMOVE;
+     return 0; # Glib::SOURCE_REMOVE;
    });
 
 Gtk2->main;

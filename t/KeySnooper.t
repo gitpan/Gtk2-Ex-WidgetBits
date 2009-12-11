@@ -17,12 +17,16 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
+use 5.008;
 use strict;
 use warnings;
 use Gtk2::Ex::KeySnooper;
-use Test::More tests => 11;
+use Test::More tests => 12;
 
-my $want_version = 10;
+SKIP: { eval 'use Test::NoWarnings; 1'
+          or skip 'Test::NoWarnings not available', 1; }
+
+my $want_version = 11;
 cmp_ok ($Gtk2::Ex::KeySnooper::VERSION, '>=', $want_version,
         'VERSION variable');
 cmp_ok (Gtk2::Ex::KeySnooper->VERSION,  '>=', $want_version,

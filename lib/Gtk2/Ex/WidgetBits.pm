@@ -16,12 +16,13 @@
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 package Gtk2::Ex::WidgetBits;
+use 5.008;
 use strict;
 use warnings;
 use Carp;
 use Gtk2;
 
-our $VERSION = 10;
+our $VERSION = 11;
 
 # get_root_position() might be done as
 #
@@ -118,7 +119,7 @@ Gtk2::Ex::WidgetBits - miscellaneous Gtk widget helpers
 
  use Gtk2::Ex::WidgetBits;
 
-=head1 GENERAL FUNCTIONS
+=head1 FUNCTIONS
 
 =over 4
 
@@ -141,8 +142,8 @@ See L<Gtk2::Gdk::Display> for the basic C<warp_pointer> which operates in
 root window coordinates.  The code here converts using C<get_root_position>
 above, so there's no server round-trip.
 
-(Incidentally the underlying C<XWarpPointer> operates relative to any
-window, not just the root, but Gdk doesn't make that feature available.)
+(The underlying C<XWarpPointer> operates relative to any window, not just
+the root, but Gdk doesn't make that feature available.)
 
 =item C<< $mm = Gtk2::Ex::WidgetBits::xy_distance_mm ($widget, $x1,$y1, $x2,$y2) >>
 
@@ -158,12 +159,18 @@ the screen.
 
 =head1 SEE ALSO
 
-L<Gtk2::Ex::GdkBits>, L<Gtk2::Ex::KeySnooper>, L<Gtk2::Ex::TreeModelBits>,
-L<Gtk2::Ex::SyncCall>, L<Gtk2::Widget>, L<Gtk2::Ex::WidgetCursor>.
+L<Gtk2::Ex::EntryBits>, L<Gtk2::Ex::GdkBits> L<Gtk2::Ex::TreeModelBits>,
+L<Gtk2::Ex::TreeViewBits>
+
+L<Gtk2::Ex::ActionTooltips>, L<Gtk2::Ex::KeySnooper>, L<Gtk2::Ex::SyncCall>,
+L<Gtk2::Ex::Statusbar::MessageUntilKey>,
+L<Gtk2::Ex::TreeModelFilter::Change>
+
+L<Gtk2::Widget>, L<Gtk2::Ex::WidgetCursor>.
 
 =head1 HOME PAGE
 
-L<http://www.geocities.com/user42_kevin/gtk2-ex-widgetbits/index.html>
+L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 

@@ -20,32 +20,51 @@
 
 use strict;
 use warnings;
-use Gtk2 '-init';
-use Gtk2::Ex::WidgetBits;
 
 use FindBin;
 my $progname = $FindBin::Script;
 
+{
+  $ENV{'DISPLAY'} ||= ':0';
+  require Gtk2;
+  Gtk2->init;
 
-my $toplevel = Gtk2::Window->new ('toplevel');
-$toplevel->set_default_size (200, 100);
-$toplevel->signal_connect (destroy => sub { Gtk2->main_quit });
+  # my $entry = Gtk2::Entry->new;
+  my $entry = Gtk2::DrawingArea->new;
 
-my $eventbox = Gtk2::EventBox->new;
-$toplevel->add ($eventbox);
+  print "$entry\n";
+  print "main select_region\n";
+  $entry->select_region ('abc', 'def');
+  print "main end\n";
+  exit 0;
+}
 
-my $vbox = Gtk2::VBox->new;
-$eventbox->add ($vbox);
+{
+  my $foo;
+  tie $foo, 'Foo';
 
-my $socket = Gtk2::Socket->new;
-$vbox->pack_start ($socket, 1,1,0);
+  {
+    package Foo;
+    sub TIESCALAR {
+      my ($class) = @_;
+      return bless {}, $class;
+    }
+    sub FETCH {
+      my ($self) = @_;
+      print "Foo FETCH\n";
+      return 0;
+    }
+  }
 
-$toplevel->show_all;
-my $id = $socket->get_id;
-print "id $id\n";
+  sub func {
+    print "func begin\n";
+    my ($x) = @_;
+    print "func got args\n";
+    print $x,"\n";
+    print "func end\n";
+  }
 
-my $plug_prog = File::Spec->catfile ($FindBin::Bin, 'plug.pl');
-system ("$^X $plug_prog $id &");
-
-Gtk2->main;
-exit 0;
+  print "main begin\n";
+  func ($foo);
+  exit 0;
+}

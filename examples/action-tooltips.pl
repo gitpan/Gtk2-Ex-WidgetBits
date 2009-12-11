@@ -1,3 +1,5 @@
+#!/usr/bin/perl
+
 # Copyright 2009 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.

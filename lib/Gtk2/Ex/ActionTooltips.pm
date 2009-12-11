@@ -16,6 +16,7 @@
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 package Gtk2::Ex::ActionTooltips;
+use 5.008;
 use strict;
 use warnings;
 use Carp;
@@ -23,7 +24,7 @@ use Exporter;
 # $widget->set_tooltip_text new in Gtk2 1.152
 use Gtk2 1.160;
 
-our $VERSION = 10;
+our $VERSION = 11;
 our @EXPORT_OK = qw(group_tooltips_to_menuitems
                     action_tooltips_to_menuitems_dynamic);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
@@ -111,13 +112,15 @@ __END__
 
 Gtk2::Ex::ActionTooltips -- propagate Action tooltips to MenuItems
 
+=for test_synopsis my ($actiongroup, $action1, $action2, $action3)
+
 =head1 SYNOPSIS
 
  use Gtk2::Ex::ActionTooltips;
  Gtk2::Ex::ActionTooltips::group_tooltips_to_menuitems
      ($actiongroup);
  Gtk2::Ex::ActionTooltips::action_tooltips_to_menuitems_dynamic
-     ($action, $action, ...);
+     ($action1, $action2, $action2);
 
 =head1 DESCRIPTION
 
@@ -164,7 +167,7 @@ current and future actions in the group.  But the tooltips in the actions
 are assumed to be unchanging.  If you change a tooltip then the change is
 not propagated to already-connected menu items.
 
-=item C<< Gtk2::Ex::ActionTooltips::action_tooltips_to_menuitems_dynamic ($action,...) >>
+=item C<< Gtk2::Ex::ActionTooltips::action_tooltips_to_menuitems_dynamic ($action1, $action2, ...) >>
 
 Setup each given C<$action> (C<Gtk2::Action> object) so its tooltip property
 is installed on any connected C<Gtk2::MenuItms>s, dynamically.
@@ -200,7 +203,7 @@ L<Gtk2::Action>, L<Gtk2::ActionGroup>, L<Gtk2::MenuItem>
 
 =head1 HOME PAGE
 
-L<http://www.geocities.com/user42_kevin/gtk2-ex-widgetbits/index.html>
+L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 

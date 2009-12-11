@@ -22,9 +22,12 @@ use strict;
 use warnings;
 use Gtk2::Ex::TreeViewBits;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
-my $want_version = 10;
+SKIP: { eval 'use Test::NoWarnings; 1'
+          or skip 'Test::NoWarnings not available', 1; }
+
+my $want_version = 11;
 cmp_ok ($Gtk2::Ex::TreeViewBits::VERSION, '>=', $want_version,
         'VERSION variable');
 cmp_ok (Gtk2::Ex::TreeViewBits->VERSION,  '>=', $want_version,

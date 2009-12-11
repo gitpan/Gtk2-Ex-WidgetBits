@@ -16,11 +16,12 @@
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 package Gtk2::Ex::TreeModelBits;
+use 5.008;
 use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 10;
+our $VERSION = 11;
 
 use constant DEBUG => 0;
 
@@ -138,7 +139,7 @@ L<Gtk2::ListModel>, L<Gtk2::TreeModel>, L<Gtk2::Ex::WidgetBits>
 
 =head1 HOME PAGE
 
-L<http://www.geocities.com/user42_kevin/gtk2-ex-widgetbits/index.html>
+L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 

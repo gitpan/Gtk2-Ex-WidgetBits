@@ -1,3 +1,5 @@
+#!/usr/bin/perl
+
 # Copyright 2009 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
@@ -15,7 +17,7 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
-
+use 5.010;
 use strict;
 use warnings;
 use Gtk2 '-init';

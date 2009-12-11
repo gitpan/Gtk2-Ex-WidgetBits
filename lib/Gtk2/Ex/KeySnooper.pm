@@ -16,11 +16,12 @@
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 package Gtk2::Ex::KeySnooper;
+use 5.008;
 use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 10;
+our $VERSION = 11;
 
 sub new {
   my ($class, $func, $userdata) = @_;
@@ -29,6 +30,7 @@ sub new {
   return $self;
 }
 
+# not yet documented ...
 sub install {
   my ($self, $func, $userdata) = @_;
   $self->remove;
@@ -55,6 +57,8 @@ __END__
 =head1 NAME
 
 Gtk2::Ex::KeySnooper -- keyboard snooper as object
+
+=for test_synopsis my ($mydata);
 
 =head1 SYNOPSIS
 
@@ -121,7 +125,7 @@ L<Gtk2::Widget>, L<Glib::Ex::WidgetBits>, L<Glib::Ex::SignalIds>
 
 =head1 HOME PAGE
 
-L<http://www.geocities.com/user42_kevin/gtk2-ex-widgetbits/index.html>
+L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 

@@ -16,6 +16,9 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+Version 11, December 2009
+    - new Gtk2::Ex::EntryBits and Gtk2::Ex::Statusbar::MessageUntilKey
+
 Version 10, June 2009
     - new Gtk2::Ex::ActionTooltips
 

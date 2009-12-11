@@ -16,11 +16,12 @@
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 package Gtk2::Ex::TreeViewBits;
+use 5.008;
 use strict;
 use warnings;
 use Carp;
 
-our $VERSION = 10;
+our $VERSION = 11;
 
 use constant DEBUG => 0;
 
@@ -159,7 +160,7 @@ C<Gtk2::TreeView>, C<Gtk2::Ex::WidgetBits>
 
 =head1 HOME PAGE
 
-L<http://www.geocities.com/user42_kevin/gtk2-ex-widgetbits/index.html>
+L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 

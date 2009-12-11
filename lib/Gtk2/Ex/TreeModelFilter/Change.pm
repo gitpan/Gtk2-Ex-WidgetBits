@@ -17,12 +17,13 @@
 
 
 package Gtk2::Ex::TreeModelFilter::Change;
+use 5.008;
 use strict;
 use warnings;
 use Gtk2 1.200; # for $iter->set()
 use Carp;
 
-our $VERSION = 10;
+our $VERSION = 11;
 
 use constant DEBUG => 0;
 
@@ -216,7 +217,7 @@ Gtk2::Ex::TreeModelFilter::Change -- change-rows mix-in for TreeModelFilter subc
 
  use Glib::Object::Subclass
    'Gtk2::TreeModelFilter',
-   properties => [ ... ];
+   properties => [   ];
 
 
 =head1 DESCRIPTION
@@ -263,15 +264,15 @@ and set to avoid an empty row.
 
 =item Gtk 2.6 -- C<insert_with_values>
 
-C<insert_with_values> on the core ListStore and TreeStore is new in Gtk 2.6.
-The mix-in method is always provided by TreeModelFilter::Change and always
-calls to the child model but you might have to check what the child model
-has if you might be using an oldish Gtk.
+C<insert_with_values> on ListStore and TreeStore is new in Gtk 2.6.  The
+mix-in method is always provided by TreeModelFilter::Change and always calls
+to the child model but you might have to check what the child model has if
+you're using an oldish Gtk.
 
 =item Parent node arg -- C<insert_after>, C<insert_before>, C<insert_with_values>
 
-These functions take either just a position like ListStore, or a parent node
-iter plus a position like TreeStore,
+These functions take either just a position number like ListStore, or a
+parent node iter plus a position like TreeStore,
 
     $filter->insert_after ($pos)                # ListStore
     $filter->insert_after ($parent_iter, $pos)  # TreeStore
@@ -284,7 +285,7 @@ C<get> and C<set> fetch and store row data.  Make sure
 C<Gtk2::Ex::TreeModelFilter::Change> is before C<Glib::Object> in your
 C<@ISA> to have these versions instead of the object property C<get> and
 C<set>.  A C<use base> before C<Glib::Object::Subclass> as shown in the
-synoposis above will accomplish that,
+synopsis above will accomplish that,
 
     use base 'Gtk2::Ex::TreeModelFilter::Change';
     use Glib::Object::Subclass 'Gtk2::TreeModelFilter';
@@ -307,12 +308,12 @@ Currently the iter is not zapped to zeros, perhaps in the future it will be
 =item Data transforms -- C<set>, C<set_value>, C<insert_with_values>
 
 No transformations are applied to stored data, so if you're using a "modify"
-function to present different types or contents there's no way to do a
+function to present different types or contents there's no way to
 reverse-modify.  Hopefully this will be possible in the future.
 
-Any columns which are unchanged by a modify function can be stored to just
-fine, in particular you can use a modify function just to add extra columns
-intended to be read-only.
+Any columns which are unchanged by a modify function can be stored, and in
+particular you can use a modify function just to add extra columns intended
+to be read-only.
 
 =back
 
@@ -326,7 +327,7 @@ to the child model
 
 =head1 HOME PAGE
 
-L<http://www.geocities.com/user42_kevin/gtk2-ex-widgetbits/index.html>
+L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 
