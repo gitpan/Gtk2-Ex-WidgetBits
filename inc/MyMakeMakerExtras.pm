@@ -258,6 +258,7 @@ check-copyright-years:
 	    case $$i in \
 	      '' | */ \
 	      | debian/changelog | debian/compat | debian/doc-base \
+	      | debian/patches/*.diff \
 	      | COPYING | MANIFEST* | SIGNATURE | META.yml \
 	      | version.texi | */version.texi \
 	      | *.mo | *.locatedb | samp.*) \

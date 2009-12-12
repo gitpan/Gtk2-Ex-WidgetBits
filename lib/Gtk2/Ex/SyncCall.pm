@@ -23,7 +23,7 @@ use Carp;
 use Gtk2;
 
 # version 2 was in with Gtk2-Ex-Dragger ...
-our $VERSION = 11;
+our $VERSION = 12;
 
 # set this to 1 for some diagnostic prints
 use constant DEBUG => 0;
@@ -33,11 +33,23 @@ my $sync_call_atom;
 
 sub sync {
   my ($class, $widget, $callback, $userdata) = @_;
-  if (DEBUG) { print "SyncCall sync\n"; }
+  if (DEBUG) { print "SyncCall sync()\n"; }
 
   my $display = $widget->get_display;
   my $data = ($display->{(__PACKAGE__)} ||= do {
     $widget->add_events ('property-change-mask');
+    #    $widget->window;
+    #    $widget->window->XID;
+    if (DEBUG) {
+      my $win = $widget->window;
+      #       if ($win->can('XID')) {
+      #         print " widget window id ",$win->XID,"\n";
+      #       }
+      print "  widget add_events gives ",
+        (defined $win ? $win->get_events : '[no window]'),
+          "\n";
+    }
+
     require Glib::Ex::SignalIds;
     # hash of data
     ({ sync_list => [],
@@ -53,6 +65,14 @@ sub sync {
   my $win = $widget->window
     || croak __PACKAGE__.'->sync(): widget not realized';
 
+  # HACK: in gtk 2.18.4 property-change-event's aren't delivered to a
+  # non-toplevel widget unless you call $window->XID on it (which is
+  # gdk_x11_drawable_get_xid()).  This is bizarre and would have to be a
+  # bug, but this workaround at least makes SyncCall and its dependents like
+  # Gtk2::Ex::CrossHair work.
+  #
+  if ($win->can('XID')) { $win->XID; }
+
   my $self = { display  => $display,
                callback => $callback,
                userdata => $userdata };
@@ -62,7 +82,7 @@ sub sync {
   if (@$aref == 1) {
     # first entry in sync_list initiates the sync
     $sync_call_atom ||= Gtk2::Gdk::Atom->intern (__PACKAGE__);
-    if (DEBUG) { print "  change $sync_call_atom\n"; }
+    if (DEBUG) { print "  property_change of $sync_call_atom\n"; }
     $win->property_change ($sync_call_atom,
                            Gtk2::Gdk::Atom->intern('STRING'),
                            Gtk2::Gdk::CHARS, 'append', '');
@@ -73,11 +93,10 @@ sub sync {
 # 'property-notify-event' signal on sync widget
 sub _do_property_notify {
   my ($widget, $event) = @_;
+  if (DEBUG) { print "SyncCall property-notify handler ",$event->atom,"\n"; }
 
   # note, no overloaded != until Gtk2-Perl 1.183, only == prior to that
   if ($event->atom == $sync_call_atom) {
-    if (DEBUG) { print "SyncCall notify $widget, ",$event->atom,"\n"; }
-
     my $display = $widget->get_display;
     my $data = $display->{(__PACKAGE__)};
     _call_all ($data);

@@ -30,22 +30,36 @@ $toplevel->add($drawingarea);
 
 $toplevel->show_all;
 my $widget = $drawingarea;
+#my $widget = $toplevel;
 
-if (1) {
-  print "initial\n";
-  Gtk2::Ex::SyncCall->sync ($widget, sub { print "hello\n"; });
-  Gtk2::Ex::SyncCall->sync ($widget, sub { print "world\n"; });
-}
+$widget->add_events ('property-change-mask');
+$widget->signal_connect
+  (property_notify_event =>  sub {
+     my ($widget, $event) = @_;
+     print "property_notify_event\n";
+     print "  ",$event->atom,"  ",$event->atom->name,"\n";
+   });
 
-if (1) {
-  Glib::Timeout->add
-      (3000, sub {
-         print "another\n";
-         Gtk2::Ex::SyncCall->sync ($widget, sub { print "one\n"; });
-         Gtk2::Ex::SyncCall->sync ($widget, sub { print "two\n"; });
-         return 1;
-       });
-}
+my $win = $widget->window;
+print "$win  id=",$win->XID,"\n";
+
+my $atom = Gtk2::Gdk::Atom->intern ('MyAtom');
+sleep 5;
+
+print "initial\n";
+$win->property_change ($atom,
+                       Gtk2::Gdk::Atom->intern('STRING'),
+                       Gtk2::Gdk::CHARS, 'append',
+                       '');
+Glib::Timeout->add
+  (5000, sub {
+     print "change\n";
+     $win->property_change ($atom,
+                            Gtk2::Gdk::Atom->intern('STRING'),
+                            Gtk2::Gdk::CHARS, 'append',
+                            '');
+     return 1; # continue
+   });
 
 Gtk2->main;
 exit 0;

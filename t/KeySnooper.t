@@ -26,7 +26,7 @@ use Test::More tests => 12;
 SKIP: { eval 'use Test::NoWarnings; 1'
           or skip 'Test::NoWarnings not available', 1; }
 
-my $want_version = 11;
+my $want_version = 12;
 cmp_ok ($Gtk2::Ex::KeySnooper::VERSION, '>=', $want_version,
         'VERSION variable');
 cmp_ok (Gtk2::Ex::KeySnooper->VERSION,  '>=', $want_version,
