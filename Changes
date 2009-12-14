@@ -16,6 +16,9 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+Version 13, December 2009
+    - new Gtk2::Ex::Units
+
 Version 12, December 2009
     - SyncCall workaround for gtk 2.18.4 bug in property-change-event delivery
 

@@ -75,9 +75,9 @@ sub _do_event {
   # the snooper should be destroyed together with statusbar, but the button
   # hook isn't, so check $ref_weak_statusbar hasn't gone away
   #
-  # $statusbar->get_display() is the default display if not under a
-  # toplevel, which means events there clear unparented statusbars.  Not
-  # sure if that's ideal, but close enough for now.
+  # $statusbar->get_display() is the default display if not under a toplevel
+  # (it's never NULL or undef), which means events there clear unparented
+  # statusbars.  Not sure if that's ideal, but close enough for now.
 
   if ($event->type eq 'key-press' || $event->type eq 'button-press') {
     if (my $statusbar = $$ref_weak_statusbar) {

@@ -31,7 +31,7 @@ use MyTestHelpers;
 SKIP: { eval 'use Test::NoWarnings; 1'
           or skip 'Test::NoWarnings not available', 1; }
 
-my $want_version = 12;
+my $want_version = 13;
 cmp_ok ($Gtk2::Ex::WidgetBits::VERSION, '>=', $want_version,
         'VERSION variable');
 cmp_ok (Gtk2::Ex::WidgetBits->VERSION, '>=', $want_version,
@@ -63,7 +63,7 @@ SKIP: {
                [], 'get_root_position() on unrealized');
 
     $toplevel->show_all;
-    MyTestHelpers::main_iterations();
+    MyTestHelpers::wait_for_event ($toplevel, 'map-event');
     my @top_xy = Gtk2::Ex::WidgetBits::get_root_position ($toplevel);
     is (scalar @top_xy, 2, 'get_root_position() on realized');
     diag ("toplevel at $top_xy[0], $top_xy[1]");
@@ -71,7 +71,7 @@ SKIP: {
     my $layout = Gtk2::Layout->new;
     $toplevel->add ($layout);
     $toplevel->show_all;
-    MyTestHelpers::main_iterations();
+    MyTestHelpers::wait_for_event ($layout, 'map-event');
     is_deeply ([ Gtk2::Ex::WidgetBits::get_root_position ($layout) ],
                \@top_xy, 'get_root_position() on contained layout');
 
@@ -94,7 +94,8 @@ SKIP: {
     like ($@, qr/Cannot warp on unrealized/);
 
     $toplevel->show_all;
-    MyTestHelpers::main_iterations();
+    
+    MyTestHelpers::wait_for_event ($toplevel, 'map-event');
     my @old = $toplevel->get_pointer;
     Gtk2::Ex::WidgetBits::warp_pointer ($toplevel, @old);
     my @new = $toplevel->get_pointer;

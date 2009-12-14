@@ -22,7 +22,7 @@ use warnings;
 use Carp;
 use Gtk2;
 
-our $VERSION = 12;
+our $VERSION = 13;
 
 # get_root_position() might be done as
 #

@@ -59,6 +59,7 @@ MyMakeMakerExtras::WriteMakefile
            },
       },
 
+   MY_NO_HTML => 1,
    MyMakeMakerExtras_Pod_Coverage
    => [ 'Gtk2::Ex::ActionTooltips',
         'Gtk2::Ex::GdkBits',

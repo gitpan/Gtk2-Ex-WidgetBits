@@ -23,7 +23,7 @@ use Carp;
 use Gtk2;
 
 # version 2 was in with Gtk2-Ex-Dragger ...
-our $VERSION = 12;
+our $VERSION = 13;
 
 # set this to 1 for some diagnostic prints
 use constant DEBUG => 0;
