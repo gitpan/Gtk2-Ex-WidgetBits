@@ -22,12 +22,12 @@ use strict;
 use warnings;
 use Gtk2::Ex::TreeViewBits;
 
-use Test::More tests => 5;
+use Test::More tests => 7;
 
 SKIP: { eval 'use Test::NoWarnings; 1'
           or skip 'Test::NoWarnings not available', 1; }
 
-my $want_version = 13;
+my $want_version = 14;
 cmp_ok ($Gtk2::Ex::TreeViewBits::VERSION, '>=', $want_version,
         'VERSION variable');
 cmp_ok (Gtk2::Ex::TreeViewBits->VERSION,  '>=', $want_version,
@@ -38,5 +38,35 @@ ok (eval { Gtk2::Ex::TreeViewBits->VERSION($want_version); 1 },
   ok (! eval { Gtk2::Ex::TreeViewBits->VERSION($check_version); 1 },
       "VERSION class check $check_version");
 }
+
+#-----------------------------------------------------------------------------
+
+require Gtk2;
+my $model = Gtk2::ListStore->new ('Glib::String');
+$model->set ($model->append, 0 => 'zero');
+$model->set ($model->append, 0 => 'one');
+$model->set ($model->append, 0 => 'two');
+$model->set ($model->append, 0 => 'three');
+
+my $treeview = Gtk2::TreeView->new ($model);
+
+Gtk2::Ex::TreeViewBits::remove_selected_rows ($treeview);
+require Gtk2::Ex::TreeModelBits;
+is_deeply ([ Gtk2::Ex::TreeModelBits::column_contents($model,0) ],
+           [ 'zero', 'one', 'two', 'three' ],
+           'remove_selected_rows() not removing anything');
+
+my $selection = $treeview->get_selection;
+$selection->set_mode ('multiple');
+$selection->select_path (Gtk2::TreePath->new("1"));
+$selection->select_path (Gtk2::TreePath->new("3"));
+diag "selected paths ",
+  join(' ', map {$_->to_string} $selection->get_selected_rows);
+
+Gtk2::Ex::TreeViewBits::remove_selected_rows ($treeview);
+require Gtk2::Ex::TreeModelBits;
+is_deeply ([ Gtk2::Ex::TreeModelBits::column_contents($model,0) ],
+           [ 'zero', 'two' ],
+           'remove_selected_rows() removed two');
 
 exit 0;

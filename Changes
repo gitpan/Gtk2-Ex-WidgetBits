@@ -16,6 +16,10 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+Version 14, December 2009
+    - TreeViewBits remove_selected_rows() use TreeRowReference for more safety
+    - Units new char_width()
+
 Version 13, December 2009
     - new Gtk2::Ex::Units
 

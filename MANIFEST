@@ -8,6 +8,7 @@ debian/rules
 debian/watch
 devel/action-tooltips.pl
 devel/entrybits-tie.pl
+devel/foreach-destroy.pl
 devel/hook.pl
 devel/messageuntilkey-multi-display.pl
 devel/messageuntilkey.pl
@@ -20,6 +21,7 @@ devel/units-line-height.pl
 devel/units.pl
 examples/action-tooltips.pl
 examples/treeview-toggle-expand.pl
+inc/my_pod2html
 inc/MyMakeMakerExtras.pm
 lib/Gtk2/Ex/ActionTooltips.pm
 lib/Gtk2/Ex/EntryBits.pm

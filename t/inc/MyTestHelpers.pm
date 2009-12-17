@@ -150,7 +150,7 @@ sub wait_for_event {
     Gtk2->main_iteration;
     $count++;
   }
-Test::More::diag ("wait_for_event('$signame'): ran $count events/iterations\n");
+  Test::More::diag ("wait_for_event('$signame'): ran $count events/iterations\n");
 
   $widget->signal_handler_disconnect ($sig_id);
   Glib::Source->remove ($timer_id);

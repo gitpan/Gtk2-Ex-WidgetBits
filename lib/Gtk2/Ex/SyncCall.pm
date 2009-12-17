@@ -23,7 +23,7 @@ use Carp;
 use Gtk2;
 
 # version 2 was in with Gtk2-Ex-Dragger ...
-our $VERSION = 13;
+our $VERSION = 14;
 
 # set this to 1 for some diagnostic prints
 use constant DEBUG => 0;
@@ -65,11 +65,11 @@ sub sync {
   my $win = $widget->window
     || croak __PACKAGE__.'->sync(): widget not realized';
 
-  # HACK: in gtk 2.18.4 property-change-event's aren't delivered to a
-  # non-toplevel widget unless you call $window->XID on it (which is
-  # gdk_x11_drawable_get_xid()).  This is bizarre and would have to be a
-  # bug, but this workaround at least makes SyncCall and its dependents like
-  # Gtk2::Ex::CrossHair work.
+  # HACK: in gtk 2.18.4 and 2.18.5 property-change-event's aren't delivered
+  # to a non-toplevel widget unless you call $gdkwin->XID on it
+  # (ie. gdk_x11_drawable_get_xid()).  This is bizarre and would have to be
+  # a bug, but this workaround at least makes SyncCall work (and its
+  # dependents like Gtk2::Ex::CrossHair).
   #
   if ($win->can('XID')) { $win->XID; }
 

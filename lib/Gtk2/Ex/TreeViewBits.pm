@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use Carp;
 
-our $VERSION = 13;
+our $VERSION = 14;
 
 use constant DEBUG => 0;
 
@@ -34,21 +34,32 @@ sub toggle_expand_row {
   }
 }
 
+# foreach @rows converting path to rowref frees each path as converted,
+# where a "map" keeps them all until the end, which might save a couple of
+# bytes of peak memory use.
+#
+# shift @rows in the removing frees each rowref as its processed, which will
+# save gtk_tree_row_ref_deleted() from going through now invalidated and
+# unwanted rowrefs -- which is pretty fast, but its easy to arrange an early
+# free for a small saving.
+# 
 sub remove_selected_rows {
   my ($treeview) = @_;
   my $model = $treeview->get_model;
   my $selection = $treeview->get_selection;
-  my $removed_path;
-  while (my ($path) = $selection->get_selected_rows) {
-    my $iter = $model->get_iter ($path)
-      || do {
-        carp 'Oops, selected row path "',$path->to_string,'" has no iter';
-        return;
-      };
-    $model->remove ($iter);
-    $removed_path = $path;
+
+  my @rows = $selection->get_selected_rows;  # paths
+  foreach (@rows) {
+    $_ = Gtk2::TreeRowReference->new($model,$_);  # rowrefs
   }
-  return $removed_path;
+  while (my $rowref = shift @rows) {
+    my $path = $rowref->get_path || next;  # if somehow gone away
+    if (my $iter = $model->get_iter ($path)) {
+      $model->remove ($iter);
+    } else {
+      carp 'Oops, selected row path "',$path->to_string,'" has no iter';
+    }
+  }
 }
 
 # In Gtk 2.12.12, when the row is bigger than the window, set_cursor()
@@ -129,6 +140,11 @@ TreeModel.  If nothing is selected then do nothing.
 Rows are removed using C<< $model->remove >> in the style of
 C<Gtk2::ListStore> or C<Gtk2::TreeStore>.  The model doesn't have to be a
 ListStore or TreeStore, only something with a compatible C<remove> method.
+
+Currently this is implemented by tracking the rows to be removed with a
+C<Gtk2::TreeRowReference> each, while removing them one by one.  This isn't
+fast, but is safe against additional changes to the model or selection
+during the removes.
 
 =item C<< Gtk2::Ex::TreeViewBits::scroll_cursor_to_path ($treeview, $path) >>
 

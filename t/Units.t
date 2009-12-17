@@ -33,12 +33,12 @@ Gtk2->init_check
   or plan skip_all => 'due to no DISPLAY available';
 MyTestHelpers::glib_gtk_versions();
 
-plan tests => 35;
+plan tests => 38;
 
 SKIP: { eval 'use Test::NoWarnings; 1'
           or skip 'Test::NoWarnings not available', 1; }
 
-my $want_version = 13;
+my $want_version = 14;
 cmp_ok ($Gtk2::Ex::Units::VERSION, '>=', $want_version, 'VERSION variable');
 cmp_ok (Gtk2::Ex::Units->VERSION,  '>=', $want_version, 'VERSION class method');
 { ok (eval { Gtk2::Ex::Units->VERSION($want_version); 1 },
@@ -91,13 +91,14 @@ my $label = Gtk2::Label->new;
 
 {
   my $target = $label;
+  my $char_width = Gtk2::Ex::Units::char_width($target);
   my $em = Gtk2::Ex::Units::em($target);
   my $digit_width = Gtk2::Ex::Units::digit_width($target);
   my $ex = Gtk2::Ex::Units::ex($target);
   my $screen = $label->get_screen;
   my $screen_width = $screen->get_width;
   my $screen_height = $screen->get_height;
-  diag "em is $em, ex is $ex, screen is $screen";
+  diag "em=$em, ex=$ex, char=$char_width, digit=$digit_width, screen=$screen";
 
   foreach my $elem (
                     # no unit
@@ -107,6 +108,11 @@ my $label = Gtk2::Label->new;
                     # pixel
                     [ \&Gtk2::Ex::Units::width, '123 pixel', 123 ],
                     [ \&Gtk2::Ex::Units::height, '456 pixels', 456 ],
+
+                    # char
+                    [ \&Gtk2::Ex::Units::width, '0 char', 0 ],
+                    [ \&Gtk2::Ex::Units::width, '6 char', 6*$char_width ],
+                    [ \&Gtk2::Ex::Units::width, '7 chars', 7*$char_width ],
 
                     # em
                     [ \&Gtk2::Ex::Units::width, '0 em', 0 ],

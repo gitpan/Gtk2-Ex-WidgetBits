@@ -41,10 +41,10 @@ $widget->signal_connect
    });
 
 my $win = $widget->window;
-print "$win  id=",$win->XID,"\n";
+# print "$win  id=",$win->XID,"\n";
 
 my $atom = Gtk2::Gdk::Atom->intern ('MyAtom');
-sleep 5;
+# sleep 5;
 
 print "initial\n";
 $win->property_change ($atom,

@@ -23,7 +23,7 @@ use warnings;
 use Gtk2 1.200; # for $iter->set()
 use Carp;
 
-our $VERSION = 13;
+our $VERSION = 14;
 
 use constant DEBUG => 0;
 

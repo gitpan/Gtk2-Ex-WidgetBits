@@ -24,7 +24,7 @@ use Exporter;
 # $widget->set_tooltip_text new in Gtk2 1.152
 use Gtk2 1.160;
 
-our $VERSION = 13;
+our $VERSION = 14;
 our @EXPORT_OK = qw(group_tooltips_to_menuitems
                     action_tooltips_to_menuitems_dynamic);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);

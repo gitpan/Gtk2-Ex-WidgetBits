@@ -22,7 +22,7 @@ use warnings;
 use Gtk2;
 use Scope::Guard;
 
-our $VERSION = 13;
+our $VERSION = 14;
 
 sub select_region_noclip {
   my ($entry, $start, $end) = @_;

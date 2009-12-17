@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 13;
+our $VERSION = 14;
 
 use constant DEBUG => 0;
 
@@ -132,6 +132,14 @@ another ListStore with the same types as an existing one,
       (Gtk2::Ex::TreeModelBits::all_column_types ($old_store));
 
 =back
+
+=head1 BUGS
+
+C<remove_matching_rows> only works properly in a Perl-Gtk compiled against
+Gtk 2.2 or higher.  If compiled against Gtk 2.0.x then only the first row
+which C<$subr> asks to remove is removed, then it returns as if there were
+no more rows.  It's unlikely you'll still be using 2.0.x, but watch this
+space for an emulation in newer Perl-Gtk.
 
 =head1 SEE ALSO
 

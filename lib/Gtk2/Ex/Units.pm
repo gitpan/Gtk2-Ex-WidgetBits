@@ -23,13 +23,13 @@ use Carp;
 use Gtk2::Pango; # for PANGO_SCALE
 
 use base 'Exporter';
-our @EXPORT_OK = qw(em ex digit_width line_height
+our @EXPORT_OK = qw(em ex char_width digit_width line_height
                     width height
                     set_default_size_with_subsizes
                     size_request_with_subsizes);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-our $VERSION = 13;
+our $VERSION = 14;
 
 use constant DEBUG => 0;
 
@@ -44,39 +44,60 @@ sub _to_screen {
   return ($target
           || croak "No screen for target $target");
 }
-
 sub _pango_rect {
-  my ($target, $str, $logical) = @_;
+  my ($target, $str, $want_logical) = @_;
   if (DEBUG) { print "_pango_rect() $target '$str'\n"; }
 
-  if ($target->can ('create_pango_layout')) {
+  if ($target->can('create_pango_layout')) {
     # if widget instead of layout
     $target = $target->create_pango_layout ($str);
   } else {
     $target->set_text ($str);
   }
-  return ($target->get_extents)[$logical||0];  # ($ink_rect,$logical_rect)
+  # get_extents() returns ($ink_rect,$logical_rect)
+  return ($target->get_extents)[$want_logical||0];
+}
+sub _pango_metrics {
+  my ($target) = @_;
+  my $context = ($target->can('pango_context')
+                 ? $target->pango_context       # Pango::Layout
+                 : $target->get_pango_context); # Gtk2::Widget
+
+  my $fontdesc = (($target->can('get_font_description')  # Pango::Layout
+                   && $target->get_font_description)
+                  || ($target->can('style')              # Gtk2::Widget
+                      && $target->style->font_desc)
+                  || $context->get_font_description);    # if unset
+  return $context->get_metrics ($fontdesc, $context->get_language);
 }
 
 #------------------------------------------------------------------------------
 
 sub em {
   my ($target) = @_;
-  return _pango_rect($target,'M')->{'width'} / Gtk2::Pango::PANGO_SCALE;
+  # logical rect to include inter-char spacing, so that "3 em" is roughly
+  # the width needed for "MMM"
+  return _pango_rect($target,'M',1)->{'width'} / Gtk2::Pango::PANGO_SCALE;
 }
 sub ex {
   my ($target) = @_;
   return _pango_rect($target,'x')->{'height'} / Gtk2::Pango::PANGO_SCALE;
 }
-
 sub line_height {
   my ($target) = @_;
-  return _pango_rect($target,"\n",1)->{'height'} / Gtk2::Pango::PANGO_SCALE;
+  # ink rect of newline is the line height plus line spacing
+  # (whereas log rect of empty is line height without line spacing,
+  # or log rect of newline is two line heights plus one line spacing)
+  return _pango_rect($target,"\n",0)->{'height'} / Gtk2::Pango::PANGO_SCALE;
 }
-
+sub char_width {
+  my ($target) = @_;
+  return _pango_metrics($target)->get_approximate_char_width
+    / Gtk2::Pango::PANGO_SCALE;
+}
 sub digit_width {
   my ($target) = @_;
-  return _pango_rect($target,"0\n1\n2\n3\n4\n5\n6\n7\n8\n9")->{'width'}
+  return _pango_metrics($target)->get_approximate_digit_width
     / Gtk2::Pango::PANGO_SCALE;
 }
 
@@ -101,6 +122,8 @@ sub _screen_width {
 }
 my %width = (pixel   => \&_pixel,
              pixels  => \&_pixel,
+             char    => \&char_width,
+             chars   => \&char_width,
              em      => \&em,
              ems     => \&em,
              digit   => \&digit_width,
@@ -203,8 +226,20 @@ sub size_request_with_subsizes {
   return $widget->size_request;
 }
 
+1;
+__END__
+
 #-----------------------------------------------------------------------------
 # unused bits
+
+# sub _to_pango_layout {
+#   my ($target) = @_;
+#   if ($target->can ('create_pango_layout')) {
+#     return $target->create_pango_layout ($str);
+#   } else {
+#     return $target;
+#   }
+# }
 
 #   if (my $func = $other->{$unit}) {
 #     my $factor = $h->{'_factor_other'};
@@ -258,9 +293,6 @@ sub size_request_with_subsizes {
 
 #-----------------------------------------------------------------------------
 
-1;
-__END__
-
 =head1 NAME
 
 Gtk2::Ex::Units -- widget sizes in various units
@@ -305,8 +337,9 @@ individually or with C<:all> in the usual way (see L<Exporter>).
 
 Return a size in pixels on C<$target> for a string size C<$str> like
 
+    10 chars       # width of a average character
     6 ems          # width of an "M" character
-    1 digit        # width of a digit 0 to 9
+    1 digit        # width of an average digit 0 to 9
     2 ex           # height of an "x" character
     1 line         # height of a line (baseline to baseline)
     10 mm          # millimetres, per screen size
@@ -317,8 +350,8 @@ Return a size in pixels on C<$target> for a string size C<$str> like
 Either singular like "inch" or plural "inches" can be given.  Decimals can
 be given, and the return may not be an integer.
 
-"em", "ex", "digit" and "line" follow the basic sizes functions below,
-according to the font in C<$target>.  For them C<$target> can be a
+"em", "ex", "char", "digit" and "line" follow the basic sizes functions
+below, according to the font in C<$target>.  For them C<$target> can be a
 C<Gtk2::Widget> or a Pango layout C<Gtk2::Pango::Layout>.
 
 "mm" and "inch" are based on the screen size for C<$target>.  For them
@@ -376,23 +409,31 @@ C<Pango::Layout>.
 Return the width of an "M", or the height of an "x", in pixels, for
 C<$target>.
 
+Currently an em includes inter-character spacing, so that "3 ems" makes room
+for "MMM", but an ex is just the inked height of that character.
+
+=item C<< $pixels = Gtk2::Ex::Units::char_width ($target) >>
+
 =item C<< $pixels = Gtk2::Ex::Units::digit_width ($target) >>
 
-Return the width of the widest digit "0" to "9", in pixels, for C<$target>.
-In a proportional font a "1" might be narrower than a "9", making
-C<digit_width> an over-estimate of the size you need for some values.
+Return the average width in pixels of a character or just a digit (0-9), for
+C<$target>.
+
+Currently these are per Pango's C<get_approximate_char_width> and
+C<get_approximate_digit_width>, so in a proportional font some characters or
+some of the digits may be wider than the average.
 
 =item C<< $pixels = Gtk2::Ex::Units::line_height ($target) >>
 
 Return the height of a line, in pixels, for C<$target>.  This the height of
-the tallest glyph in the target font, plus any pango line spacing
+the glyphs in the target font, plus any Pango line spacing per
 (C<< $layout->set_spacing >>).
 
 =back
 
 =head1 SEE ALSO
 
-L<Gtk2::Gdk::Screen> for screen size in pixels and millimetres
+L<Gtk2::Gdk::Screen>, for screen size in pixels and millimetres.
 
 L<Math::Units>
 
