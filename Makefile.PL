@@ -34,9 +34,14 @@ MyMakeMakerExtras::WriteMakefile
    MIN_PERL_VERSION => '5.008',
 
    PREREQ_PM    => {
+                    # part of Glib, but used explicitly, so name it here
+                    'Glib::Object::Subclass' => 0,
+
                     # 1.200 for $iter->set() in TreeModelFilter::Change
                     # remove(), and also 1.200 is a good idea for bug fixes
-                    'Gtk2' => 1.200,
+                    'Gtk2' => '1.200',
+                    # part of Gtk2, but used explicitly
+                    'Gtk2::Pango' => 0,
 
                     # my Glib-Ex-ObjectBits
                     # only used by SyncCall actually
@@ -52,8 +57,6 @@ MyMakeMakerExtras::WriteMakefile
         => { maximum_tests
              => { description => 'Have "make test" do as much as possible.',
                   requires => { 'Test::NoWarnings' => 0,
-                                # comes with Gtk2/Glib anyway of course
-                                'Glib::Object::Subclass' => 0,
                               },
                 },
            },

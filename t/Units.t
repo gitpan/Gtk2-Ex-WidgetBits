@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2008, 2009 Kevin Ryde
+# Copyright 2008, 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -38,9 +38,9 @@ plan tests => 38;
 SKIP: { eval 'use Test::NoWarnings; 1'
           or skip 'Test::NoWarnings not available', 1; }
 
-my $want_version = 14;
-cmp_ok ($Gtk2::Ex::Units::VERSION, '>=', $want_version, 'VERSION variable');
-cmp_ok (Gtk2::Ex::Units->VERSION,  '>=', $want_version, 'VERSION class method');
+my $want_version = 15;
+is ($Gtk2::Ex::Units::VERSION, $want_version, 'VERSION variable');
+is (Gtk2::Ex::Units->VERSION,  $want_version, 'VERSION class method');
 { ok (eval { Gtk2::Ex::Units->VERSION($want_version); 1 },
       "VERSION class check $want_version");
   my $check_version = $want_version + 1000;

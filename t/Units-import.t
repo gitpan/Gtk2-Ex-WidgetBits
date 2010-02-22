@@ -26,7 +26,7 @@ require Gtk2;
 Gtk2->init_check
   or plan skip_all => 'due to no DISPLAY available';
 
-plan tests => 12;
+plan tests => 13;
 
 SKIP: { eval 'use Test::NoWarnings; 1'
           or skip 'Test::NoWarnings not available', 1; }
@@ -36,6 +36,7 @@ my $toplevel = Gtk2::Window->new ('toplevel');
 
 cmp_ok (em($toplevel), '>', 0);
 cmp_ok (ex($toplevel), '>', 0);
+cmp_ok (char_width($toplevel), '>', 0);
 cmp_ok (digit_width($toplevel), '>', 0);
 cmp_ok (line_height($toplevel), '>', 0);
 is (width($toplevel,'1 pixel'), 1);

@@ -1,4 +1,4 @@
-# Copyright 2007, 2008, 2009 Kevin Ryde
+# Copyright 2007, 2008, 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -29,7 +29,7 @@ our @EXPORT_OK = qw(em ex char_width digit_width line_height
                     size_request_with_subsizes);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-our $VERSION = 14;
+our $VERSION = 15;
 
 use constant DEBUG => 0;
 
@@ -420,7 +420,7 @@ Return the average width in pixels of a character or just a digit (0-9), for
 C<$target>.
 
 Currently these are per Pango's C<get_approximate_char_width> and
-C<get_approximate_digit_width>, so in a proportional font some characters or
+C<get_approximate_digit_width>.  In a proportional font some characters or
 some of the digits may be wider than the average.
 
 =item C<< $pixels = Gtk2::Ex::Units::line_height ($target) >>
@@ -443,7 +443,7 @@ L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 
-Copyright 2007, 2008, 2009 Kevin Ryde
+Copyright 2007, 2008, 2009, 2010 Kevin Ryde
 
 Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

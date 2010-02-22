@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2008, 2009 Kevin Ryde
+# Copyright 2008, 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -22,16 +22,14 @@ use strict;
 use warnings;
 use Gtk2::Ex::TreeViewBits;
 
-use Test::More tests => 7;
+use Test::More tests => 11;
 
 SKIP: { eval 'use Test::NoWarnings; 1'
           or skip 'Test::NoWarnings not available', 1; }
 
-my $want_version = 14;
-cmp_ok ($Gtk2::Ex::TreeViewBits::VERSION, '>=', $want_version,
-        'VERSION variable');
-cmp_ok (Gtk2::Ex::TreeViewBits->VERSION,  '>=', $want_version,
-        'VERSION class method');
+my $want_version = 15;
+is ($Gtk2::Ex::TreeViewBits::VERSION, $want_version, 'VERSION variable');
+is (Gtk2::Ex::TreeViewBits->VERSION,  $want_version, 'VERSION class method');
 ok (eval { Gtk2::Ex::TreeViewBits->VERSION($want_version); 1 },
     "VERSION class check $want_version");
 { my $check_version = $want_version + 1000;
@@ -40,6 +38,7 @@ ok (eval { Gtk2::Ex::TreeViewBits->VERSION($want_version); 1 },
 }
 
 #-----------------------------------------------------------------------------
+# remove_selected_rows()
 
 require Gtk2;
 my $model = Gtk2::ListStore->new ('Glib::String');
@@ -49,24 +48,30 @@ $model->set ($model->append, 0 => 'two');
 $model->set ($model->append, 0 => 'three');
 
 my $treeview = Gtk2::TreeView->new ($model);
+my $selection = $treeview->get_selection;
 
+is (join(' ', map {$_->to_string} $selection->get_selected_rows),
+    '', 'no selected paths before remove');
 Gtk2::Ex::TreeViewBits::remove_selected_rows ($treeview);
 require Gtk2::Ex::TreeModelBits;
-is_deeply ([ Gtk2::Ex::TreeModelBits::column_contents($model,0) ],
-           [ 'zero', 'one', 'two', 'three' ],
-           'remove_selected_rows() not removing anything');
+is (join (' ', Gtk2::Ex::TreeModelBits::column_contents($model,0)),
+    'zero one two three',
+    'remove_selected_rows() not removing anything');
+is (join(' ', map {$_->to_string} $selection->get_selected_rows),
+    '', 'no selected paths after remove');
 
-my $selection = $treeview->get_selection;
 $selection->set_mode ('multiple');
 $selection->select_path (Gtk2::TreePath->new("1"));
 $selection->select_path (Gtk2::TreePath->new("3"));
-diag "selected paths ",
-  join(' ', map {$_->to_string} $selection->get_selected_rows);
+is (join(' ', map {$_->to_string} $selection->get_selected_rows),
+    '1 3', 'two selected paths before remove');
 
 Gtk2::Ex::TreeViewBits::remove_selected_rows ($treeview);
 require Gtk2::Ex::TreeModelBits;
-is_deeply ([ Gtk2::Ex::TreeModelBits::column_contents($model,0) ],
-           [ 'zero', 'two' ],
-           'remove_selected_rows() removed two');
+is (join (' ', Gtk2::Ex::TreeModelBits::column_contents($model,0)),
+    'zero two',
+    'remove_selected_rows() removed two');
+is (join(' ', map {$_->to_string} $selection->get_selected_rows),
+    '', 'no selected paths after remove');
 
 exit 0;

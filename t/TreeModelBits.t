@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2008, 2009 Kevin Ryde
+# Copyright 2008, 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -23,14 +23,17 @@ use warnings;
 use Gtk2::Ex::TreeModelBits;
 use Test::More tests => 16;
 
+use FindBin;
+use File::Spec;
+use lib File::Spec->catdir($FindBin::Bin,'inc');
+use MyTestHelpers;
+
 SKIP: { eval 'use Test::NoWarnings; 1'
           or skip 'Test::NoWarnings not available', 1; }
 
-my $want_version = 14;
-cmp_ok ($Gtk2::Ex::TreeModelBits::VERSION, '>=', $want_version,
-        'VERSION variable');
-cmp_ok (Gtk2::Ex::TreeModelBits->VERSION,  '>=', $want_version,
-        'VERSION class method');
+my $want_version = 15;
+is ($Gtk2::Ex::TreeModelBits::VERSION, $want_version, 'VERSION variable');
+is (Gtk2::Ex::TreeModelBits->VERSION,  $want_version, 'VERSION class method');
 ok (eval { Gtk2::Ex::TreeModelBits->VERSION($want_version); 1 },
     "VERSION class check $want_version");
 { my $check_version = $want_version + 1000;
@@ -39,24 +42,7 @@ ok (eval { Gtk2::Ex::TreeModelBits->VERSION($want_version); 1 },
 }
 
 require Gtk2;
-diag ("Perl-Gtk2 version ",Gtk2->VERSION);
-diag ("Perl-Glib version ",Glib->VERSION);
-diag ("Compiled against Glib version ",
-      Glib::MAJOR_VERSION(), ".",
-      Glib::MINOR_VERSION(), ".",
-      Glib::MICRO_VERSION(), ".");
-diag ("Running on       Glib version ",
-      Glib::major_version(), ".",
-      Glib::minor_version(), ".",
-      Glib::micro_version(), ".");
-diag ("Compiled against Gtk version ",
-      Gtk2::MAJOR_VERSION(), ".",
-      Gtk2::MINOR_VERSION(), ".",
-      Gtk2::MICRO_VERSION(), ".");
-diag ("Running on       Gtk version ",
-      Gtk2::major_version(), ".",
-      Gtk2::minor_version(), ".",
-      Gtk2::micro_version(), ".");
+MyTestHelpers::glib_gtk_versions();
 
 
 #------------------------------------------------------------------------------
