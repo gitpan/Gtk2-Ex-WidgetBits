@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 15;
+our $VERSION = 16;
 
 sub new {
   my ($class, $func, $userdata) = @_;

@@ -20,8 +20,7 @@
 
 use strict;
 use warnings;
-use Gtk2::Ex::TreeModelBits;
-use Test::More tests => 16;
+use Test::More tests => 17;
 
 use FindBin;
 use File::Spec;
@@ -31,12 +30,15 @@ use MyTestHelpers;
 SKIP: { eval 'use Test::NoWarnings; 1'
           or skip 'Test::NoWarnings not available', 1; }
 
-my $want_version = 15;
-is ($Gtk2::Ex::TreeModelBits::VERSION, $want_version, 'VERSION variable');
-is (Gtk2::Ex::TreeModelBits->VERSION,  $want_version, 'VERSION class method');
-ok (eval { Gtk2::Ex::TreeModelBits->VERSION($want_version); 1 },
-    "VERSION class check $want_version");
-{ my $check_version = $want_version + 1000;
+require Gtk2::Ex::TreeModelBits;
+
+{
+  my $want_version = 16;
+  is ($Gtk2::Ex::TreeModelBits::VERSION, $want_version, 'VERSION variable');
+  is (Gtk2::Ex::TreeModelBits->VERSION,  $want_version, 'VERSION class method');
+  ok (eval { Gtk2::Ex::TreeModelBits->VERSION($want_version); 1 },
+      "VERSION class check $want_version");
+  my $check_version = $want_version + 1000;
   ok (! eval { Gtk2::Ex::TreeModelBits->VERSION($check_version); 1 },
       "VERSION class check $check_version");
 }
@@ -91,11 +93,16 @@ MyTestHelpers::glib_gtk_versions();
   my $store = Gtk2::ListStore->new ('Glib::String');
   $store->set ($store->insert(0), 0=>'one');
   $store->set ($store->insert(1), 0=>'two');
+  my $got_arg;
   Gtk2::Ex::TreeModelBits::remove_matching_rows
-      ($store, sub { my ($store, $iter) = @_;
-                     my $value = $store->get_value ($iter, 0);
-                     return ($value eq 'one'); });
-  is ($store->iter_n_children(undef), 1);
+      ($store,
+       sub { my ($store, $iter, $arg) = @_;
+             $got_arg = $arg;
+             my $value = $store->get_value ($iter, 0);
+             return ($value eq 'one'); },
+       'extra argument');
+  is ($store->iter_n_children(undef), 1, 'extra argument');
+  is ($got_arg, 'extra argument');
 }
 {
   my $store = Gtk2::ListStore->new ('Glib::String');

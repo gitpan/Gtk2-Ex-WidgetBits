@@ -21,10 +21,10 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 15;
+our $VERSION = 16;
 
-use constant DEBUG => 0;
-
+# uncomment this to run the ### lines
+#use Smart::Comments;
 
 sub column_contents {
   my ($model, $column) = @_;
@@ -40,28 +40,33 @@ sub column_contents {
                      $ret[$pos++] = $model->get_value ($iter, $column);
                      return 0; # keep walking
                    });
-  if (DEBUG) {
-    if ($pos < @ret) {
-      print "column_contents(): oops, iterating gave less than n_children\n";
-    }
-  }
+  # iterating should give n_children, trim @ret if it doesn't
+  ### assert: $pos >= scalar(@ret)
   $#ret = $pos-1;
+
   return @ret;
 }
 
+# If a remove() might end up removing more than one row then it's expected
+# to leave $iter at whatever next row then exists (at the same depth).
+# A multi-remove happens for instance in Gtk2::Ex::ListModelConcat when it's
+# presenting two or more copies of one submodel.
+# Gtk2::Ex::TreeModelFilter::Change::remove() asks for similar from its
+# child remove().
+#
 sub remove_matching_rows {
-  my ($model, $subr) = @_;
+  my $model = shift;
+  my $subr = shift;
 
   my @pending;
   my $iter = $model->get_iter_first;
 
   for (;;) {
-    # undef at end of one level, pop the upper level, or finished if no upper
+    # undef at end of one level, pop to upper level, or finished if no upper
     $iter ||= pop @pending || last;
+    ### looking at: $model->get_path($iter)->to_string
 
-    if (DEBUG) { print "looking at ",$model->get_path($iter)->to_string,"\n"; }
-
-    if ($subr->($model, $iter)) {
+    if ($subr->($model, $iter, @_)) {
       if (! $model->remove ($iter)) {
         $iter = undef; # no more at this depth
       }
@@ -73,8 +78,7 @@ sub remove_matching_rows {
     $iter = $model->iter_next ($iter);
 
     if ($child) {
-      if (DEBUG) { print "descend to child ",
-                     $model->get_path($child)->to_string,"\n"; }
+      ### descend to child: $model->get_path($child)->to_string
       push @pending, $iter;
       $iter = $child;
     }
@@ -110,18 +114,21 @@ Any tree structure in the model is flattened out for the return.  A parent
 row's column value comes first, followed by the column values from its
 children, recursively, as per C<< $model->foreach >>.
 
-=item C<Gtk2::Ex::TreeModelBits::remove_matching_rows ($store, $subr)>
+=item C<Gtk2::Ex::TreeModelBits::remove_matching_rows ($store, $subr, ...)>
 
 Remove from C<$store> all rows passing C<$subr>.  C<$store> can be a
 C<Gtk2::TreeStore>, a C<Gtk2::ListStore>, or another type with the same
 style C<< $store->remove >> method.  C<$subr> is called
 
-    $want_remove = &$subr ($store, $iter)
+    $want_remove = &$subr ($store, $iter, ...)
 
-where C<$iter> is the row being considered and C<$subr> should return true
-if it wants to remove the row.  The order rows are considered is
-unspecified, except that a parent row is tested before its children (the
-children of course tested only if the parent is not removed).
+where C<$iter> is the row being considered, and any extra arguments to
+C<remove_matching_rows> are passed on to C<$subr>.  C<$subr> should return
+true if it wants to remove the row.
+
+The order rows are considered and removed is unspecified, except that a
+parent row is tested before its children (the children of course tested only
+if the parent is not removed).
 
 =item C<@types = Gtk2::Ex::TreeModelBits::all_column_types ($model)>
 
@@ -133,13 +140,13 @@ another ListStore with the same types as an existing one,
 
 =back
 
-=head1 BUGS
+=head1 OTHER NOTES
 
-C<remove_matching_rows> only works properly in a Perl-Gtk compiled against
-Gtk 2.2 or higher.  If compiled against Gtk 2.0.x then only the first row
-which C<$subr> asks to remove is removed, then it returns as if there were
-no more rows.  It's unlikely you'll still be using 2.0.x, but watch this
-space for an emulation in newer Perl-Gtk.
+If you use an old Gtk 2.0.x and want to pass a C<Gtk2::ListStore> or
+C<Gtk2::TreeStore> to C<remove_matching_rows> then get Perl-Gtk 1.240 or
+higher to have the C<remove> method on those Stores return a flag the same
+as in Gtk 2.2 and up.  Otherwise C<remove_matching_rows> will stop after the
+first row removed.
 
 =head1 SEE ALSO
 

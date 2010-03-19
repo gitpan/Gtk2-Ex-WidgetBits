@@ -20,7 +20,6 @@
 
 use strict;
 use warnings;
-use Gtk2::Ex::EntryBits;
 use Test::More tests => 13;
 
 use FindBin;
@@ -31,10 +30,13 @@ use MyTestHelpers;
 SKIP: { eval 'use Test::NoWarnings; 1'
           or skip 'Test::NoWarnings not available', 1; }
 
-my $want_version = 15;
-is ($Gtk2::Ex::EntryBits::VERSION, $want_version, 'VERSION variable');
-is (Gtk2::Ex::EntryBits->VERSION,  $want_version, 'VERSION class method');
-{ ok (eval { Gtk2::Ex::EntryBits->VERSION($want_version); 1 },
+require Gtk2::Ex::EntryBits;
+
+{
+  my $want_version = 16;
+  is ($Gtk2::Ex::EntryBits::VERSION, $want_version, 'VERSION variable');
+  is (Gtk2::Ex::EntryBits->VERSION,  $want_version, 'VERSION class method');
+  ok (eval { Gtk2::Ex::EntryBits->VERSION($want_version); 1 },
       "VERSION class check $want_version");
   my $check_version = $want_version + 1000;
   ok (! eval { Gtk2::Ex::EntryBits->VERSION($check_version); 1 },

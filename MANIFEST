@@ -19,6 +19,7 @@ devel/synccall.pl
 devel/treeview-scroll.pl
 devel/units-line-height.pl
 devel/units.pl
+devel/unused.pl
 examples/action-tooltips.pl
 examples/treeview-toggle-expand.pl
 inc/my_pod2html

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2008, 2009 Kevin Ryde
+# Copyright 2008, 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -37,8 +37,9 @@ MyMakeMakerExtras::WriteMakefile
                     # part of Glib, but used explicitly, so name it here
                     'Glib::Object::Subclass' => 0,
 
-                    # 1.200 for $iter->set() in TreeModelFilter::Change
-                    # remove(), and also 1.200 is a good idea for bug fixes
+                    # 1.200 for TreeModelFilter::Change::remove() doing
+                    # $iter->set() in, and also 1.200 is a good idea for bug
+                    # fixes
                     'Gtk2' => '1.200',
                     # part of Gtk2, but used explicitly
                     'Gtk2::Pango' => 0,

@@ -24,12 +24,13 @@ use Exporter;
 # $widget->set_tooltip_text new in Gtk2 1.152
 use Gtk2 1.160;
 
-our $VERSION = 15;
+our $VERSION = 16;
 our @EXPORT_OK = qw(group_tooltips_to_menuitems
                     action_tooltips_to_menuitems_dynamic);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-use constant DEBUG => 0;
+# uncomment this to run the ### lines
+#use Smart::Comments;
 
 # Cribs:
 #
@@ -77,9 +78,7 @@ sub action_tooltips_to_menuitems_dynamic {
 sub _do_connect_proxy {
   my ($invocation_hint, $parameters) = @_;
   my ($actiongroup, $action, $widget) = @$parameters;
-  if (DEBUG) {
-    print "dynamic: connect @{[$action->get_name]} $action onto $widget\n";
-  }
+  ### dynamic connect: ("@{[$action->get_name]} $action onto $widget")
 
   if ((exists $actiongroup->{(__PACKAGE__)}
        || exists $action->{(__PACKAGE__)})
@@ -93,11 +92,10 @@ sub _do_connect_proxy {
 sub _do_action_tooltip {
   my ($action) = @_;
   my $tip = $action->get('tooltip');
-  if (DEBUG) { print "tooltip @{[$action->get_name]} $action, tip '",
-                 (defined $tip ? $tip : 'undef'), "'\n";
-             }
+  ### tooltip: ["@{[$action->get_name]} $action, tip ", $tip]
+
   foreach my $widget ($action->get_proxies) {
-    if (DEBUG) { print "  proxy $widget\n"; }
+    ### proxy: $widget
     if ($widget->isa('Gtk2::MenuItem')) {
       # use set_property() to support older Perl-Gtk
       $widget->set_tooltip_text ($tip);

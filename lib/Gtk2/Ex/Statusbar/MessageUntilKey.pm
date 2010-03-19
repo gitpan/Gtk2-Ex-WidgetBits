@@ -1,4 +1,4 @@
-# Copyright 2008, 2009 Kevin Ryde
+# Copyright 2008, 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -20,11 +20,9 @@ use 5.008;
 use strict;
 use warnings;
 use Gtk2;
-use Scalar::Util;
 
-our $VERSION = 1;
-
-use constant DEBUG => 0;
+# WidgetBits 11 through 15 mistakenly had only $VERSION==1 here
+our $VERSION = 16;
 
 sub message {
   my ($class, $statusbar, $str) = @_;
@@ -34,20 +32,21 @@ sub message {
   $statusbar->push ($id, $str);
 }
 
-# The alternative would be a single snooper and hook, and look through a
-# list of statusbars with messages, maybe a Tie::RefHash::Weak.  Normally
-# there'll be just one or two statusbars, so small and simple is the aim.
+# The alternative would be a single KeySnooper object and emission hook, and
+# have it look through a list of statusbars with messages, maybe held in a
+# Tie::RefHash::Weak.  But normally there'll be just one or two statusbars,
+# so aim for small and simple.
 #
 sub _new {
   my ($class, $statusbar) = @_;
 
+  require Scalar::Util;
   require Gtk2::Ex::KeySnooper;
   Scalar::Util::weaken (my $weak_statusbar = $statusbar);
-  my $ref_weak_statusbar = \$weak_statusbar;
   return bless
-    { snooper => Gtk2::Ex::KeySnooper->new (\&_do_event, $ref_weak_statusbar),
+    { snooper => Gtk2::Ex::KeySnooper->new (\&_do_event, \$weak_statusbar),
       emission_id => Gtk2::Widget->signal_add_emission_hook
-      (button_press_event => \&_do_button_hook, $ref_weak_statusbar)
+      (button_press_event => \&_do_button_hook, \$weak_statusbar)
     }, $class;
 }
 
@@ -58,9 +57,8 @@ sub DESTROY {
 }
 
 sub remove {
-  my ($class, $statusbar) = @_;
-  if (DEBUG) { print "MessageUntilKey remove ",
-                 $statusbar->{(__PACKAGE__)}||'(none)',"\n"; }
+  my ($class_or_self, $statusbar) = @_;
+  ### MessageUntilKey remove: $statusbar->{(__PACKAGE__)}
 
   delete $statusbar->{(__PACKAGE__)} || return;
   my $id = $statusbar->get_context_id(__PACKAGE__);
@@ -70,7 +68,7 @@ sub remove {
 # KeySnooper handler, and called from button below
 sub _do_event {
   my ($widget, $event, $ref_weak_statusbar) = @_;
-  if (DEBUG) { print "MessageUntilKey _do_event ",$event->type,"\n"; }
+  ### MessageUntilKey _do_event: $event->type
 
   # the snooper should be destroyed together with statusbar, but the button
   # hook isn't, so check $ref_weak_statusbar hasn't gone away
@@ -82,7 +80,10 @@ sub _do_event {
   if ($event->type eq 'key-press' || $event->type eq 'button-press') {
     if (my $statusbar = $$ref_weak_statusbar) {
       if ($widget->get_display == $statusbar->get_display) {
-        __PACKAGE__->remove ($statusbar);
+        # call through object to allow for subclassing
+        if (my $self = $statusbar->{(__PACKAGE__)}) {
+          $self->remove ($statusbar);
+        }
       }
     }
   }
@@ -180,7 +181,7 @@ L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 
-Copyright 2008, 2009 Kevin Ryde
+Copyright 2008, 2009, 2010 Kevin Ryde
 
 Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

@@ -27,12 +27,13 @@ use Test::More tests => 11;
 SKIP: { eval 'use Test::NoWarnings; 1'
           or skip 'Test::NoWarnings not available', 1; }
 
-my $want_version = 15;
-is ($Gtk2::Ex::TreeViewBits::VERSION, $want_version, 'VERSION variable');
-is (Gtk2::Ex::TreeViewBits->VERSION,  $want_version, 'VERSION class method');
-ok (eval { Gtk2::Ex::TreeViewBits->VERSION($want_version); 1 },
-    "VERSION class check $want_version");
-{ my $check_version = $want_version + 1000;
+{
+  my $want_version = 16;
+  is ($Gtk2::Ex::TreeViewBits::VERSION, $want_version, 'VERSION variable');
+  is (Gtk2::Ex::TreeViewBits->VERSION,  $want_version, 'VERSION class method');
+  ok (eval { Gtk2::Ex::TreeViewBits->VERSION($want_version); 1 },
+      "VERSION class check $want_version");
+  my $check_version = $want_version + 1000;
   ok (! eval { Gtk2::Ex::TreeViewBits->VERSION($check_version); 1 },
       "VERSION class check $check_version");
 }

@@ -23,10 +23,10 @@ use warnings;
 use Gtk2 1.200; # for $iter->set()
 use Carp;
 
-our $VERSION = 15;
+our $VERSION = 16;
 
-use constant DEBUG => 0;
-
+# uncomment this to run the ### lines
+#use Smart::Comments;
 
 # append empty row, return new iter
 # prepend empty row, return new iter
@@ -119,13 +119,16 @@ sub move_before {
 #
 sub remove {
   my ($self, $iter) = @_;
+  ### TreeModelFilter-Change remove()
 
   my $subiter = $self->convert_iter_to_child_iter ($iter);
 
-  if ($self->get_model->remove ($subiter)) {
+  my $model = $self->get_model;
+  if ($model->remove ($subiter)) {
+    ### child remove() true
+    ### subiter path: $model->get_path($subiter)->to_string
     # if the updated $subiter is filtered out then search forwards for the
     # next unfiltered
-    my $model = $self->get_model;
     do {
       if (my $new_iter = $self->convert_child_iter_to_iter ($subiter)) {
         $iter->set ($new_iter);
@@ -134,6 +137,7 @@ sub remove {
     } while ($subiter = $model->iter_next ($subiter));
   }
 
+  ### TreeModelFilter-Change remove() no further rows
   # no more rows in this node after the removed one, or no more which pass
   # the filter at least
   $iter->set ([0,0,undef,undef]);  # invalidate, new in Gtk 1.200

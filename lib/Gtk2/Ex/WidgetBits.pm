@@ -22,7 +22,7 @@ use warnings;
 use Carp;
 use Gtk2;
 
-our $VERSION = 15;
+our $VERSION = 16;
 
 # get_root_position() might be done as
 #
@@ -159,8 +159,8 @@ the screen.
 
 =head1 SEE ALSO
 
-L<Gtk2::Ex::EntryBits>, L<Gtk2::Ex::GdkBits> L<Gtk2::Ex::TreeModelBits>,
-L<Gtk2::Ex::TreeViewBits>
+L<Gtk2::Ex::EntryBits>, L<Gtk2::Ex::GdkBits>, L<Gtk2::Ex::TreeModelBits>,
+L<Gtk2::Ex::TreeViewBits>, L<Gtk2::Ex::Units>
 
 L<Gtk2::Ex::ActionTooltips>, L<Gtk2::Ex::KeySnooper>, L<Gtk2::Ex::SyncCall>,
 L<Gtk2::Ex::Statusbar::MessageUntilKey>,

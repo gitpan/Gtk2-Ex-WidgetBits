@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use Carp;
 
-our $VERSION = 15;
+our $VERSION = 16;
 
 use constant DEBUG => 0;
 

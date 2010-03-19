@@ -29,9 +29,10 @@ our @EXPORT_OK = qw(em ex char_width digit_width line_height
                     size_request_with_subsizes);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-our $VERSION = 15;
+our $VERSION = 16;
 
-use constant DEBUG => 0;
+# uncomment this to run the ### lines
+#use Smart::Comments;
 
 
 #------------------------------------------------------------------------------
@@ -46,7 +47,7 @@ sub _to_screen {
 }
 sub _pango_rect {
   my ($target, $str, $want_logical) = @_;
-  if (DEBUG) { print "_pango_rect() $target '$str'\n"; }
+  ### _pango_rect(): [$target, $str]
 
   if ($target->can('create_pango_layout')) {
     # if widget instead of layout
@@ -178,7 +179,7 @@ sub height {
 }
 sub _units {
   my ($target, $str, $h, $other) = @_;
-  if (DEBUG) { print "_units \"$str\"\n"; }
+  ### _units str: $str
 
   my ($amount,$unit) = ($str =~ /(.*?)\s*([[:alpha:]_]+)$/s)
     or return $str;
@@ -281,11 +282,11 @@ __END__
 #     $unitclass = "Gtk2::Ex::Units::$unitclass";
 #     eval { Module::Load::load ($unitclass) }
 #       || do {
-#         if (DEBUG >= 2) { print "  cannot load $unitclass -- $@"; };
+#         #### cannot load: "$unitclass -- $@"
 #       };
 #
 #     if (my $func = $unitclass->can($method)) {
-#       if (DEBUG) { print "  use $unitclass->$method\n"; }
+#       ### use: "$unitclass->$method"
 #       return &$func ($unitclass, $target, $amount);
 #     }
 #   }
