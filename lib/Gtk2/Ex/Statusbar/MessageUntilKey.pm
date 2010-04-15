@@ -22,7 +22,7 @@ use warnings;
 use Gtk2;
 
 # WidgetBits 11 through 15 mistakenly had only $VERSION==1 here
-our $VERSION = 16;
+our $VERSION = 17;
 
 sub message {
   my ($class, $statusbar, $str) = @_;
@@ -100,6 +100,8 @@ sub _do_button_hook {
 
 1;
 __END__
+
+=for stopwords Statusbar multi-display statusbar's statusbar MessageUntilKey Keypresses keypresses clickable unclickable toplevel toplevels unparented Ryde Gtk2-Ex-WidgetBits
 
 =head1 NAME
 

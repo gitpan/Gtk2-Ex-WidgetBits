@@ -24,7 +24,7 @@ use Exporter;
 # $widget->set_tooltip_text new in Gtk2 1.152
 use Gtk2 1.160;
 
-our $VERSION = 16;
+our $VERSION = 17;
 our @EXPORT_OK = qw(group_tooltips_to_menuitems
                     action_tooltips_to_menuitems_dynamic);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
@@ -105,6 +105,8 @@ sub _do_action_tooltip {
 
 1;
 __END__
+
+=for stopwords tooltips MenuItems Gtk MenuItem tooltip unintrusive GtkActionGroup statusbar ActionGroup Ryde Gtk2-Ex-WidgetBits
 
 =head1 NAME
 

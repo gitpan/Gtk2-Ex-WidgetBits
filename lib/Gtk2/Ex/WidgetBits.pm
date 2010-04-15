@@ -22,7 +22,7 @@ use warnings;
 use Carp;
 use Gtk2;
 
-our $VERSION = 16;
+our $VERSION = 17;
 
 # get_root_position() might be done as
 #
@@ -111,6 +111,8 @@ sub _hypot {
 1;
 __END__
 
+=for stopwords Gdk ie eg toplevel Ryde Gtk2-Ex-WidgetBits Gtk2
+
 =head1 NAME
 
 Gtk2::Ex::WidgetBits - miscellaneous Gtk widget helpers
@@ -152,19 +154,27 @@ C<$x2>,C<$y2> in C<$widget>.
 
 Pixels are converted to millimetres using the screen size from
 C<Gtk2::Gdk::Screen>.  C<$widget> must have been added into a toplevel
-widget heirarchy (eg. C<Gtk2::Window>), since the toplevel widget determines
+widget hierarchy (eg. C<Gtk2::Window>), since the toplevel widget determines
 the screen.
 
 =back
 
 =head1 SEE ALSO
 
-L<Gtk2::Ex::EntryBits>, L<Gtk2::Ex::GdkBits>, L<Gtk2::Ex::TreeModelBits>,
-L<Gtk2::Ex::TreeViewBits>, L<Gtk2::Ex::Units>
+L<Gtk2::Ex::EntryBits>,
+L<Gtk2::Ex::GdkBits>,
+L<Gtk2::Ex::MenuBits>,
+L<Gtk2::Ex::TreeModelBits>,
+L<Gtk2::Ex::TreeModel::ImplBits>,
+L<Gtk2::Ex::TreeViewBits>,
+L<Gtk2::Ex::Units>
 
-L<Gtk2::Ex::ActionTooltips>, L<Gtk2::Ex::KeySnooper>, L<Gtk2::Ex::SyncCall>,
+L<Gtk2::Ex::ActionTooltips>,
+L<Gtk2::Ex::KeySnooper>,
+L<Gtk2::Ex::SyncCall>,
 L<Gtk2::Ex::Statusbar::MessageUntilKey>,
-L<Gtk2::Ex::TreeModelFilter::Change>
+L<Gtk2::Ex::TreeModelFilter::Change>,
+L<Test::Weaken::Gtk2>
 
 L<Gtk2::Widget>, L<Gtk2::Ex::WidgetCursor>.
 

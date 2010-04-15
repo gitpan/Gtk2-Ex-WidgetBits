@@ -22,7 +22,7 @@ use warnings;
 use Carp;
 use Gtk2;
 
-our $VERSION = 16;
+our $VERSION = 17;
 
 
 # The loop here is similar to what gtk_widget_translate_coordinates() does
@@ -42,6 +42,8 @@ sub window_get_root_position {
   return ($x, $y);
 }
 
+# Not yet documented, might move elsewhere ...
+# Or maybe better $rect->intersect not undef ...
 sub rect_contains_rect {
   my ($rect, $part) = @_;
   return $rect->x <= $part->x
@@ -52,6 +54,8 @@ sub rect_contains_rect {
 
 1;
 __END__
+
+=for stopwords Gdk Ryde Gtk2-Ex-WidgetBits
 
 =head1 NAME
 

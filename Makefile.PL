@@ -70,9 +70,12 @@ MyMakeMakerExtras::WriteMakefile
         'Gtk2::Ex::EntryBits',
         'Gtk2::Ex::KeySnooper',
         'Gtk2::Ex::SyncCall',
+        'Gtk2::Ex::MenuBits',
         'Gtk2::Ex::TreeModelBits',
+        'Gtk2::Ex::TreeModel::ImplBits',
         'Gtk2::Ex::TreeModelFilter::Change',
         'Gtk2::Ex::TreeViewBits',
-        'Gtk2::Ex::WidgetBits'
+        'Gtk2::Ex::WidgetBits',
+        'Test::Weaken::Gtk2',
       ],
   );

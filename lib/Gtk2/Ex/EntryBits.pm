@@ -22,7 +22,7 @@ use warnings;
 use Gtk2;
 use Scope::Guard;
 
-our $VERSION = 16;
+our $VERSION = 17;
 
 sub select_region_noclip {
   my ($entry, $start, $end) = @_;
@@ -40,6 +40,8 @@ sub select_region_noclip {
 
 1;
 __END__
+
+=for stopwords Ryde Gtk2-Ex-WidgetBits
 
 =head1 NAME
 

@@ -27,20 +27,21 @@ use File::Spec;
 use lib File::Spec->catdir($FindBin::Bin,'inc');
 use MyTestHelpers;
 
-require Gtk2;
-Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
-if (! Gtk2->init_check) {
-  plan skip_all => 'due to no DISPLAY available';
+BEGIN {
+  require Gtk2;
+  Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
+  if (! Gtk2->init_check) {
+    plan skip_all => 'due to no DISPLAY available';
+  }
+  plan tests => 15;
+
+ SKIP: { eval 'use Test::NoWarnings; 1'
+           or skip 'Test::NoWarnings not available', 1; }
 }
-plan tests => 15;
-
-SKIP: { eval 'use Test::NoWarnings; 1'
-          or skip 'Test::NoWarnings not available', 1; }
-
 require Gtk2::Ex::ActionTooltips;
 
 {
-  my $want_version = 16;
+  my $want_version = 17;
   is ($Gtk2::Ex::ActionTooltips::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::ActionTooltips->VERSION,  $want_version,

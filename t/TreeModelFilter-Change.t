@@ -22,13 +22,14 @@ use warnings;
 
 use Test::More tests => 20;
 
-SKIP: { eval 'use Test::NoWarnings; 1'
-          or skip 'Test::NoWarnings not available', 1; }
-
+BEGIN {
+ SKIP: { eval 'use Test::NoWarnings; 1'
+           or skip 'Test::NoWarnings not available', 1; }
+}
 require Gtk2::Ex::TreeModelFilter::Change;
 
 {
-  my $want_version = 16;
+  my $want_version = 17;
   is ($Gtk2::Ex::TreeModelFilter::Change::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::TreeModelFilter::Change->VERSION,  $want_version,

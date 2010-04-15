@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 16;
+our $VERSION = 17;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
@@ -92,6 +92,8 @@ sub all_column_types {
 
 1;
 __END__
+
+=for stopwords TreeModel ListStore Ryde Gtk2 Gtk2-Ex-WidgetBits
 
 =head1 NAME
 

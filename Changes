@@ -16,6 +16,10 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+Version 17, April 2010
+    - new Gtk2::Ex::MenuBits, Gtk2::Ex::TreeModel::ImplBits and
+      Test::Weaken::Gtk2
+
 Version 16, March 2010
     - TreeModelBits remove_matching_rows() extra arguments passed to $subr
     - MessageUntilKey call remove() through object for subclassing

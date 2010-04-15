@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2009 Kevin Ryde
+# Copyright 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -76,7 +76,7 @@ $actiongroup->add_actions
       undef,       # accelerator
       undef,       # tooltip (set in the code below)
       sub {        # code when action activated
-        print "MyAction runs\n"
+        print "MyAction runs\n";
       }
     ],
     [ 'Quit',      # name
@@ -85,7 +85,7 @@ $actiongroup->add_actions
       undef,       # accelerator
       'Quit means close the window and exit the program',  # tooltip
       sub {        # code when action activated
-        $toplevel->destroy
+        $toplevel->destroy;
       }
     ],
    ]);

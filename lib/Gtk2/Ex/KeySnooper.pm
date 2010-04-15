@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 16;
+our $VERSION = 17;
 
 sub new {
   my ($class, $func, $userdata) = @_;
@@ -53,6 +53,8 @@ sub remove {
 
 1;
 __END__
+
+=for stopwords KeySnooper ie Ryde Gtk2 Gtk2-Ex-WidgetBits
 
 =head1 NAME
 

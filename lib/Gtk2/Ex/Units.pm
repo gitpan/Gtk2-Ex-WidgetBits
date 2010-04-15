@@ -29,7 +29,7 @@ our @EXPORT_OK = qw(em ex char_width digit_width line_height
                     size_request_with_subsizes);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-our $VERSION = 16;
+our $VERSION = 17;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
@@ -211,17 +211,17 @@ sub size_request_with_subsizes {
   my @guard;
 
   foreach my $elem (@elems) {
-    my ($widget, $width, $height) = @$elem;
-    my ($save_width, $save_height) = $widget->get_size_request;
+    my ($subwidget, $width, $height) = @$elem;
+    my ($save_width, $save_height) = $subwidget->get_size_request;
     my $width_pixels = (defined $width
-                        ? Gtk2::Ex::Units::width($widget,$width)
+                        ? Gtk2::Ex::Units::width($subwidget,$width)
                         : $save_width);
     my $height_pixels = (defined $height
-                        ? Gtk2::Ex::Units::height($widget,$height)
+                        ? Gtk2::Ex::Units::height($subwidget,$height)
                         : $save_height);
     push @guard, Scope::Guard->new
-      (sub { $widget->set_size_request ($save_width, $save_height) });
-    $widget->set_size_request ($width_pixels, $height_pixels);
+      (sub { $subwidget->set_size_request ($save_width, $save_height) });
+    $subwidget->set_size_request ($width_pixels, $height_pixels);
   }
 
   return $widget->size_request;
@@ -293,6 +293,8 @@ __END__
 
 
 #-----------------------------------------------------------------------------
+
+=for stopwords toplevel Pango arrayref ie MMM Pango's Ryde Gtk2-Ex-WidgetBits
 
 =head1 NAME
 

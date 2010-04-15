@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2009 Kevin Ryde
+# Copyright 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -18,10 +18,11 @@
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
-BEGIN { $ENV{'DISPLAY'} ||= ':0' }
 use strict;
 use warnings;
 use Devel::GlobalDestruction ();
+
+BEGIN { $ENV{'DISPLAY'} ||= ':0' }
 use Gtk2 '-init';
 
 {

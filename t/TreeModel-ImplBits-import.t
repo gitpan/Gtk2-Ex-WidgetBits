@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2008, 2009, 2010 Kevin Ryde
+# Copyright 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -17,40 +17,25 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
+use 5.008;
 use strict;
 use warnings;
-use Gtk2::Ex::Units ':all';
-use Test::More;
+use Gtk2::Ex::TreeModel::ImplBits 'random_stamp';
+use Test::More tests => 101;
 
 BEGIN {
-  require Gtk2;
-  Gtk2->init_check
-    or plan skip_all => 'due to no DISPLAY available';
-
-  plan tests => 13;
-
  SKIP: { eval 'use Test::NoWarnings; 1'
            or skip 'Test::NoWarnings not available', 1; }
 }
 
-my $toplevel = Gtk2::Window->new ('toplevel');
-
-cmp_ok (em($toplevel), '>', 0);
-cmp_ok (ex($toplevel), '>', 0);
-cmp_ok (char_width($toplevel), '>', 0);
-cmp_ok (digit_width($toplevel), '>', 0);
-cmp_ok (line_height($toplevel), '>', 0);
-is (width($toplevel,'1 pixel'), 1);
-is (height($toplevel,-1), -1);
-
-my $req = size_request_with_subsizes($toplevel);
-isa_ok ($req, 'Gtk2::Requisition');
-isnt ($req->width, -1);
-isnt ($req->height, -1);
-
-set_default_size_with_subsizes($toplevel);
-my ($width,$height) = $toplevel->get_default_size;
-isnt ($width, -1);
-isnt ($height, -1);
+{
+  my $obj = {};
+  foreach (1 .. 50) {
+    my $old = $obj->{'stamp'};
+    random_stamp($obj);
+    cmp_ok ($obj->{'stamp'}, '>=', 1);
+    isnt ($obj->{'stamp'}, $old, 'random_stamp() different from old');
+  }
+}
 
 exit 0;

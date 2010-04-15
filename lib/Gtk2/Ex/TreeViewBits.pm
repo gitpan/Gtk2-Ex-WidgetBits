@@ -21,9 +21,11 @@ use strict;
 use warnings;
 use Carp;
 
-our $VERSION = 16;
+# uncomment this to run the ### lines
+#use Smart::Comments;
 
-use constant DEBUG => 0;
+our $VERSION = 17;
+
 
 sub toggle_expand_row {
   my ($treeview, $path, $open_all) = @_;
@@ -34,30 +36,28 @@ sub toggle_expand_row {
   }
 }
 
-# foreach @rows converting path to rowref frees each path as converted,
-# where a "map" keeps them all until the end, which might save a couple of
-# bytes of peak memory use.
-#
-# shift @rows in the removing frees each rowref as its processed, which will
-# save gtk_tree_row_ref_deleted() from going through now invalidated and
-# unwanted rowrefs -- which is pretty fast, but its easy to arrange an early
-# free for a small saving.
-# 
 sub remove_selected_rows {
   my ($treeview) = @_;
   my $model = $treeview->get_model;
-  my $selection = $treeview->get_selection;
 
-  my @rows = $selection->get_selected_rows;  # paths
+  # foreach converting path to rowref frees each path as converted, whereas
+  # a "map" keeps them all until the end, to perhaps save a couple of bytes
+  # of peak memory use.
+  #
+  my @rows = $treeview->get_selection->get_selected_rows;  # paths
   foreach (@rows) {
     $_ = Gtk2::TreeRowReference->new($model,$_);  # rowrefs
   }
+
+  # shifting frees each rowref as it's processed, to save
+  # gtk_tree_row_ref_deleted() going through now removed rowrefs
+  #
   while (my $rowref = shift @rows) {
     my $path = $rowref->get_path || next;  # if somehow gone away
     if (my $iter = $model->get_iter ($path)) {
       $model->remove ($iter);
     } else {
-      carp 'Oops, selected row path "',$path->to_string,'" has no iter';
+      carp 'Oops, selected row path "',$path->to_string,'" does not exist';
     }
   }
 }
@@ -74,7 +74,7 @@ sub remove_selected_rows {
 #
 sub scroll_cursor_to_path {
   my ($treeview, $path) = @_;
-  if (DEBUG) { print "scroll_cursor_to_path() path=@{[$path->to_string]}\n"; }
+  ### scroll_cursor_to_path() path: $path->to_string
   my $model = $treeview->get_model || return;  # nothing to make visible
 
   # check path exists, in particular since ->scroll_to_cell() gives an
@@ -87,18 +87,17 @@ sub scroll_cursor_to_path {
   my $bin_window = $treeview->get_bin_window || return; # if unrealized
 
   my ($bin_width, $bin_height) = $bin_window->get_size;
-  if (DEBUG) { print "  bin_height $bin_height\n"; }
+  ### $bin_height
 
   my $rect = $treeview->get_cell_area ($path, undef);
-  if (DEBUG) { print "  path y=",$rect->y, " height=",$rect->height,
-                 " end=", $rect->y + $rect->height, "\n"; }
+  ### path: "y=".$rect->y." height=".$rect->height." end=".($rect->y + $rect->height)
 
   if ($rect->y >= 0 && $rect->y + $rect->height <= $bin_height) {
-    if (DEBUG) { print "  fully visible, don't scroll\n"; }
+    ### fully visible, don't scroll
     return;
   }
   my $row_align = ($rect->height > $bin_height ? 0 : 0.5);
-  if (DEBUG) { print "  scroll align to $row_align\n"; }
+  ### scroll align to: $row_align
   $treeview->scroll_to_cell ($path,
                              undef, # no column scroll
                              1,     # use_align
@@ -108,6 +107,8 @@ sub scroll_cursor_to_path {
 
 1;
 __END__
+
+=for stopwords TreeModel ListStore TreeStore TreeView Ryde Gtk2-Ex-WidgetBits Gtk2
 
 =head1 NAME
 
@@ -141,8 +142,8 @@ Rows are removed using C<< $model->remove >> in the style of
 C<Gtk2::ListStore> or C<Gtk2::TreeStore>.  The model doesn't have to be a
 ListStore or TreeStore, only something with a compatible C<remove> method.
 
-Currently this is implemented by tracking the rows to be removed with a
-C<Gtk2::TreeRowReference> each, while removing them one by one.  This isn't
+Currently this is implemented by tracking rows to be removed using a
+C<Gtk2::TreeRowReference> each, and removing them one by one.  This isn't
 fast, but is safe against additional changes to the model or selection
 during the removes.
 

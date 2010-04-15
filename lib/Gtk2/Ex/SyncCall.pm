@@ -22,33 +22,25 @@ use warnings;
 use Carp;
 use Gtk2;
 
-# version 2 was in with Gtk2-Ex-Dragger ...
-our $VERSION = 16;
+# uncomment this to run the ### lines
+#use Smart::Comments;
 
-# set this to 1 for some diagnostic prints
-use constant DEBUG => 0;
+# version 2 was in with Gtk2-Ex-Dragger ...
+our $VERSION = 17;
 
 
 my $sync_call_atom;
 
 sub sync {
   my ($class, $widget, $callback, $userdata) = @_;
-  if (DEBUG) { print "SyncCall sync()\n"; }
+  ### SyncCall sync()
 
   my $display = $widget->get_display;
   my $data = ($display->{(__PACKAGE__)} ||= do {
     $widget->add_events ('property-change-mask');
-    #    $widget->window;
-    #    $widget->window->XID;
-    if (DEBUG) {
-      my $win = $widget->window;
-      #       if ($win->can('XID')) {
-      #         print " widget window id ",$win->XID,"\n";
-      #       }
-      print "  widget add_events gives ",
-        (defined $win ? $win->get_events : '[no window]'),
-          "\n";
-    }
+
+    ### widget add_events gives: $widget->window && $widget->window->get_events
+    #### window XID: $widget->window && $widget->window->can('XID') && $widget->window->XID
 
     require Glib::Ex::SignalIds;
     # hash of data
@@ -82,7 +74,7 @@ sub sync {
   if (@$aref == 1) {
     # first entry in sync_list initiates the sync
     $sync_call_atom ||= Gtk2::Gdk::Atom->intern (__PACKAGE__);
-    if (DEBUG) { print "  property_change of $sync_call_atom\n"; }
+    ### property_change of: $sync_call_atom
     $win->property_change ($sync_call_atom,
                            Gtk2::Gdk::Atom->intern('STRING'),
                            Gtk2::Gdk::CHARS, 'append', '');
@@ -93,7 +85,7 @@ sub sync {
 # 'property-notify-event' signal on sync widget
 sub _do_property_notify {
   my ($widget, $event) = @_;
-  if (DEBUG) { print "SyncCall property-notify handler ",$event->atom,"\n"; }
+  ### SyncCall property-notify handler: $event->atom
 
   # note, no overloaded != until Gtk2-Perl 1.183, only == prior to that
   if ($event->atom == $sync_call_atom) {
@@ -126,6 +118,8 @@ sub _call_all {
 
 1;
 __END__
+
+=for stopwords SyncCall unrealize ie Ryde Gtk2-Ex-WidgetBits
 
 =head1 NAME
 

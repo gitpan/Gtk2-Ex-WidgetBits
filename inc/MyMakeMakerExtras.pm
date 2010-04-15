@@ -249,7 +249,7 @@ HERE
   my $podcoverage = '';
   foreach my $class (@{$my_options{'MyMakeMakerExtras_Pod_Coverage'}}) {
     # the "." obscures it from MyExtractUse.pm
-    $podcoverage .= "\t-perl -e 'use "."Pod::Coverage package=>$class'\n";
+    $podcoverage .= "\t-\$(PERLRUNINST) -e 'use "."Pod::Coverage package=>$class'\n";
   }
 
   $post .= "LINT_FILES = $lint_files\n"
@@ -260,7 +260,7 @@ pc:
 HERE
   # "podchecker -warnings -warnings" too much reporting every < and >
   $post .= $podcoverage . <<'HERE';
-	-podchecker $(LINT_FILES)
+	-podchecker `ls $(LINT_FILES) | grep -v '\.bash$$|\.desktop$$\.png$$|\.xpm$$'`
 	perlcritic $(LINT_FILES)
 unused:
 	for i in $(LINT_FILES); do perl -Mwarnings::unused -I lib -c $$i; done
@@ -285,7 +285,7 @@ check-copyright-years:
 	    case $$i in \
 	      '' | */ \
 	      | debian/changelog | debian/compat | debian/doc-base \
-	      | debian/patches/*.diff \
+	      | debian/patches/*.diff | debian/source/format \
 	      | COPYING | MANIFEST* | SIGNATURE | META.yml \
 	      | version.texi | */version.texi \
 	      | *utf16* \
@@ -389,7 +389,7 @@ lintian-source:
 	mv -T $(DISTVNAME) $(DEBNAME)-$(VERSION); \
 	dpkg-source -b $(DEBNAME)-$(VERSION) \
 	               $(DEBNAME)_$(VERSION).orig.tar.gz; \
-	lintian -i *.dsc; \
+	lintian -i -X missing-debian-source-format *.dsc; \
 	cd ..; \
 	rm -rf temp-lintian
 
