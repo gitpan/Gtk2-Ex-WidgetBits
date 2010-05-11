@@ -25,7 +25,7 @@ use List::Util qw(max);
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 17;
+our $VERSION = 18;
 
 sub position_widget_topcentre {
   my ($menu, $x, $y, $widget) = @_;
@@ -61,7 +61,7 @@ sub position_widget_topcentre {
 1;
 __END__
 
-=for stopwords userdata multi iconified toplevel uniconified Ryde Gtk2 Gtk2-Ex-WidgetBits
+=for stopwords userdata multi-screen iconified toplevel un-iconified Ryde Gtk2 Gtk2-Ex-WidgetBits popup
 
 =head1 NAME
 

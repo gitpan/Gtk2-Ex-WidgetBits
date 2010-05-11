@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 # Copyright 2010 Kevin Ryde
 
@@ -33,7 +33,7 @@ use MyTestHelpers;
 
 require Gtk2::Ex::MenuBits;
 {
-  my $want_version = 17;
+  my $want_version = 18;
   is ($Gtk2::Ex::MenuBits::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::MenuBits->VERSION,  $want_version,

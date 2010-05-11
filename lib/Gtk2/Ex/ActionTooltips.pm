@@ -21,10 +21,9 @@ use strict;
 use warnings;
 use Carp;
 use Exporter;
-# $widget->set_tooltip_text new in Gtk2 1.152
-use Gtk2 1.160;
+use Gtk2 1.160; # for $widget->set_tooltip_text new in Gtk2 1.152
 
-our $VERSION = 17;
+our $VERSION = 18;
 our @EXPORT_OK = qw(group_tooltips_to_menuitems
                     action_tooltips_to_menuitems_dynamic);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
@@ -39,8 +38,11 @@ our %EXPORT_TAGS = (all => \@EXPORT_OK);
 # using group_tooltips_to_menuitems() within connect-proxy until that
 # version, though doing so from there would be pretty unusual anyway.
 #
-# gtk_action_get_tooltip() isn't bound ($action->get_tooltip) as of
+# $action->get_tooltip isn't wrapped (gtk_action_get_tooltip()) as of
 # Gtk2-Perl 1.220, hence use of $action->get('tooltip').
+# $widget->set_tooltip_text is wrapped in 1.160, and will want at least that
+# or newer for bug fixes, so may as well use that method instead of the
+# 'tooltip-text' property.
 #
 
 my $connect_hook_id;
@@ -97,7 +99,6 @@ sub _do_action_tooltip {
   foreach my $widget ($action->get_proxies) {
     ### proxy: $widget
     if ($widget->isa('Gtk2::MenuItem')) {
-      # use set_property() to support older Perl-Gtk
       $widget->set_tooltip_text ($tip);
     }
   }
@@ -138,7 +139,7 @@ though, and pops up only after the usual delay.
 
 There's other ways to show what a menu item might do of course.  For
 instance the Gtk manual under the GtkActionGroup connect-proxy signal
-mentions showing action tooltips in a statusbar for MenuItems.
+describes showing action tooltips in a statusbar for MenuItems.
 
 =head1 EXPORTS
 
@@ -146,7 +147,7 @@ By default nothing is exported and the functions can be called with a fully
 qualified name as shown.  Or they can be imported in usual
 L<Exporter|Exporter> style, including tag C<:all> for all functions.
 
-    use Gtk2::Ex::ActionTooltips ':all';
+    use Gtk2::Ex::ActionTooltips 'group_tooltips_to_menuitems';
     group_tooltips_to_menuitems ($actiongroup);
 
 =head1 FUNCTIONS

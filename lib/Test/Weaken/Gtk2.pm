@@ -32,7 +32,7 @@ our @EXPORT_OK = qw(contents_container
                     destructor_destroy_and_iterate
                     ignore_default_display);
 
-our $VERSION = 17;
+our $VERSION = 18;
 
 sub contents_container {
   my ($ref) = @_;
@@ -113,7 +113,7 @@ sub ignore_default_display {
 1;
 __END__
 
-=for stopwords destructors arrayref submenu MenuItem Destructor toplevel AccelLabel finalizations Ryde Gtk2 WidgetBits
+=for stopwords destructors arrayref submenu MenuItem Destructor toplevel AccelLabel finalizations Ryde Gtk2-Ex-WidgetBits Gtk
 
 =head1 NAME
 

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 # Copyright 2008, 2009, 2010 Kevin Ryde
 
@@ -29,7 +29,7 @@ BEGIN {
            or skip 'Test::NoWarnings not available', 1; }
 }
 {
-  my $want_version = 17;
+  my $want_version = 18;
   is ($Gtk2::Ex::TreeViewBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::TreeViewBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::TreeViewBits->VERSION($want_version); 1 },

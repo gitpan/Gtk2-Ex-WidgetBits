@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 # Copyright 2008, 2009, 2010 Kevin Ryde
 
@@ -35,7 +35,7 @@ BEGIN {
 require Gtk2::Ex::EntryBits;
 
 {
-  my $want_version = 17;
+  my $want_version = 18;
   is ($Gtk2::Ex::EntryBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::EntryBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::EntryBits->VERSION($want_version); 1 },

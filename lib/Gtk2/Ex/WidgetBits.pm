@@ -22,7 +22,7 @@ use warnings;
 use Carp;
 use Gtk2;
 
-our $VERSION = 17;
+our $VERSION = 18;
 
 # get_root_position() might be done as
 #
@@ -111,7 +111,7 @@ sub _hypot {
 1;
 __END__
 
-=for stopwords Gdk ie eg toplevel Ryde Gtk2-Ex-WidgetBits Gtk2
+=for stopwords Gdk ie eg toplevel Ryde Gtk2-Ex-WidgetBits Gtk2 Gtk
 
 =head1 NAME
 
@@ -164,6 +164,7 @@ the screen.
 L<Gtk2::Ex::EntryBits>,
 L<Gtk2::Ex::GdkBits>,
 L<Gtk2::Ex::MenuBits>,
+L<Gtk2::Ex::TextBufferBits>,
 L<Gtk2::Ex::TreeModelBits>,
 L<Gtk2::Ex::TreeModel::ImplBits>,
 L<Gtk2::Ex::TreeViewBits>,

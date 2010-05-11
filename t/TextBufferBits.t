@@ -17,27 +17,40 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
+use 5.008;
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More tests => 30;
+
 
 BEGIN {
  SKIP: { eval 'use Test::NoWarnings; 1'
            or skip 'Test::NoWarnings not available', 1; }
 }
 
-require Test::Weaken::Gtk2;
+require Gtk2::Ex::TextBufferBits;
+
 {
   my $want_version = 18;
-  is ($Test::Weaken::Gtk2::VERSION, $want_version,
-      'VERSION variable');
-  is (Test::Weaken::Gtk2->VERSION,  $want_version,
-      'VERSION class method');
-  ok (eval { Test::Weaken::Gtk2->VERSION($want_version); 1 },
+  is ($Gtk2::Ex::TextBufferBits::VERSION, $want_version, 'VERSION variable');
+  is (Gtk2::Ex::TextBufferBits->VERSION,  $want_version, 'VERSION class method');
+  ok (eval { Gtk2::Ex::TextBufferBits->VERSION($want_version); 1 },
       "VERSION class check $want_version");
   my $check_version = $want_version + 1000;
-  ok (! eval { Test::Weaken::Gtk2->VERSION($check_version); 1 },
+  ok (! eval { Gtk2::Ex::TextBufferBits->VERSION($check_version); 1 },
       "VERSION class check $check_version");
+}
+
+require Gtk2;
+
+foreach my $bstr ('', 'abc', "abc\n", "abc\ndef", "abc\ndef\n") {
+  foreach my $repl ('', 'xx', "yy\n", "xx\nyy", "x\ny\n") {
+    my $buffer = Gtk2::TextBuffer->new;
+    $buffer->set_text ($bstr);
+    Gtk2::Ex::TextBufferBits::replace_lines ($buffer, $repl);
+    my $got = $buffer->get('text');
+    is ($got, $repl, "replace bstr[".length($bstr)."]=$bstr with repl[".length($repl)."]=$repl");
+  }
 }
 
 exit 0;

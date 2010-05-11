@@ -99,7 +99,9 @@ devel/h2xs/TestConstFoo/
 ^devel/mallopt$
 ^devel/mallstats$
 ^devel/malltrim$
-# special case widgetbits executables
+# special case fli executables
+^devel/mmap-multi$
+# special case widget-bits executables
 ^devel/grandom$
 ^devel/grandom-[a-z]+$
 

@@ -24,7 +24,7 @@ use Carp;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 17;
+our $VERSION = 18;
 
 
 sub toggle_expand_row {
@@ -108,7 +108,7 @@ sub scroll_cursor_to_path {
 1;
 __END__
 
-=for stopwords TreeModel ListStore TreeStore TreeView Ryde Gtk2-Ex-WidgetBits Gtk2
+=for stopwords TreeModel ListStore TreeStore TreeView Ryde Gtk2-Ex-WidgetBits Gtk2 Gtk
 
 =head1 NAME
 

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 # Copyright 2010 Kevin Ryde
 
@@ -19,7 +19,7 @@
 
 use strict;
 use warnings;
-use Gtk2 '-init';
+use Gtk2 1.220 '-init';
 use Gtk2::Ex::MenuBits;
 
 use FindBin;

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 # Copyright 2008, 2009, 2010 Kevin Ryde
 
@@ -71,6 +71,7 @@ MyMakeMakerExtras::WriteMakefile
         'Gtk2::Ex::KeySnooper',
         'Gtk2::Ex::SyncCall',
         'Gtk2::Ex::MenuBits',
+        'Gtk2::Ex::TextBufferBits',
         'Gtk2::Ex::TreeModelBits',
         'Gtk2::Ex::TreeModel::ImplBits',
         'Gtk2::Ex::TreeModelFilter::Change',

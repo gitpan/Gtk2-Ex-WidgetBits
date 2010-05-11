@@ -1,6 +1,6 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
-# Copyright 2009 Kevin Ryde
+# Copyright 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -21,6 +21,13 @@ use strict;
 use warnings;
 use Gtk2;
 
+{
+  print Gtk2::Widget->find_property('tooltip-text'),"\n";
+  print Gtk2::Widget->can('set_tooltip_text');
+  exit 0;
+}
+
+my $label = Gtk2::Label->new;
 my $action = Gtk2::Action->new (name => 'MyName');
 
 #                                 label => '_Open',

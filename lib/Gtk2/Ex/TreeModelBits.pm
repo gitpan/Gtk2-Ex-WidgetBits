@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 17;
+our $VERSION = 18;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
@@ -93,7 +93,7 @@ sub all_column_types {
 1;
 __END__
 
-=for stopwords TreeModel ListStore Ryde Gtk2 Gtk2-Ex-WidgetBits
+=for stopwords TreeModel ListStore Ryde Gtk2 Gtk2-Ex-WidgetBits Gtk
 
 =head1 NAME
 
@@ -152,7 +152,7 @@ first row removed.
 
 =head1 SEE ALSO
 
-L<Gtk2::ListModel>, L<Gtk2::TreeModel>, L<Gtk2::Ex::WidgetBits>
+L<Gtk2::ListStore>, L<Gtk2::TreeModel>, L<Gtk2::Ex::WidgetBits>
 
 =head1 HOME PAGE
 

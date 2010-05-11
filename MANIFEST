@@ -24,6 +24,8 @@ devel/treeview-scroll.pl
 devel/units-line-height.pl
 devel/units.pl
 devel/unused.pl
+devel/weaken-flags.pl
+devel/WidgetEvents-no-flags-new.t
 examples/action-tooltips.pl
 examples/treeview-toggle-expand.pl
 inc/my_pod2html
@@ -35,6 +37,7 @@ lib/Gtk2/Ex/KeySnooper.pm
 lib/Gtk2/Ex/MenuBits.pm
 lib/Gtk2/Ex/Statusbar/MessageUntilKey.pm
 lib/Gtk2/Ex/SyncCall.pm
+lib/Gtk2/Ex/TextBufferBits.pm
 lib/Gtk2/Ex/TreeModel/ImplBits.pm
 lib/Gtk2/Ex/TreeModelBits.pm
 lib/Gtk2/Ex/TreeModelFilter/Change.pm
@@ -61,6 +64,7 @@ t/MenuBits.t
 t/Statusbar-MessageUntilKey.t
 t/SyncCall.t
 t/Test-Weaken-Gtk2.t
+t/TextBufferBits.t
 t/TreeModel-ImplBits-import.t
 t/TreeModel-ImplBits.t
 t/TreeModelBits.t

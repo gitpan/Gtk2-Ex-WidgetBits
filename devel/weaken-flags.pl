@@ -19,25 +19,40 @@
 
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::Weaken;
+print Test::Weaken->VERSION,"\n";
 
-BEGIN {
- SKIP: { eval 'use Test::NoWarnings; 1'
-           or skip 'Test::NoWarnings not available', 1; }
-}
-
-require Test::Weaken::Gtk2;
 {
-  my $want_version = 18;
-  is ($Test::Weaken::Gtk2::VERSION, $want_version,
-      'VERSION variable');
-  is (Test::Weaken::Gtk2->VERSION,  $want_version,
-      'VERSION class method');
-  ok (eval { Test::Weaken::Gtk2->VERSION($want_version); 1 },
-      "VERSION class check $want_version");
-  my $check_version = $want_version + 1000;
-  ok (! eval { Test::Weaken::Gtk2->VERSION($check_version); 1 },
-      "VERSION class check $check_version");
+  package MyOverload;
+  use Carp;
+  use overload '+' => \&add;
+  sub new {
+    my ($class) = @_;
+    my $x;
+    return bless \$x, $class;
+  }
+  sub add {
+    my ($x, $y, $swap) = @_;
+    croak "I am not in the adding mood";
+  }
 }
 
-exit 0;
+Test::Weaken::leaks ({ constructor => sub {
+                         return MyOverload->new;
+                       },
+                     });
+
+
+{
+  use Scalar::Util;
+  my $obj = MyOverload->new;
+  print Scalar::Util::refaddr($obj),"\n";
+  print $obj+0,"\n";
+}
+
+# use Gtk2;
+# Test::Weaken::leaks ({ constructor => sub {
+#                          return Gtk2::Gdk::EventMask->new([]);
+#                        },
+#                      });;
+
