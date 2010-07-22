@@ -15,15 +15,15 @@ not run its Makefile.PL or Build.PL.
 Hash: SHA1
 
 SHA1 842745cb706f8f2126506f544492f7a80dbe29b3 COPYING
-SHA1 4df67ecd148a2e04aa51fa023c99a9a777d66a4c Changes
-SHA1 f4fe0a1f288c261137fafd4642fdef87c9c1dcc2 MANIFEST
-SHA1 00e97fa7664a1ea29a3be5b0b2ec2b0076e002f1 MANIFEST.SKIP
-SHA1 93bce258a520119264e22c73d516d26e479d310f META.yml
+SHA1 db3e0acee8d7a371a31148318e933c7d0a0a8b6e Changes
+SHA1 c58e6ff2988c64157089221e0eb19f407403a05a MANIFEST
+SHA1 9f057ed3ba7d042426c4d899f7685b4ae05076b2 MANIFEST.SKIP
+SHA1 4ae4171136ca49e7c0ababfaa5cb43ff2ee23d33 META.yml
 SHA1 dc480ad21ad34b07587c570da6123fab4296b272 Makefile.PL
-SHA1 0d9c4d0df3a0c8b95c4f07f7f3dca067bef0a15f README
-SHA1 cd913b03a612922ef63f4f3a3aa5c702fb6594fe debian/changelog
+SHA1 1e95f4ba703d2c1c14c1a234b7256ce3d8696c1f README
+SHA1 2af9dd7b34ede86e455313d374d6b43a6ca91a4c debian/changelog
 SHA1 ac3478d69a3c81fa62e60f5c3696165a4e5e6ac4 debian/compat
-SHA1 1fb0540dfb15c47744dd223874a6f925ae98c493 debian/control
+SHA1 ea56bd98043cd64c4f21b4b3a373a94e689d28e2 debian/control
 SHA1 e8f1accf619d7f3912265ec95b66c809bb775f1d debian/copyright
 SHA1 304d3b2825f05090883b48807bb5e24468a22614 debian/rules
 SHA1 61652cd1568dcf2614df833eba241755eee34e89 debian/source/format
@@ -33,6 +33,9 @@ SHA1 bd09539d8ec78c148f6baeea78956ee3a70918b6 devel/WidgetEvents-no-flags-new.t
 SHA1 ce37cfa6f4b5ceac7fe7c5b04c2e3f15b29f4af5 devel/action-tooltips.pl
 SHA1 16fc25fc9df14e65e131085d742ad88bde680cb7 devel/entrybits-tie.pl
 SHA1 73e06bfb8e8e2b761431ec580a873235ef737584 devel/foreach-destroy.pl
+SHA1 b72b1891471d30f48c223cbc3ca031a26cc77067 devel/grandom-array.c
+SHA1 c46d895965eb377e88ed67a8b827169dfa543058 devel/grandom-zero.c
+SHA1 0e56c8d3e9d3ec8b45549fa4f225bf7f3b502b97 devel/grandom.c
 SHA1 f5953e423e9ae60de3b437344e46572cfe2d4347 devel/hook.pl
 SHA1 72ee5c2a91966bf9498381ca1d8bdd687fff2dc0 devel/menu-popup.pl
 SHA1 4552f2d63e27e6b4617cd3ad0e1d0f57f109360e devel/messageuntilkey-multi-display.pl
@@ -49,50 +52,51 @@ SHA1 b038a82eb9da25f4be52e6c81851d78bc094088d devel/unused.pl
 SHA1 84b0b4f2204d3d720c94af0bed32343ff11b72b9 devel/weaken-flags.pl
 SHA1 13971538aa3796ed4e4957a96dd434e22b772a72 examples/action-tooltips.pl
 SHA1 cf041fc832d375e8c49a093ade502954ebb8bf56 examples/treeview-toggle-expand.pl
-SHA1 f0016bb5fbe1ba38245f6264210252af0583fa0e inc/MyMakeMakerExtras.pm
-SHA1 63427b66eb26f013f10c835b0cf320c93361f310 inc/my_pod2html
-SHA1 28179b68b1643cda2bb2e68aeebf8637219d29e6 lib/Gtk2/Ex/ActionTooltips.pm
-SHA1 96fa8b3f4f41632fc5720198ad1a20a5c575e449 lib/Gtk2/Ex/EntryBits.pm
-SHA1 585b72074c782f8b77c3a953f09dd61eef983af3 lib/Gtk2/Ex/GdkBits.pm
-SHA1 964f71c649066e4f1ced7735871a503b1f9ae941 lib/Gtk2/Ex/KeySnooper.pm
-SHA1 1c031d229030a7be54fa9dc7b6563b75cb266c61 lib/Gtk2/Ex/MenuBits.pm
-SHA1 c490264de2e16baca90f3f46074e14abb61860f7 lib/Gtk2/Ex/Statusbar/MessageUntilKey.pm
-SHA1 3410d5b6c268c1376d1dd9639dd28531d74e06bf lib/Gtk2/Ex/SyncCall.pm
-SHA1 8b119bd13df875155384629ec906f66316992975 lib/Gtk2/Ex/TextBufferBits.pm
-SHA1 9464167621bf11497663e9e21071c1b8e97a2baf lib/Gtk2/Ex/TreeModel/ImplBits.pm
-SHA1 a9b6d52b2a242fde313b446306b47525b12330af lib/Gtk2/Ex/TreeModelBits.pm
-SHA1 42f82d33250a76960ca6313aabba325ef49c6912 lib/Gtk2/Ex/TreeModelFilter/Change.pm
-SHA1 9e1a642eaf82f4c08ca5a5d983621440f25582a8 lib/Gtk2/Ex/TreeViewBits.pm
-SHA1 24a514cebaee4967c688b16796ef046d6ffb5413 lib/Gtk2/Ex/Units.pm
-SHA1 4f7bb9b647f2ded3866b85eb53b942c129648664 lib/Gtk2/Ex/WidgetBits.pm
-SHA1 89087341246acc5a7511cb531f1fea2a234fe0b0 lib/Test/Weaken/Gtk2.pm
-SHA1 d5d5c83c83918d8c97ca79e92ea840cdf277f01f t/0-META-read.t
+SHA1 c692d671972440c53db493553cd899af86e36a4d inc/MyMakeMakerExtras.pm
+SHA1 692a1ddc2ca6b98cac7b48ea40bc1ac1509e8ed9 inc/my_pod2html
+SHA1 e114597d54d7650cc76bd3fe5656b4b70bc96a8e lib/Gtk2/Ex/ActionTooltips.pm
+SHA1 ee2563a07bc22e553a4734421c9df85fcbba059a lib/Gtk2/Ex/EntryBits.pm
+SHA1 b4f3d1841d72f88e7c1bd63e10924c36c3f857a4 lib/Gtk2/Ex/GdkBits.pm
+SHA1 d0d62f179c1d182c5d3d13ccaac4dd71ad6d9d83 lib/Gtk2/Ex/KeySnooper.pm
+SHA1 ffb33aeb1b16241e1a44ebec79a703f912509f6e lib/Gtk2/Ex/MenuBits.pm
+SHA1 b9cf4137b51d603242b1c9c9e84c159281538420 lib/Gtk2/Ex/Statusbar/MessageUntilKey.pm
+SHA1 c687824087f897d86a16519af0cf44f4f32f1ac9 lib/Gtk2/Ex/SyncCall.pm
+SHA1 234b15097a24432d78bcd8f0d431915ad9d356f7 lib/Gtk2/Ex/TextBufferBits.pm
+SHA1 c06864bdbf0faac06d615527885cae2b8e6195f0 lib/Gtk2/Ex/TreeModel/ImplBits.pm
+SHA1 927f631790fe6e90efe870fc4474968fcdd8f25a lib/Gtk2/Ex/TreeModelBits.pm
+SHA1 c8980b4fd38c755997d2b2ec17381cd16d462e1d lib/Gtk2/Ex/TreeModelFilter/Change.pm
+SHA1 c132a6d8839c78e32217eeba0590edc6460caac5 lib/Gtk2/Ex/TreeViewBits.pm
+SHA1 5adef32a55fcafc3fbbd9c3ba24db48a39b374b4 lib/Gtk2/Ex/Units.pm
+SHA1 f4de3066d2098d1abf24ebe6c170e96bb4696eef lib/Gtk2/Ex/WidgetBits.pm
+SHA1 89a3e087472b5f4d0082154db74cc69a95dfc9a0 lib/Test/Weaken/Gtk2.pm
+SHA1 8bd60b2ff800c5677af002587c6824d1d093e7a1 lib/Test/Without/Gtk2Things.pm
+SHA1 2a0a12208a8b081a1a588028c980c5472779453e t/0-META-read.t
 SHA1 37abd43b41068804ea4bb099fdd89af21be82926 t/0-Test-DistManifest.t
 SHA1 8f93fb4c8f0424a4442cc93c9a2e86342ef55281 t/0-Test-Pod.t
 SHA1 1de8f07883f6bf1a2ef79f2cb8adf1deb3f61cee t/0-Test-Synopsis.t
 SHA1 fb517c2fae5ddac559318bf6a224949115ea3129 t/0-Test-YAML-Meta.t
-SHA1 65246d3fbc8ea87843a352984bc99327d3a41d4b t/ActionTooltips.t
-SHA1 f8631984e3d6e7d3ce24257192c7a0174deadb76 t/EntryBits.t
-SHA1 5788c3c1ef4aa40789fe55ff93059fdea62e2245 t/GdkBits.t
-SHA1 aeb3ababd3815a6997cd8b1a12f7ae935bf39f06 t/KeySnooper.t
-SHA1 1a8864df6f032555d8b2a8ba918294fc35dfff85 t/MenuBits.t
-SHA1 245f55a2d5e92466a9465416a710b5ee610e4b1d t/Statusbar-MessageUntilKey.t
-SHA1 0970c6aad29037d95b7848266b4990e9e9b95795 t/SyncCall.t
-SHA1 a3eae9e5157415882eb904cbaf42f2a713f72834 t/Test-Weaken-Gtk2.t
-SHA1 5574069daf9229309ef016c906e6b7b5f07f0deb t/TextBufferBits.t
+SHA1 9cc794b6fbd6a6c2706554547eb313f9c352a888 t/ActionTooltips.t
+SHA1 b961c524d4c225fb8d3c9682a6799090bb3784c7 t/EntryBits.t
+SHA1 507ee2e08fdccaea9eccbba95ef16ac4f4619e3a t/GdkBits.t
+SHA1 8bd1edefe80636363e91e5d9cfeb81207ae17d6f t/KeySnooper.t
+SHA1 9fedefb30ecb5310080506536659ccf9008df3eb t/MenuBits.t
+SHA1 f3bc1eb4ccf4844e7d352ca88452d854c3e6b437 t/MyTestHelpers.pm
+SHA1 a8b1ee2825027b5fe5f3a6a68d7f911e124c8045 t/Statusbar-MessageUntilKey.t
+SHA1 4bbe2f9df05168d361fe700585409953beb874ab t/SyncCall.t
+SHA1 4727ee56225c502dc1a2ffd8eb84cae6c7d7b9d8 t/Test-Weaken-Gtk2.t
+SHA1 50decff4ad1190d4c3af50e9203439bdc32a00f3 t/TextBufferBits.t
 SHA1 031ebe8b3fdd9ff6f7804b65e4722afc2d3a5df1 t/TreeModel-ImplBits-import.t
-SHA1 bde2e2b97853d6a4dacae040a77c1cc9c6604c9d t/TreeModel-ImplBits.t
-SHA1 034a0b5dca146c99f0a263cb26c618be043dfdad t/TreeModelBits.t
-SHA1 af8243b3032b16613d2791567092c083405de201 t/TreeModelFilter-Change.t
-SHA1 1d136b7082fde14e415641a48aa693f28a45af3e t/TreeViewBits.t
+SHA1 bbceafa7a65991767d8a3d1605088f691c3160b5 t/TreeModel-ImplBits.t
+SHA1 475d7bdf5794db9e7a7c78b735076271fc2af188 t/TreeModelBits.t
+SHA1 7fabe546e24ec529fbb0b67a7a961d0bd3aeb261 t/TreeModelFilter-Change.t
+SHA1 c70e8822eb21bd4d95e5a4d87697a1cf5a6ca9dd t/TreeViewBits.t
 SHA1 c977c740685bb707fed3c14cbf313b90a50fd796 t/Units-import.t
-SHA1 1168fc2a9fc26d0e5257691d4afaefa742ceeca5 t/Units.t
-SHA1 9657c59971246664fe81f25bb12957e2d54b5e56 t/WidgetBits.t
-SHA1 e5b9059d5e27d380fc9418095d773ad5f96baa06 t/inc/MyTestHelpers.pm
+SHA1 3d372980cbc28cf46ef837d091203ce144bd2f7b t/Units.t
+SHA1 ec78fbcb7fd43554386efc63d273977df4e2fb5b t/WidgetBits.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iD8DBQFL6OdLLFMCIV9q3ToRAgbMAJ40OGO+XLDNKc9V0VCByU4CEsbuDwCgnyYS
-BxiNvIr4qDHSmxTaxrzZHvA=
-=EA8l
+iD8DBQFMSMGkLFMCIV9q3ToRAo75AJ9S314WJUBbU2Zv3d0oMQjjzX/mbQCfejhC
+EXeVjQqCWXZAJwswIh40gSM=
+=e2Xu
 -----END PGP SIGNATURE-----

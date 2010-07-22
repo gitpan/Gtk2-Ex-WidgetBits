@@ -22,14 +22,14 @@ use strict;
 use warnings;
 use Gtk2::Ex::TreeViewBits;
 
-use Test::More tests => 11;
+use Test::More tests => 10;
 
-BEGIN {
- SKIP: { eval 'use Test::NoWarnings; 1'
-           or skip 'Test::NoWarnings not available', 1; }
-}
+use lib 't';
+use MyTestHelpers;
+MyTestHelpers::nowarnings();
+
 {
-  my $want_version = 18;
+  my $want_version = 19;
   is ($Gtk2::Ex::TreeViewBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::TreeViewBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::TreeViewBits->VERSION($want_version); 1 },

@@ -10,6 +10,9 @@ debian/watch
 devel/action-tooltips.pl
 devel/entrybits-tie.pl
 devel/foreach-destroy.pl
+devel/grandom-array.c
+devel/grandom-zero.c
+devel/grandom.c
 devel/hook.pl
 devel/Makefile
 devel/menu-popup.pl
@@ -45,6 +48,7 @@ lib/Gtk2/Ex/TreeViewBits.pm
 lib/Gtk2/Ex/Units.pm
 lib/Gtk2/Ex/WidgetBits.pm
 lib/Test/Weaken/Gtk2.pm
+lib/Test/Without/Gtk2Things.pm
 Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
@@ -58,9 +62,9 @@ t/0-Test-YAML-Meta.t
 t/ActionTooltips.t
 t/EntryBits.t
 t/GdkBits.t
-t/inc/MyTestHelpers.pm
 t/KeySnooper.t
 t/MenuBits.t
+t/MyTestHelpers.pm
 t/Statusbar-MessageUntilKey.t
 t/SyncCall.t
 t/Test-Weaken-Gtk2.t

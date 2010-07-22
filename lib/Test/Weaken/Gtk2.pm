@@ -32,7 +32,7 @@ our @EXPORT_OK = qw(contents_container
                     destructor_destroy_and_iterate
                     ignore_default_display);
 
-our $VERSION = 18;
+our $VERSION = 19;
 
 sub contents_container {
   my ($ref) = @_;
@@ -110,6 +110,7 @@ sub ignore_default_display {
           && ($ref == (Gtk2::Gdk::Display->get_default)));
 }
 
+#------------------------------------------------------------------------------
 1;
 __END__
 
@@ -117,7 +118,7 @@ __END__
 
 =head1 NAME
 
-Test::Weaken::Gtk2 -- Gtk2 widget helpers for Test::Weaken
+Test::Weaken::Gtk2 -- Gtk2 helpers for Test::Weaken
 
 =head1 SYNOPSIS
 
@@ -125,13 +126,13 @@ Test::Weaken::Gtk2 -- Gtk2 widget helpers for Test::Weaken
 
 =head1 DESCRIPTION
 
-This is a few functions to help C<Test::Weaken> C<leaks> on C<Gtk2> widgets
-etc.  They can be used individually, or combined into larger
-application-specific callbacks.
+This is a few functions to help C<Test::Weaken> C<leaks()> on C<Gtk2>
+widgets etc.  The functions can be used individually, or combined into
+larger application-specific contents etc handlers.
 
 This module doesn't load C<Gtk2>.  If C<Gtk2> is not loaded then the
 functions simply return empty, false, or do nothing, as appropriate.  This
-module also doesn't load C<Test::Weaken>, that's left to the test script.
+module also doesn't load C<Test::Weaken>, that's left to a test script.
 
 =head1 FUNCTIONS
 
@@ -141,12 +142,12 @@ module also doesn't load C<Test::Weaken>, that's left to the test script.
 
 =item C<< @widgets = Test::Weaken::Gtk2::contents_container ($ref) >>
 
-If C<$ref> is a C<Gtk2::Container> (or subclass) then return its widget
+If C<$ref> is a C<Gtk2::Container> or subclass then return its widget
 children per C<< $container->get_children >>.  If C<$ref> is not a
 container, or C<Gtk2> is not loaded, then return an empty list.
 
 The children of a container are held in C structures and are not otherwise
-reached by the traversal C<leaks> does.
+reached by the traversal C<Test::Weaken> does.
 
 =item C<< @widgets = Test::Weaken::Gtk2::contents_submenu ($ref) >>
 
@@ -156,7 +157,7 @@ MenuItem, or it doesn't have a submenu, or C<Gtk2> is not loaded, then
 return an empty list.
 
 A submenu is held in the item's C structure and is not otherwise reached by
-the traversal C<leaks> does.
+the traversal C<Test::Weaken> does.
 
 =back
 
@@ -190,18 +191,20 @@ C<destroy>,
     });
 
 All C<Gtk2::Object>s support C<destroy> but most don't need it for garbage
-collection.  C<Gtk2::Window> is the most common which does, another is a
-MenuItem with an AccelLabel not in a menu (see notes in L<Gtk2::MenuItem>).
+collection.  C<Gtk2::Window> is the most common which does.  Another is a
+MenuItem which has an AccelLabel and is not in a menu (see notes in
+L<Gtk2::MenuItem>).
 
 =item C<< Test::Weaken::Gtk2::destructor_destroy_and_iterate ($top) >>
 
 The same as C<destructor_destroy> above, but in addition run
-C<< Gtk2->main_iteration_do >> for queued main loop actions.  A maximum
-iteration count protects against a runaway main loop.
+C<< Gtk2->main_iteration_do >> for queued main loop actions.  There's a
+limit on the number of iterations done, so as to protect against a runaway
+main loop.
 
 This is good if some finalizations are only done in an idle handler, or
-perhaps under a timer which has expired by now.  Queued X server events are
-run, but there's no wait for further events.
+perhaps under a timer which has now expired.  Currently queued events from
+the X server are run, but there's no read or wait for further events.
 
 =back
 
@@ -211,11 +214,11 @@ run, but there's no wait for further events.
 
 =item C<< $bool = Test::Weaken::Gtk2::ignore_default_display ($ref) >>
 
-Return true if C<$ref> is the default C<Gtk2::Gdk::Display> per
+Return true if C<$ref> is the default display
 C<< Gtk2::Gdk::Display->get_default_display >>.
 
-If C<Gtk2> is not loaded, or C<< Gtk2->init >> has not been called, then
-there's no default display and this function returns false.
+If C<Gtk2> is not loaded or C<< Gtk2->init >> has not been called then
+there's no default display yet and this function returns false.
 
     my $leaks = leaks({
       constructor => sub { make_something },
@@ -238,8 +241,8 @@ C<Exporter> style.
     use Test::Weaken::Gtk2 'contents_container';
 
 There's no C<:all> tag since new functions are likely to be added in the
-future and an import of all runs the risk of name clashes with application
-functions etc.
+future and an import of all would run the risk of name clashes with
+application functions etc.
 
 =head1 SEE ALSO
 

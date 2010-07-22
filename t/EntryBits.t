@@ -20,22 +20,16 @@
 
 use strict;
 use warnings;
-use Test::More tests => 13;
+use Test::More tests => 12;
 
-use FindBin;
-use File::Spec;
-use lib File::Spec->catdir($FindBin::Bin,'inc');
+use lib 't';
 use MyTestHelpers;
-
-BEGIN {
- SKIP: { eval 'use Test::NoWarnings; 1'
-           or skip 'Test::NoWarnings not available', 1; }
-}
+MyTestHelpers::nowarnings();
 
 require Gtk2::Ex::EntryBits;
 
 {
-  my $want_version = 18;
+  my $want_version = 19;
   is ($Gtk2::Ex::EntryBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::EntryBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::EntryBits->VERSION($want_version); 1 },

@@ -20,18 +20,17 @@
 use 5.008;
 use strict;
 use warnings;
-use Test::More tests => 30;
+use Test::More tests => 29;
 
 
-BEGIN {
- SKIP: { eval 'use Test::NoWarnings; 1'
-           or skip 'Test::NoWarnings not available', 1; }
-}
+use lib 't';
+use MyTestHelpers;
+MyTestHelpers::nowarnings();
 
 require Gtk2::Ex::TextBufferBits;
 
 {
-  my $want_version = 18;
+  my $want_version = 19;
   is ($Gtk2::Ex::TextBufferBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::TextBufferBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::TextBufferBits->VERSION($want_version); 1 },

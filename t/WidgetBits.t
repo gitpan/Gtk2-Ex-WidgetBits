@@ -20,21 +20,16 @@
 use 5.008;
 use strict;
 use warnings;
-use Test::More tests => 18;
+use Test::More tests => 17;
 
-use FindBin;
-use File::Spec;
-use lib File::Spec->catdir($FindBin::Bin,'inc');
+use lib 't';
 use MyTestHelpers;
+MyTestHelpers::nowarnings();
 
-BEGIN {
- SKIP: { eval 'use Test::NoWarnings; 1'
-           or skip 'Test::NoWarnings not available', 1; }
-}
 require Gtk2::Ex::WidgetBits;
 
 {
-  my $want_version = 18;
+  my $want_version = 19;
   is ($Gtk2::Ex::WidgetBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::WidgetBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::WidgetBits->VERSION($want_version); 1 },
@@ -110,7 +105,7 @@ SKIP: {
     $toplevel->destroy;
   }
 
-  # wrap_pointer()
+  # warp_pointer()
   #
   {
     my $toplevel = Gtk2::Window->new('toplevel');
@@ -124,7 +119,7 @@ SKIP: {
     Gtk2::Ex::WidgetBits::warp_pointer ($toplevel, @old);
     my @new = $toplevel->get_pointer;
     is_deeply (\@new, \@old,
-               'wrap_pointer() not moved');
+               'warp_pointer() not moved');
 
     $toplevel->destroy;
   }

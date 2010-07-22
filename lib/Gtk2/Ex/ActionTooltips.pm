@@ -23,7 +23,7 @@ use Carp;
 use Exporter;
 use Gtk2 1.160; # for $widget->set_tooltip_text new in Gtk2 1.152
 
-our $VERSION = 18;
+our $VERSION = 19;
 our @EXPORT_OK = qw(group_tooltips_to_menuitems
                     action_tooltips_to_menuitems_dynamic);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
@@ -139,7 +139,7 @@ though, and pops up only after the usual delay.
 
 There's other ways to show what a menu item might do of course.  For
 instance the Gtk manual under the GtkActionGroup connect-proxy signal
-describes showing action tooltips in a statusbar for MenuItems.
+describes showing action tooltips in a statusbar.
 
 =head1 EXPORTS
 
@@ -171,7 +171,7 @@ not propagated to already-connected menu items.
 =item C<< Gtk2::Ex::ActionTooltips::action_tooltips_to_menuitems_dynamic ($action1, $action2, ...) >>
 
 Setup each given C<$action> (C<Gtk2::Action> object) so its tooltip property
-is installed on any connected C<Gtk2::MenuItms>s, dynamically.
+is installed on any connected C<Gtk2::MenuItms>s dynamically.
 
     Gtk2::Ex::ActionTooltips::action_tooltips_to_menuitems_dynamic
       ($my_help_action,
@@ -185,8 +185,8 @@ action tooltip then the change is propagated to connected MenuItems.
 
 C<action_tooltips_to_menuitems_dynamic> makes a signal connection on each
 Action.  To keep down overheads you probably only want it on actions which
-might change.  If you think you want dynamic propagation for all Actions in
-an ActionGroup you could use
+might change their tooltips.  If you want dynamic propagation for all
+Actions in an ActionGroup you could use
 
     Gtk2::Ex::ActionTooltips::action_tooltips_to_menuitems_dynamic
       ($actiongroup->list_actions);

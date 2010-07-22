@@ -19,16 +19,15 @@
 
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More tests => 4;
 
-BEGIN {
- SKIP: { eval 'use Test::NoWarnings; 1'
-           or skip 'Test::NoWarnings not available', 1; }
-}
+use lib 't';
+use MyTestHelpers;
+MyTestHelpers::nowarnings();
 
 require Test::Weaken::Gtk2;
 {
-  my $want_version = 18;
+  my $want_version = 19;
   is ($Test::Weaken::Gtk2::VERSION, $want_version,
       'VERSION variable');
   is (Test::Weaken::Gtk2->VERSION,  $want_version,
