@@ -16,6 +16,9 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+Version 20, August 2010
+    - new Gtk2::Ex::Statusbar::DynamicContext
+
 Version 19, July 2010
     - new Test::Without::Gtk2Things
 

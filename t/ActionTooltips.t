@@ -36,7 +36,7 @@ plan tests => 14;
 require Gtk2::Ex::ActionTooltips;
 
 {
-  my $want_version = 19;
+  my $want_version = 20;
   is ($Gtk2::Ex::ActionTooltips::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::ActionTooltips->VERSION,  $want_version,

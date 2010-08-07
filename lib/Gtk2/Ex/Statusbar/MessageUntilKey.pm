@@ -22,7 +22,7 @@ use warnings;
 use Gtk2;
 
 # WidgetBits 11 through 15 mistakenly had only $VERSION==1 here
-our $VERSION = 19;
+our $VERSION = 20;
 
 sub message {
   my ($class, $statusbar, $str) = @_;
@@ -175,7 +175,9 @@ contents aren't important until redisplayed later.
 
 =head1 SEE ALSO
 
-L<Gtk2::Statusbar>, L<Gtk2::Ex::KeySnooper>
+L<Gtk2::Statusbar>,
+L<Gtk2::Ex::KeySnooper>,
+L<Gtk2::Ex::Statusbar::DynamicContext>
 
 =head1 HOME PAGE
 

@@ -22,16 +22,15 @@ use warnings;
 use Gtk2::Ex::Units ':all';
 use Test::More;
 
-BEGIN {
-  require Gtk2;
-  Gtk2->init_check
-    or plan skip_all => 'due to no DISPLAY available';
+use lib 't';
+use MyTestHelpers;
+MyTestHelpers::nowarnings();
 
-  plan tests => 13;
+require Gtk2;
+Gtk2->init_check
+  or plan skip_all => 'due to no DISPLAY available';
 
- SKIP: { eval 'use Test::NoWarnings; 1'
-           or skip 'Test::NoWarnings not available', 1; }
-}
+plan tests => 12;
 
 my $toplevel = Gtk2::Window->new ('toplevel');
 

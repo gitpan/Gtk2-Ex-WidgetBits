@@ -8,6 +8,8 @@ debian/rules
 debian/source/format
 debian/watch
 devel/action-tooltips.pl
+devel/dynamic-context-statusbar.pl
+devel/dynamic-context.pl
 devel/entrybits-tie.pl
 devel/foreach-destroy.pl
 devel/grandom-array.c
@@ -38,6 +40,7 @@ lib/Gtk2/Ex/EntryBits.pm
 lib/Gtk2/Ex/GdkBits.pm
 lib/Gtk2/Ex/KeySnooper.pm
 lib/Gtk2/Ex/MenuBits.pm
+lib/Gtk2/Ex/Statusbar/DynamicContext.pm
 lib/Gtk2/Ex/Statusbar/MessageUntilKey.pm
 lib/Gtk2/Ex/SyncCall.pm
 lib/Gtk2/Ex/TextBufferBits.pm
@@ -65,6 +68,7 @@ t/GdkBits.t
 t/KeySnooper.t
 t/MenuBits.t
 t/MyTestHelpers.pm
+t/Statusbar-DynamicContext.t
 t/Statusbar-MessageUntilKey.t
 t/SyncCall.t
 t/Test-Weaken-Gtk2.t

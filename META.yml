@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Gtk2-Ex-WidgetBits
-version:            19
+version:            20
 abstract:           Helpers for Gtk2 widgets.
 author:
     - Kevin Ryde <user42@zip.com.au>
@@ -40,7 +40,6 @@ optional_features:
         requires:
             Parse::CPAN::Meta:   0
             Test::DistManifest:  0
-            Test::NoWarnings:    0
             Test::Pod:           1.00
             Test::Synopsis:      0
             Test::YAML::Meta:    0.15

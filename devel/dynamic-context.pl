@@ -17,24 +17,47 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
-use 5.008;
+
+# Gtk2::Statusbar itself doesn't freeze/thaw
+
 use strict;
 use warnings;
-use Gtk2::Ex::TreeModel::ImplBits 'random_stamp';
-use Test::More tests => 100;
+use 5.010;
+use Gtk2;
+use Storable;
+use Gtk2::Ex::Statusbar::DynamicContext;
 
-use lib 't';
-use MyTestHelpers;
-MyTestHelpers::nowarnings();
+# uncomment this to run the ### lines
+use Smart::Comments;
+
 
 {
-  my $obj = {};
-  foreach (1 .. 50) {
-    my $old = $obj->{'stamp'};
-    random_stamp($obj);
-    cmp_ok ($obj->{'stamp'}, '>=', 1);
-    isnt ($obj->{'stamp'}, $old, 'random_stamp() different from old');
+  # grows unboundedly ...
+  my $n = 0;
+  for (;;) {
+    my $statusbar = Gtk2::Statusbar->new;
+    $statusbar->get_context_id ($n++);
+    $statusbar->destroy;
   }
+  exit 0;
 }
 
-exit 0;
+{
+  my $statusbar = Gtk2::Statusbar->new;
+  ### $statusbar
+  pop @{$statusbar->{some_thing}};
+  ### $statusbar
+  exit 0;
+}
+{
+  my $statusbar = Gtk2::Statusbar->new;
+  my $dc = Gtk2::Ex::Statusbar::DynamicContext->new($statusbar);
+  ### $dc
+  my $pst = Storable::freeze($dc);
+  ### $pst
+
+  my $dc2 = Storable::thaw($pst);
+  ### $dc2
+
+  exit 0;
+}

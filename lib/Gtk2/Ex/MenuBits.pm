@@ -25,7 +25,7 @@ use List::Util qw(max);
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 19;
+our $VERSION = 20;
 
 sub position_widget_topcentre {
   my ($menu, $x, $y, $widget) = @_;
@@ -90,25 +90,26 @@ which is wide but has only a small height.
 
 C<$userdata> can be either a widget or a reference to a widget.  The latter
 can be a weak reference so as to avoid a circular reference between a widget
-and a menu within it (C<$menu> holds the userdata within it for later
-C<reposition>).
+and a menu within it (C<< $menu->popup >> holds C<$userdata> within the menu
+for later C<reposition>).
 
 If C<$userdata> is C<undef> or a ref to C<undef>, or if the widget is not
 mapped or is on a different screen than C<$menu>, then the return is the
-given C<$x>,C<$y> input parameters.  (The mouse pointer position if called
-straight from C<Gtk2::Menu>.)
+given C<$x>,C<$y> input parameters.  This is the mouse pointer position if
+called straight from C<Gtk2::Menu>.
 
 A multi-screen program should C<set_screen> on the menu to ensure it's the
-same as the widget.  This is left to the application as it's probably not
-safe within the positioning function, especially not if the positioning is
-called by C<set_screen> itself for moving the menu to a different screen
-while popped up.
+same as the widget.  This is left to the application because it's probably
+not safe within the positioning function, especially not if the positioning
+is called from C<set_screen> itself due to moving a popped-up menu to a
+different screen.
 
 In the current implementation if the widget is in an iconified toplevel then
 the position is based on its un-iconified location.  The intention in the
-future is to go to the mouse position fallback in this case, as the widget
-is not on-screen.  Of course when iconified a widget won't get keyboard or
-button events to cause a menu popup, so in practice this won't arise.
+future is to go to the mouse position fallback in this case, since the
+widget is not on-screen.  Of course when iconified a widget won't get
+keyboard or button events to cause a menu popup, so in practice this doesn't
+arise.
 
 =back
 

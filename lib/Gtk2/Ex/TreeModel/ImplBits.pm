@@ -26,7 +26,7 @@ use Exporter;
 our @ISA = ('Exporter');
 our @EXPORT_OK = ('random_stamp');
 
-our $VERSION = 19;
+our $VERSION = 20;
 
 sub random_stamp {
   my ($model) = @_;

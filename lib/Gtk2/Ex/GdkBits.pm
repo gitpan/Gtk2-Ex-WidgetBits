@@ -22,7 +22,7 @@ use warnings;
 use Carp;
 use Gtk2;
 
-our $VERSION = 19;
+our $VERSION = 20;
 
 
 # The loop here is similar to what gtk_widget_translate_coordinates() does
