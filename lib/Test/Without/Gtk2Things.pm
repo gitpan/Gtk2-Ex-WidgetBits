@@ -42,6 +42,7 @@ sub import {
     } elsif ($thing eq '-all') {
       foreach my $method (all_without_methods()) {
         $class->$method;
+        $count++;
       }
 
     } else {
@@ -50,6 +51,7 @@ sub import {
         die "Unknown thing to disable: $thing";
       }
       $class->$method;
+      $count++;
     }
   }
   if ($VERBOSE) {

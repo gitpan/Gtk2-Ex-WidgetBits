@@ -20,15 +20,11 @@ with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 This is some helpers for working with Gtk2 widgets and stuff.
 
 * Gtk2::Ex::WidgetBits -- misc funcs
-
+* Gtk2::Ex::ContainerBits -- misc funcs
 * Gtk2::Ex::EntryBits -- misc funcs
-
 * Gtk2::Ex::GdkBits -- misc funcs
-
 * Gtk2::Ex::TreeModelBits -- misc funcs
-
 * Gtk2::Ex::TreeViewBits -- misc funcs
-
 * Gtk2::Ex::TextBufferBits -- misc funcs
 
 * Gtk2::Ex::ActionTooltips -- action tooltips on menu items
@@ -44,6 +40,8 @@ This is some helpers for working with Gtk2 widgets and stuff.
 * Gtk2::Ex::TreeModelFilter::Change -- propagate insert etc to child model
 
 * Gtk2::Ex::Units -- widget sizes in units like "em" or "ex"
+
+* Gtk2::Ex::WidgetEvents -- adding and removing widget event mask bits
 
 * Test::Weaken::Gtk2 -- helpers for Test::Weaken
 

@@ -38,7 +38,7 @@ MyMakeMakerExtras::WriteMakefile
                     'Glib::Object::Subclass' => 0,
 
                     # 1.200 for TreeModelFilter::Change::remove() doing
-                    # $iter->set() in, and also 1.200 is a good idea for bug
+                    # $iter->set(), and also 1.200 is a good idea for bug
                     # fixes
                     'Gtk2' => '1.200',
                     # part of Gtk2, but used explicitly

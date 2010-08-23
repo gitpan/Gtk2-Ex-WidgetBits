@@ -30,7 +30,7 @@ MyTestHelpers::nowarnings();
 require Gtk2::Ex::Statusbar::MessageUntilKey;
 
 {
-  my $want_version = 20;
+  my $want_version = 21;
   is ($Gtk2::Ex::Statusbar::MessageUntilKey::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::Statusbar::MessageUntilKey->VERSION,  $want_version,

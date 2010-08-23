@@ -58,3 +58,20 @@ sub remove_matching_rows {
   }
 }
 
+__END__
+
+# When DESTROY runs the weakening in obj_list has been applied, so our entry
+# to get rid of is an undef.  Must splice() not grep or lose weakening on
+# other entries.
+sub _splice_out {
+  my ($aref, $self) = @_;
+  for (my $i = 0; $i <= $#$aref; $i++) {
+    if (! defined $aref->[$i] || $aref->[$i] == $self) {
+      splice @$aref, $i,1;
+    } else {
+      $i++;
+    }
+  }
+  return $aref;
+}
+

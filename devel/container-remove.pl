@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010 Kevin Ryde
+# Copyright 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -17,26 +17,26 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
+use 5.010;
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Gtk2::Ex::ContainerBits;
 
-use lib 't';
-use MyTestHelpers;
-MyTestHelpers::nowarnings();
-
-require Test::Weaken::Gtk2;
 {
-  my $want_version = 21;
-  is ($Test::Weaken::Gtk2::VERSION, $want_version,
-      'VERSION variable');
-  is (Test::Weaken::Gtk2->VERSION,  $want_version,
-      'VERSION class method');
-  ok (eval { Test::Weaken::Gtk2->VERSION($want_version); 1 },
-      "VERSION class check $want_version");
-  my $check_version = $want_version + 1000;
-  ok (! eval { Test::Weaken::Gtk2->VERSION($check_version); 1 },
-      "VERSION class check $check_version");
-}
+  require Gtk2;
+  my $hbox = Gtk2::HBox->new;
 
-exit 0;
+  {
+    my $l1 = Gtk2::Label->new;
+    $l1->signal_connect (destroy => sub { print "l1 destroy\n"; });
+    $l1->signal_connect ('notify::parent' => sub { print "l1 parent\n"; });
+    my $l2 = Gtk2::Label->new;
+    $l2->signal_connect (destroy => sub { print "l2 destroy\n"; });
+    $l2->signal_connect ('notify::parent' => sub { print "l2 parent\n"; });
+    $hbox->add($l1);
+    $hbox->add($l2);
+  }
+
+  Gtk2::Ex::ContainerBits::remove_all ($hbox);
+  exit 0;
+}

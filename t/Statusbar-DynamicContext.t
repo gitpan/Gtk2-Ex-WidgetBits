@@ -27,18 +27,16 @@ BEGIN { MyTestHelpers::nowarnings() }
 
 require Gtk2::Ex::Statusbar::DynamicContext;
 
-my $want_version = 20;
+my $want_version = 21;
 my $check_version = $want_version + 1000;
-{
-  is ($Gtk2::Ex::Statusbar::DynamicContext::VERSION, $want_version,
-      'VERSION variable');
-  is (Gtk2::Ex::Statusbar::DynamicContext->VERSION,  $want_version,
-      'VERSION class method');
-  ok (eval { Gtk2::Ex::Statusbar::DynamicContext->VERSION($want_version); 1 },
-      "VERSION class check $want_version");
-  ok (! eval { Gtk2::Ex::Statusbar::DynamicContext->VERSION($check_version); 1 },
-      "VERSION class check $check_version");
-}
+is ($Gtk2::Ex::Statusbar::DynamicContext::VERSION, $want_version,
+    'VERSION variable');
+is (Gtk2::Ex::Statusbar::DynamicContext->VERSION,  $want_version,
+    'VERSION class method');
+ok (eval { Gtk2::Ex::Statusbar::DynamicContext->VERSION($want_version); 1 },
+    "VERSION class check $want_version");
+ok (! eval { Gtk2::Ex::Statusbar::DynamicContext->VERSION($check_version); 1 },
+    "VERSION class check $check_version");
 
 require Gtk2;
 

@@ -8,6 +8,7 @@ debian/rules
 debian/source/format
 debian/watch
 devel/action-tooltips.pl
+devel/container-remove.pl
 devel/dynamic-context-statusbar.pl
 devel/dynamic-context.pl
 devel/entrybits-tie.pl
@@ -30,12 +31,15 @@ devel/units-line-height.pl
 devel/units.pl
 devel/unused.pl
 devel/weaken-flags.pl
+devel/wevents-realize.pl
+devel/wevents-run.pl
 devel/WidgetEvents-no-flags-new.t
 examples/action-tooltips.pl
 examples/treeview-toggle-expand.pl
 inc/my_pod2html
 inc/MyMakeMakerExtras.pm
 lib/Gtk2/Ex/ActionTooltips.pm
+lib/Gtk2/Ex/ContainerBits.pm
 lib/Gtk2/Ex/EntryBits.pm
 lib/Gtk2/Ex/GdkBits.pm
 lib/Gtk2/Ex/KeySnooper.pm
@@ -50,6 +54,7 @@ lib/Gtk2/Ex/TreeModelFilter/Change.pm
 lib/Gtk2/Ex/TreeViewBits.pm
 lib/Gtk2/Ex/Units.pm
 lib/Gtk2/Ex/WidgetBits.pm
+lib/Gtk2/Ex/WidgetEvents.pm
 lib/Test/Weaken/Gtk2.pm
 lib/Test/Without/Gtk2Things.pm
 Makefile.PL
@@ -63,6 +68,7 @@ t/0-Test-Pod.t
 t/0-Test-Synopsis.t
 t/0-Test-YAML-Meta.t
 t/ActionTooltips.t
+t/ContainerBits.t
 t/EntryBits.t
 t/GdkBits.t
 t/KeySnooper.t
@@ -81,4 +87,5 @@ t/TreeViewBits.t
 t/Units-import.t
 t/Units.t
 t/WidgetBits.t
+t/WidgetEvents.t
 META.yml                                 Module meta-data (added by MakeMaker)
