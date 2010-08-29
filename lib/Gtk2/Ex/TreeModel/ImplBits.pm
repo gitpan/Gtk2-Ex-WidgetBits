@@ -17,7 +17,7 @@
 
 
 package Gtk2::Ex::TreeModel::ImplBits;
-use 5.010;
+use 5.008;
 use strict;
 use warnings;
 use Gtk2;
@@ -26,7 +26,7 @@ use Exporter;
 our @ISA = ('Exporter');
 our @EXPORT_OK = ('random_stamp');
 
-our $VERSION = 21;
+our $VERSION = 22;
 
 sub random_stamp {
   my ($model) = @_;

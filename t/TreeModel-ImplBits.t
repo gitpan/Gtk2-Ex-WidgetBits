@@ -29,7 +29,7 @@ MyTestHelpers::nowarnings();
 require Gtk2::Ex::TreeModel::ImplBits;
 
 {
-  my $want_version = 21;
+  my $want_version = 22;
   is ($Gtk2::Ex::TreeModel::ImplBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::TreeModel::ImplBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::TreeModel::ImplBits->VERSION($want_version); 1 },

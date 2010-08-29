@@ -17,11 +17,11 @@
 
 
 package Gtk2::Ex::ContainerBits;
-use 5.010;
+use 5.008;
 use strict;
 use warnings;
 
-our $VERSION = 21;
+our $VERSION = 22;
 
 sub remove_all {
   my ($container) = @_;

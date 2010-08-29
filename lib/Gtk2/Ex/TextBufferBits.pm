@@ -17,14 +17,14 @@
 
 
 package Gtk2::Ex::TextBufferBits;
-use 5.010;
+use 5.008;
 use strict;
 use warnings;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 21;
+our $VERSION = 22;
 
 sub replace_lines {
   my ($textbuf, $str) = @_;
