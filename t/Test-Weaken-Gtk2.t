@@ -23,11 +23,11 @@ use Test::More tests => 4;
 
 use lib 't';
 use MyTestHelpers;
-MyTestHelpers::nowarnings();
+BEGIN { MyTestHelpers::nowarnings() }
 
 require Test::Weaken::Gtk2;
 {
-  my $want_version = 22;
+  my $want_version = 23;
   is ($Test::Weaken::Gtk2::VERSION, $want_version,
       'VERSION variable');
   is (Test::Weaken::Gtk2->VERSION,  $want_version,

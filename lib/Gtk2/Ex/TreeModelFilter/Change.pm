@@ -23,7 +23,7 @@ use warnings;
 use Gtk2 1.200; # for $iter->set()
 use Carp;
 
-our $VERSION = 22;
+our $VERSION = 23;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;

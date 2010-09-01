@@ -21,7 +21,7 @@ use 5.008;
 use strict;
 use warnings;
 
-our $VERSION = 22;
+our $VERSION = 23;
 
 sub remove_all {
   my ($container) = @_;

@@ -14,27 +14,16 @@
 # or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 # for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-use 5.008;
 use strict;
 use warnings;
-use Gtk2::Ex::TreeModel::ImplBits 'random_stamp';
-use Test::More tests => 100;
+use Gtk2;
 
-use lib 't';
-use MyTestHelpers;
-BEGIN { MyTestHelpers::nowarnings() }
+my @pspecs = Glib::Object->list_properties;
+print scalar(@pspecs),"\n";
 
-{
-  my $obj = {};
-  foreach (1 .. 50) {
-    my $old = $obj->{'stamp'};
-    random_stamp($obj);
-    cmp_ok ($obj->{'stamp'}, '>=', 1);
-    isnt ($obj->{'stamp'}, $old, 'random_stamp() different from old');
-  }
+while (1) {
+  @pspecs = Glib::Object->list_properties;
 }
-
-exit 0;

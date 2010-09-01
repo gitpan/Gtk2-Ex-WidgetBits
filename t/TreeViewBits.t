@@ -26,10 +26,10 @@ use Test::More tests => 10;
 
 use lib 't';
 use MyTestHelpers;
-MyTestHelpers::nowarnings();
+BEGIN { MyTestHelpers::nowarnings() }
 
 {
-  my $want_version = 22;
+  my $want_version = 23;
   is ($Gtk2::Ex::TreeViewBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::TreeViewBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::TreeViewBits->VERSION($want_version); 1 },

@@ -20,10 +20,12 @@ use 5.008;
 use strict;
 use warnings;
 use Carp;
-use Exporter;
 use Gtk2 1.160; # for $widget->set_tooltip_text new in Gtk2 1.152
 
-our $VERSION = 22;
+our $VERSION = 23;
+
+use Exporter;
+our @ISA = ('Exporter');
 our @EXPORT_OK = qw(group_tooltips_to_menuitems
                     action_tooltips_to_menuitems_dynamic);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
@@ -143,7 +145,7 @@ describes showing action tooltips in a statusbar.
 
 =head1 EXPORTS
 
-By default nothing is exported and the functions can be called with a fully
+Nothing is exported by default and the functions can be called with a fully
 qualified name as shown.  Or they can be imported in usual
 L<Exporter|Exporter> style, including tag C<:all> for all functions.
 

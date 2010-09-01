@@ -25,54 +25,22 @@ use lib 't';
 use MyTestHelpers;
 BEGIN { MyTestHelpers::nowarnings() }
 
-require Gtk2::Ex::MenuBits;
+use Gtk2::Ex::MenuBits qw(position_widget_topcentre);
 
 require Gtk2;
 Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
 Gtk2->init_check
   or plan skip_all => 'due to no DISPLAY available';
 
-plan tests => 7;
-
-{
-  my $want_version = 23;
-  is ($Gtk2::Ex::MenuBits::VERSION, $want_version,
-      'VERSION variable');
-  is (Gtk2::Ex::MenuBits->VERSION,  $want_version,
-      'VERSION class method');
-  ok (eval { Gtk2::Ex::MenuBits->VERSION($want_version); 1 },
-      "VERSION class check $want_version");
-  my $check_version = $want_version + 1000;
-  ok (! eval { Gtk2::Ex::MenuBits->VERSION($check_version); 1 },
-      "VERSION class check $check_version");
-}
+plan tests => 1;
 
 {
   my $menu = Gtk2::Menu->new;
   my $widget = Gtk2::Label->new;
   $widget->show;
-  is_deeply ([ Gtk2::Ex::MenuBits::position_widget_topcentre
-               ($menu, -12345, -6789, $widget) ],
+  is_deeply ([ position_widget_topcentre ($menu, -12345, -6789, $widget) ],
              [ -12345, -6789, 1 ],
              'not in a toplevel');
-
-  my $toplevel = Gtk2::Window->new('toplevel');
-  $toplevel->add ($widget);
-  is_deeply ([ Gtk2::Ex::MenuBits::position_widget_topcentre
-               ($menu, -12345, -6789, $widget) ],
-             [ -12345, -6789, 1 ],
-             'not realized');
-
-  $toplevel->show_all;
-  # MyTestHelpers::main_iterations();
-  # diag $toplevel->window;
-  # diag $widget->window;
-  my ($x,$y,$push_in) = Gtk2::Ex::MenuBits::position_widget_topcentre
-    ($menu, -123456, -654321, $widget);
-  isnt ($x, -123456,
-        'with show_all()');
-
-  $toplevel->destroy;
 }
 
 exit 0;

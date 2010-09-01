@@ -24,12 +24,12 @@ use Test::More tests => 11;
 
 use lib 't';
 use MyTestHelpers;
-MyTestHelpers::nowarnings();
+BEGIN { MyTestHelpers::nowarnings() }
 
 require Gtk2::Ex::KeySnooper;
 
 {
-  my $want_version = 22;
+  my $want_version = 23;
   is ($Gtk2::Ex::KeySnooper::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::KeySnooper->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::KeySnooper->VERSION($want_version); 1 },

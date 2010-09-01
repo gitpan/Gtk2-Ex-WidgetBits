@@ -24,7 +24,9 @@ use Test::More;
 
 use lib 't';
 use MyTestHelpers;
-MyTestHelpers::nowarnings();
+BEGIN { MyTestHelpers::nowarnings() }
+
+require Gtk2::Ex::Units;
 
 require Gtk2;
 Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
@@ -34,10 +36,8 @@ MyTestHelpers::glib_gtk_versions();
 
 plan tests => 37;
 
-require Gtk2::Ex::Units;
-
 {
-  my $want_version = 22;
+  my $want_version = 23;
   is ($Gtk2::Ex::Units::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::Units->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::Units->VERSION($want_version); 1 },

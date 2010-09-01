@@ -22,14 +22,15 @@ use warnings;
 use Carp;
 use Gtk2::Pango; # for PANGO_SCALE
 
-use base 'Exporter';
+use Exporter;
+our @ISA = ('Exporter');
 our @EXPORT_OK = qw(em ex char_width digit_width line_height
                     width height
                     set_default_size_with_subsizes
                     size_request_with_subsizes);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-our $VERSION = 22;
+our $VERSION = 23;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;

@@ -17,39 +17,34 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
+
 use strict;
 use warnings;
-use Gtk2::Ex::Units ':all';
 use Test::More;
 
 use lib 't';
 use MyTestHelpers;
 BEGIN { MyTestHelpers::nowarnings() }
 
+use Gtk2::Ex::ActionTooltips qw(group_tooltips_to_menuitems
+                                action_tooltips_to_menuitems_dynamic);
+
+plan tests => 1;
+
 require Gtk2;
-Gtk2->init_check
-  or plan skip_all => 'due to no DISPLAY available';
+MyTestHelpers::glib_gtk_versions();
 
-plan tests => 12;
 
-my $toplevel = Gtk2::Window->new ('toplevel');
-
-cmp_ok (em($toplevel), '>', 0);
-cmp_ok (ex($toplevel), '>', 0);
-cmp_ok (char_width($toplevel), '>', 0);
-cmp_ok (digit_width($toplevel), '>', 0);
-cmp_ok (line_height($toplevel), '>', 0);
-is (width($toplevel,'1 pixel'), 1);
-is (height($toplevel,-1), -1);
-
-my $req = size_request_with_subsizes($toplevel);
-isa_ok ($req, 'Gtk2::Requisition');
-isnt ($req->width, -1);
-isnt ($req->height, -1);
-
-set_default_size_with_subsizes($toplevel);
-my ($width,$height) = $toplevel->get_default_size;
-isnt ($width, -1);
-isnt ($height, -1);
+{
+  my $actiongroup = Gtk2::ActionGroup->new ('test1');
+  group_tooltips_to_menuitems ($actiongroup);
+}
+{
+  my $action1 = Gtk2::Action->new (name     => 'Quit',
+                                   stock_id => 'gtk-quit',
+                                   tooltip  => 'The initial tooltip for Quit');
+  action_tooltips_to_menuitems_dynamic ($action1);
+}
+ok(1);
 
 exit 0;

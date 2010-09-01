@@ -25,42 +25,30 @@ use lib 't';
 use MyTestHelpers;
 BEGIN { MyTestHelpers::nowarnings() }
 
-require Gtk2::Ex::GdkBits;
+use Gtk2::Ex::GdkBits qw(window_get_root_position
+                         window_clear_region);
 
 require Gtk2;
 Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
 Gtk2->init_check
   or plan skip_all => 'due to no DISPLAY available';
-MyTestHelpers::glib_gtk_versions();
 
-plan tests => 6;
+plan tests => 1;
 
 {
-  my $want_version = 23;
-  is ($Gtk2::Ex::GdkBits::VERSION, $want_version, 'VERSION variable');
-  is (Gtk2::Ex::GdkBits->VERSION,  $want_version, 'VERSION class method');
-  ok (eval { Gtk2::Ex::GdkBits->VERSION($want_version); 1 },
-      "VERSION class check $want_version");
-  my $check_version = $want_version + 1000;
-  ok (! eval { Gtk2::Ex::GdkBits->VERSION($check_version); 1 },
-      "VERSION class check $check_version");
+  my $root = Gtk2::Gdk->get_default_root_window;
+  is_deeply ([ window_get_root_position ($root) ],
+             [ 0, 0 ],
+             'window_get_root_position() on root window');
 }
 
 {
   my $root = Gtk2::Gdk->get_default_root_window;
-  is_deeply ([ Gtk2::Ex::GdkBits::window_get_root_position ($root) ],
-             [ 0, 0 ],
-             'window_get_root_position() on root window');
+  my $region = Gtk2::Gdk::Region->new;
+  window_clear_region ($root, $region);
 
-  my $win = Gtk2::Gdk::Window->new ($root,
-                                    { window_type => 'temp',
-                                      x => 200,
-                                      y => 100,
-                                      width => 20,
-                                      height => 10 });
-  is_deeply ([ Gtk2::Ex::GdkBits::window_get_root_position ($win) ],
-             [ 200, 100 ],
-             'window_get_root_position() on temp window');
+  $region->union_with_rect (Gtk2::Gdk::Rectangle->new (0,0, 10, 10));
+  window_clear_region ($root, $region);
 }
 
 exit 0;

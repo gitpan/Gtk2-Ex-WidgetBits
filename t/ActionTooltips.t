@@ -24,19 +24,19 @@ use Test::More;
 
 use lib 't';
 use MyTestHelpers;
-MyTestHelpers::nowarnings();
-
-require Gtk2;
-Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
-if (! Gtk2->init_check) {
-  plan skip_all => 'due to no DISPLAY available';
-}
-plan tests => 14;
+BEGIN { MyTestHelpers::nowarnings() }
 
 require Gtk2::Ex::ActionTooltips;
 
+require Gtk2;
+Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
+Gtk2->init_check
+  or plan skip_all => 'due to no DISPLAY available';
+
+plan tests => 14;
+
 {
-  my $want_version = 22;
+  my $want_version = 23;
   is ($Gtk2::Ex::ActionTooltips::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::ActionTooltips->VERSION,  $want_version,

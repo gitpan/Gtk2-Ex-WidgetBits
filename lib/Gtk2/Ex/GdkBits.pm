@@ -22,7 +22,13 @@ use warnings;
 use Carp;
 use Gtk2;
 
-our $VERSION = 22;
+use Exporter;
+our @ISA = ('Exporter');
+our @EXPORT_OK = qw(window_get_root_position
+                    window_clear_region);
+our %EXPORT_TAGS = (all => \@EXPORT_OK);
+
+our $VERSION = 23;
 
 
 # The loop here is similar to what gtk_widget_translate_coordinates() does
@@ -40,6 +46,13 @@ sub window_get_root_position {
       || croak 'Gtk2::Ex::GdkBits::window_get_root_position(): oops, didn\'t reach root window';
   }
   return ($x, $y);
+}
+
+sub window_clear_region {
+  my ($win, $region) = @_;
+  foreach my $rect ($region->get_rectangles) {
+    $win->clear_area ($rect->values);
+  }
 }
 
 # Not yet documented, might move elsewhere ...
@@ -78,6 +91,11 @@ This is the same as C<< $window->get_origin >>, but it's implemented with
 C<< $window->get_position >> calls and thus uses the most recently recorded
 window positions rather than making an X server round-trip.
 
+=item C<($x,$y) = Gtk2::Ex::GdkBits::window_clear_region ($window, $region)>
+
+Clear the area of C<$region> in C<$window> to its background pixel colour or
+pixmap contents.
+
 =cut
 
 # The only time there's a difference is if another client (like the window
@@ -94,9 +112,20 @@ window positions rather than making an X server round-trip.
 
 =back
 
+=head1 EXPORTS
+
+Nothing is exported by default, but the functions can be requested in usual
+C<Exporter> style,
+
+    use Gtk2::Ex::GdkBits 'window_clear_region';
+    position_widget_topcentre ($win, $region);
+
+There's no C<:all> tag since this module is meant as a grab-bag of functions
+and to import as-yet unknown things would be asking for name clashes.
+
 =head1 SEE ALSO
 
-L<Gtk2::Ex::WidgetBits>, L<Gtk2::Gdk>
+L<Gtk2::Ex::WidgetBits>, L<Gtk2::Gdk>, L<Gtk2::Gdk::Window>
 
 =head1 HOME PAGE
 

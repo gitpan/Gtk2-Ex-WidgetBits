@@ -26,7 +26,7 @@ use Gtk2;
 #use Smart::Comments;
 
 # version 2 was in with Gtk2-Ex-Dragger ...
-our $VERSION = 22;
+our $VERSION = 23;
 
 
 my $sync_call_atom;

@@ -25,7 +25,11 @@ use List::Util qw(max);
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 22;
+our $VERSION = 23;
+
+use Exporter;
+our @ISA = ('Exporter');
+our @EXPORT_OK = qw(position_widget_topcentre);
 
 sub position_widget_topcentre {
   my ($menu, $x, $y, $widget) = @_;
