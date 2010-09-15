@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 23;
+our $VERSION = 24;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;

@@ -22,7 +22,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 0;
+our $VERSION = 24;
 
 our $VERBOSE = 0;
 
@@ -36,10 +36,10 @@ sub import {
   my $count = 0;
 
   foreach my $thing (@_) {
-    if ($thing eq '-verbose') {
+    if ($thing eq '-verbose' || $thing eq 'verbose') {
       $VERBOSE++;
 
-    } elsif ($thing eq '-all') {
+    } elsif ($thing eq '-all' || $thing eq 'all') {
       foreach my $method (all_without_methods()) {
         $class->$method;
         $count++;
@@ -55,19 +55,10 @@ sub import {
     }
   }
   if ($VERBOSE) {
-    print STDERR "Test::Without::Gtk2Things: count without $count things\n";
+    print STDERR
+      "Test::Without::Gtk2Things: count without $count thing",
+        ($count==1?'':'s'), "\n";
   }
-}
-
-sub without_verbose {
-  require Gtk2;
-  $VERBOSE++;
-}
-
-# this one not documented as yet
-sub without_all {
-  require Gtk2;
-  $VERBOSE++;
 }
 
 # search @ISA with a view to subclasses, but is it a good idea?
@@ -165,6 +156,25 @@ sub without_blank_cursor {
 
 }
 
+sub without_cell_layout_get_cells {
+  require Gtk2;
+  if ($VERBOSE) {
+    print STDERR "Test::Without::Gtk2Things: without Gtk2::CellLayout get_cells() method, per Gtk before 2.12\n";
+  }
+
+  { no warnings 'once';
+    undef *Gtk2::CellLayout::get_cells;
+  }
+
+  # check the desired effect ...
+  foreach my $class ('Gtk2::CellView', 'Gtk2::TreeViewColumn',
+                     'Gtk2::ComboBox') {
+    if ($class->can('get_cells')) {
+      die "Oops, $class->can(get_cells) still true";
+    }
+  }
+}
+
 1;
 __END__
 
@@ -249,8 +259,17 @@ Object properties of type C<Gtk2::Gdk::CursorType> are are not affected
 in the future.  Blank cursors within Gtk itself are unaffected.
 
 C<blank-cursor> is new in Gtk 2.16.  In earlier versions an invisible cursor
-can be made by applications with a no-pixels-set bitmap.  (See
-L<Gtk2::Ex::WidgetCursor> for some help with that.)
+can be made by applications with a no-pixels-set bitmap as described by
+C<gdk_cursor_new> in such earlier versions.  (See L<Gtk2::Ex::WidgetCursor>
+for some help with that.)
+
+=item C<cell_layout_get_cells>
+
+Remove the C<get_cells> method from the C<Gtk2::CellLayout> interface.  That
+interface method is new in Gtk 2.12 and removal affects all widget classes
+implementing that interface.  In earlier Gtk versions C<Gtk2::CellView> and
+C<Gtk2::TreeViewColumn> have individual C<get_cell_renderers> methods.
+Those methods are unaffected by this without.
 
 =back
 

@@ -75,3 +75,85 @@ sub _splice_out {
   return $aref;
 }
 
+
+
+
+
+
+
+
+
+
+
+my %tooltip_text_pname = ('tooltip_text' => 1,
+                          'tooltip-text' => 1);
+
+sub without_tooltip_text {
+  require Gtk2;
+  if ($VERBOSE) {
+    print STDERR "Test::Without::Gtk2Things: without tooltip-text property, per Gtk before 2.12\n";
+  }
+
+  no warnings 'redefine', 'once';
+  undef *Gtk2::Widget::get_tooltip_text;
+  undef *Gtk2::Widget::set_tooltip_text;
+  undef *Gtk2::Entry::get_icon_tooltip_text;
+  undef *Gtk2::Entry::set_icon_tooltip_markup;
+  undef *Gtk2::MenuToolButton::set_arrow_tooltip_text;
+  undef *Gtk2::MenuToolButton::set_arrow_tooltip_markup;
+
+  # think these are the query-tooltip mechanism, and are 2.16 up
+  # undef *Gtk2::StatusIcon::set_tooltip_text;
+  # undef *Gtk2::StatusIcon::get_tooltip_text;
+  {
+    my $orig = Glib::Object->can('list_properties');
+    *Glib::Object::list_properties = sub {
+      my ($class) = @_;
+      if ($class->isa('Gtk2::Widget')) {
+        return grep {$_->get_name ne 'tooltip-text'} &$orig (@_);
+      } else {
+        goto $orig;
+      }
+    };
+  }
+  {
+    my $orig = Glib::Object->can('find_property');
+    *Glib::Object::find_property = sub {
+      my ($class, $pname) = @_;
+      if ($class->isa('Gtk2::Widget') && $tooltip_text_pname{$pname}) {
+        return undef;
+      } else {
+        goto $orig;
+      }
+    };
+  }
+  foreach my $func ('get', 'get_property') {
+    my $orig = Glib::Object->can($func); # force autoload
+    my $new = sub {
+      for (my $i = 1; $i < @_; $i++) {
+        if ($tooltip_text_pname{$_[$i]}) {
+          croak "Test-Without-Gtk2Things: no get property $pname";
+        }
+      }
+      goto $orig;
+    };
+    my $func = "Glib::Object::$func";
+    no strict 'refs';
+    *$func = $new;
+  }
+  foreach my $func ('set', 'set_property') {
+    my $orig = Glib::Object->can($func); # force autoload
+    my $new = sub {
+      for (my $i = 1; $i < @_; $i += 2) {
+        if ($tooltip_text_pname{$_[$i]}) {
+          croak "Test-Without-Gtk2Things: no set property $pname";
+        }
+      }
+      goto $orig;
+    };
+    my $func = "Glib::Object::$func";
+    no strict 'refs';
+    *$func = $new;
+  }
+}
+

@@ -28,11 +28,12 @@ use Exporter;
 our @ISA = ('Exporter');
 our @EXPORT_OK = qw(contents_container
                     contents_submenu
+                    contents_cell_renderers
                     destructor_destroy
                     destructor_destroy_and_iterate
                     ignore_default_display);
 
-our $VERSION = 23;
+our $VERSION = 24;
 
 sub contents_container {
   my ($ref) = @_;
@@ -49,11 +50,64 @@ sub contents_submenu {
   my ($ref) = @_;
   require Scalar::Util;
   if (Scalar::Util::blessed($ref)
-      && $ref->isa('Gtk2::MenuItem')) {
-    return $ref->get_submenu;
+      && $ref->isa('Gtk2::MenuItem')
+      && defined (my $menu = $ref->get_submenu)) {
+    return $menu;
   } else {
     return ();
   }
+}
+
+sub contents_cell_renderers {
+  my ($ref) = @_;
+
+  require Scalar::Util;
+  Scalar::Util::blessed($ref) || return;
+  my $method;
+  if ($ref->isa('Gtk2::CellLayout')
+      && $ref->can('get_cells')) {  # new in Gtk 2.12
+    $method = 'get_cells';
+
+  } elsif ($ref->isa('Gtk2::TreeViewColumn') || $ref->isa('Gtk2::CellView')) {
+    # gtk_cell_view_get_cell_renderers() or
+    # gtk_tree_view_column_get_cell_renderers() pre-dating the interface
+    # style
+    $method = 'get_cell_renderers';
+
+  } else {
+    return;
+  }
+  
+  # as of Gtk 2.20.1 GtkCellView tries to set the data into the cells
+  # returned by either the get_cells interface or
+  # gtk_cell_view_get_cell_renderers().  If there's no display_row set then
+  # it throws a g_log.  Suppress that in case we're looking for leaks in an
+  # empty CellView or without a display_row.
+  #
+  my @cells;
+  {
+    my $old_warn = $SIG{__WARN__};
+    local $SIG{__WARN__} = sub {
+      my ($str) = @_;
+      if (index ($str, 'Gtk-CRITICAL **: gtk_cell_view_set_cell_data: assertion') >= 0) {
+        ### Suppressed gtk_cell_view_set_cell_data() assertion failure
+        return;
+      }
+      if ($old_warn) {
+        $old_warn->(@_);
+      } else {
+        warn @_;
+      }
+    };
+    @cells = $ref->$method;
+  }
+
+  # Gtk2-Perl 1.221 returns a one-element list of undef if no cells.
+  # Prefer to return an empty list for that case.
+  if (@cells == 1 && ! defined $cells[0]) {
+    @cells = ();
+  }
+  return @cells;
 }
 
 #------------------------------------------------------------------------------
@@ -146,8 +200,8 @@ If C<$ref> is a C<Gtk2::Container> or subclass then return its widget
 children per C<< $container->get_children >>.  If C<$ref> is not a
 container, or C<Gtk2> is not loaded, then return an empty list.
 
-The children of a container are held in C structures and are not otherwise
-reached by the traversal C<Test::Weaken> does.
+The children of a C code container will be held in C structures and not
+otherwise reached by the traversal C<Test::Weaken> does.
 
 =item C<< @widgets = Test::Weaken::Gtk2::contents_submenu ($ref) >>
 
@@ -158,6 +212,23 @@ return an empty list.
 
 A submenu is held in the item's C structure and is not otherwise reached by
 the traversal C<Test::Weaken> does.
+
+=item C<< @widgets = Test::Weaken::Gtk2::contents_cell_renderers ($ref) >>
+
+If C<$ref> is a widget with the C<Gtk2::CellLayout> interface then return
+its C<Gtk2::CellRenderer> objects from C<get_cells>.  Or if C<$ref> is a
+C<Gtk2::TreeViewColumn> or C<Gtk2::CellView> then use C<get_cell_renderers>.
+For anything else the return is an empty list.
+
+C<get_cells> is new in Gtk 2.12.  C<get_cell_renderers> is the previous
+style.  The renderers in a C code viewer widget are held in C structures and
+are not otherwise reached by the traversal C<Test::Weaken> does.
+
+C<Gtk2::CellView> as of Gtk 2.20.1 has a bug or severe misfeature where it
+gives a C<g_assert> failure on attempting get cells when there's no display
+row set, including when no model.  The returned cells are correct, there's
+just an assert logged.  C<contents_cell_renderers> suppresses that warning
+so as to help leak checking of CellViews not yet displaying anything.
 
 =back
 
