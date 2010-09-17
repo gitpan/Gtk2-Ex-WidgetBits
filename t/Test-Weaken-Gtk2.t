@@ -19,15 +19,23 @@
 
 use strict;
 use warnings;
-use Test::More tests => 17;
+use Test::More;
 
 use lib 't';
 use MyTestHelpers;
 BEGIN { MyTestHelpers::nowarnings() }
 
 require Test::Weaken::Gtk2;
+
+require Gtk2;
+Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
+Gtk2->init_check
+  or plan skip_all => 'due to no DISPLAY available';
+
+plan tests => 23;
+
 {
-  my $want_version = 24;
+  my $want_version = 25;
   is ($Test::Weaken::Gtk2::VERSION, $want_version,
       'VERSION variable');
   is (Test::Weaken::Gtk2->VERSION,  $want_version,
@@ -40,6 +48,7 @@ require Test::Weaken::Gtk2;
 }
 
 require Gtk2;
+MyTestHelpers::glib_gtk_versions();
 
 #------------------------------------------------------------------------------
 # contents_submenu()
@@ -52,9 +61,33 @@ eval "use Test::Weaken::Gtk2 'contents_submenu'";
   my $item = Gtk2::MenuItem->new;
   is_deeply ([], [Test::Weaken::Gtk2::contents_submenu ($item)],
              'contents_submenu() MenuItem empty');
-
   is_deeply ([], [contents_submenu ($item)],
              'contents_submenu() MenuItem empty, import');
+
+  my $menu = Gtk2::Menu->new;
+  $item->set_submenu ($menu);
+  is_deeply ([$menu], [Test::Weaken::Gtk2::contents_submenu ($item)],
+             'contents_submenu() MenuItem submenu');
+  is_deeply ([$menu], [contents_submenu ($item)],
+             'contents_submenu() MenuItem submenu, import');
+}
+
+SKIP: {
+  unless (Gtk2::MenuToolButton->can('new')) {
+    skip 'Gtk2::MenuToolButton not available (pre gtk 2.6)', 2;
+  }
+  my $item = Gtk2::MenuToolButton->new (undef, 'Hello');
+  is_deeply ([], [Test::Weaken::Gtk2::contents_submenu ($item)],
+             'contents_submenu() MenuToolButton empty');
+  is_deeply ([], [contents_submenu ($item)],
+             'contents_submenu() MenuToolButton empty, import');
+
+  my $menu = Gtk2::Menu->new;
+  $item->set_menu ($menu);
+  is_deeply ([$menu], [Test::Weaken::Gtk2::contents_submenu ($item)],
+             'contents_submenu() MenuToolButton menu');
+  is_deeply ([$menu], [contents_submenu ($item)],
+             'contents_submenu() MenuToolButton menu, import');
 }
 
 #------------------------------------------------------------------------------

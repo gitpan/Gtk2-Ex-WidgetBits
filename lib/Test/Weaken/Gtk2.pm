@@ -33,7 +33,7 @@ our @EXPORT_OK = qw(contents_container
                     destructor_destroy_and_iterate
                     ignore_default_display);
 
-our $VERSION = 24;
+our $VERSION = 25;
 
 sub contents_container {
   my ($ref) = @_;
@@ -49,13 +49,18 @@ sub contents_container {
 sub contents_submenu {
   my ($ref) = @_;
   require Scalar::Util;
-  if (Scalar::Util::blessed($ref)
-      && $ref->isa('Gtk2::MenuItem')
-      && defined (my $menu = $ref->get_submenu)) {
-    return $menu;
-  } else {
-    return ();
+  if (Scalar::Util::blessed($ref)) {
+    my $menu;
+    if ($ref->isa('Gtk2::MenuItem')) {
+      $menu = $ref->get_submenu;
+    } elsif ($ref->isa('Gtk2::MenuToolButton')) {
+      $menu = $ref->get_menu;
+    }
+    if (defined $menu) {
+      return $menu;
+    }
   }
+  return ();
 }
 
 sub contents_cell_renderers {
@@ -180,7 +185,7 @@ Test::Weaken::Gtk2 -- Gtk2 helpers for Test::Weaken
 
 =head1 DESCRIPTION
 
-This is a few functions to help C<Test::Weaken> C<leaks()> on C<Gtk2>
+This is a few functions to help C<Test::Weaken> leak checking on C<Gtk2>
 widgets etc.  The functions can be used individually, or combined into
 larger application-specific contents etc handlers.
 
@@ -200,18 +205,23 @@ If C<$ref> is a C<Gtk2::Container> or subclass then return its widget
 children per C<< $container->get_children >>.  If C<$ref> is not a
 container, or C<Gtk2> is not loaded, then return an empty list.
 
-The children of a C code container will be held in C structures and not
+The children of a C code container are held in C structures and not
 otherwise reached by the traversal C<Test::Weaken> does.
 
 =item C<< @widgets = Test::Weaken::Gtk2::contents_submenu ($ref) >>
 
-If C<$ref> is a C<Gtk2::MenuItem> (or subclass) and it has a submenu per
-C<< $item->get_submenu >> then return that submenu.  If C<$ref> is not a
-MenuItem, or it doesn't have a submenu, or C<Gtk2> is not loaded, then
-return an empty list.
+If C<$ref> is a C<Gtk2::MenuItem> then return its submenu per
+C<< $item->get_submenu >>, or if it's a C<Gtk2::MenuToolButton> then per
+C<< $item->get_menu >>.  If there's no menu, or C<$ref> is not such a
+widget, then return an empty list.
 
-A submenu is held in the item's C structure and is not otherwise reached by
-the traversal C<Test::Weaken> does.
+The submenu in both cases is held in the item's C structure and is not
+otherwise reached by the traversal C<Test::Weaken> does.
+
+Only the MenuItem and MenuToolButton classes are acted on currently, just in
+case a C<get_submenu> / C<get_menu> on some other Gtk class isn't a simple
+property fetch but perhaps some kind of constructor.  Other classes which
+are a simple fetch might be added in the future.
 
 =item C<< @widgets = Test::Weaken::Gtk2::contents_cell_renderers ($ref) >>
 
@@ -231,6 +241,11 @@ just an assert logged.  C<contents_cell_renderers> suppresses that warning
 so as to help leak checking of CellViews not yet displaying anything.
 
 =back
+
+When a C-code widget has sub-widgets or renderers as part of its
+implementation, those children will end up extracted and leak checked by the
+functions above.  This is usually desirable in as much as it notices leaks,
+even though they may not relate to Perl level code.
 
 =head2 Destructor Functions
 
@@ -289,7 +304,7 @@ Return true if C<$ref> is the default display
 C<< Gtk2::Gdk::Display->get_default_display >>.
 
 If C<Gtk2> is not loaded or C<< Gtk2->init >> has not been called then
-there's no default display yet and this function returns false.
+there's no default display yet and this function returns false always.
 
     my $leaks = leaks({
       constructor => sub { make_something },

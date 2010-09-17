@@ -22,7 +22,7 @@ use warnings;
 use Gtk2;
 
 # WidgetBits 11 through 15 mistakenly had only $VERSION==1 here
-our $VERSION = 24;
+our $VERSION = 25;
 
 sub message {
   my ($class, $statusbar, $str) = @_;
@@ -74,8 +74,9 @@ sub _do_event {
   # hook isn't, so check $ref_weak_statusbar hasn't gone away
   #
   # $statusbar->get_display() is the default display if not under a toplevel
-  # (it's never NULL or undef), which means events there clear unparented
-  # statusbars.  Not sure if that's ideal, but close enough for now.
+  # (it's never NULL or undef), which means events there will clear
+  # unparented statusbars.  Not sure if that's ideal, but close enough for
+  # now.
 
   if ($event->type eq 'key-press' || $event->type eq 'button-press') {
     if (my $statusbar = $$ref_weak_statusbar) {

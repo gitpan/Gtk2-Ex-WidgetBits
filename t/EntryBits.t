@@ -37,7 +37,7 @@ MyTestHelpers::glib_gtk_versions();
 plan tests => 12;
 
 {
-  my $want_version = 24;
+  my $want_version = 25;
   is ($Gtk2::Ex::EntryBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::EntryBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::EntryBits->VERSION($want_version); 1 },
@@ -54,7 +54,9 @@ plan tests => 12;
   my $entry = Gtk2::Entry->new;
   $toplevel->add ($entry);
   my $atom = Gtk2::Gdk::Atom->new ('PRIMARY');
-  my $clipboard = Gtk2::Clipboard->get_for_display ($entry->get_display,$atom);
+  # $entry is on default display, so Gtk2::Clipboard->get() is enough, and
+  # doesn't depend on Gtk2::Gdk::Display which is new in Gtk 2.2
+  my $clipboard = Gtk2::Clipboard->get ($atom);
   diag $entry->flags;
 
   Gtk2::Ex::EntryBits::select_region_noclip ($entry, 0, 1);

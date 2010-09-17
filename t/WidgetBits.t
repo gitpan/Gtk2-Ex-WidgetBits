@@ -29,7 +29,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 require Gtk2::Ex::WidgetBits;
 
 {
-  my $want_version = 24;
+  my $want_version = 25;
   is ($Gtk2::Ex::WidgetBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::WidgetBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::WidgetBits->VERSION($want_version); 1 },
@@ -107,7 +107,10 @@ SKIP: {
 
   # warp_pointer()
   #
-  {
+ SKIP: {
+    Gtk2::Gdk::Display->can('warp_pointer')
+        or skip 'no display->warp_pointer(), per Gtk before 2.8', 3;
+
     my $toplevel = Gtk2::Window->new('toplevel');
     ok (! eval { Gtk2::Ex::WidgetBits::warp_pointer ($toplevel, 10, 20); 1 });
     like ($@, qr/Cannot warp on unrealized/);
@@ -118,8 +121,7 @@ SKIP: {
     my @old = $toplevel->get_pointer;
     Gtk2::Ex::WidgetBits::warp_pointer ($toplevel, @old);
     my @new = $toplevel->get_pointer;
-    is_deeply (\@new, \@old,
-               'warp_pointer() not moved');
+    is_deeply (\@new, \@old, 'warp_pointer() not moved');
 
     $toplevel->destroy;
   }

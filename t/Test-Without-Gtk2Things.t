@@ -19,7 +19,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More tests => 6;
 
 use lib 't';
 use MyTestHelpers;
@@ -27,7 +27,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 
 require Test::Without::Gtk2Things;
 {
-  my $want_version = 24;
+  my $want_version = 25;
   is ($Test::Without::Gtk2Things::VERSION, $want_version,
       'VERSION variable');
   is (Test::Without::Gtk2Things->VERSION,  $want_version,
@@ -38,4 +38,15 @@ require Test::Without::Gtk2Things;
   ok (! eval { Test::Without::Gtk2Things->VERSION($check_version); 1 },
       "VERSION class check $check_version");
 }
+
+{
+  my @methods = Test::Without::Gtk2Things->all_without_methods;
+  cmp_ok (scalar(@methods), '>', 0);
+}
+
+# exercise funcs
+Test::Without::Gtk2Things->import ('verbose',
+                                   'all');
+ok (1, 'import "all" runs');
+
 exit 0;

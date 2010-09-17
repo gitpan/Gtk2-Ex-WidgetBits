@@ -22,7 +22,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 24;
+our $VERSION = 25;
 
 our $VERBOSE = 0;
 
@@ -30,6 +30,10 @@ our $VERBOSE = 0;
 # Not sure the without_foo methods are a good idea.  Might prefer a hash of
 # names so can associate a gtk version number to a without-ness, to have a
 # "without version 2.x" option etc.
+#
+# FIXME: deleting the whole glob with "undef *Foo::Bar::func" is probably
+# not a good idea.  Maybe let Sub::Delete do the work.
+#
 
 sub import {
   my $class = shift;
@@ -39,8 +43,8 @@ sub import {
     if ($thing eq '-verbose' || $thing eq 'verbose') {
       $VERBOSE++;
 
-    } elsif ($thing eq '-all' || $thing eq 'all') {
-      foreach my $method (all_without_methods()) {
+    } elsif ($thing eq 'all') {
+      foreach my $method ($class->all_without_methods) {
         $class->$method;
         $count++;
       }
@@ -67,10 +71,13 @@ sub all_without_methods {
   ### all_without_methods(): $class
   my @methods;
   no strict 'refs';
-  my @classes = @{"${class}::ISA"};
+  my @classes = ($class, @{"${class}::ISA"});
   ### @classes
   while (@classes) {
     my $c = shift @classes;
+    ### $c
+    #     my @keys = keys %{"${c}::"};
+    #     ### keys: @keys
     push @methods, grep {/^without_/} keys %{"${c}::"};
     push @classes, grep {/^Test/} @{$c::ISA};
     ### @classes
@@ -171,6 +178,31 @@ sub without_cell_layout_get_cells {
                      'Gtk2::ComboBox') {
     if ($class->can('get_cells')) {
       die "Oops, $class->can(get_cells) still true";
+    }
+  }
+}
+
+sub without_warp_pointer {
+  require Gtk2;
+  if ($VERBOSE) {
+    print STDERR "Test::Without::Gtk2Things: without Gtk2::Gdk::Display warp_pointer() method, per Gtk before 2.8\n";
+  }
+
+  { no warnings 'once';
+    undef *Gtk2::Gdk::Display::warp_pointer;
+  }
+
+  # check the desired effect ...
+  foreach my $class ('Gtk2::Gdk::Display') {
+    if (my $coderef = $class->can('warp_pointer')) {
+      die "Oops, $class->can(warp_pointer) still true: $coderef";
+    }
+  }
+  if (Gtk2::Gdk::Display->can('get_default')) { # new in Gtk 2.2
+    if (my $display = Gtk2::Gdk::Display->get_default) {
+      if (my $coderef = $display->can('warp_pointer')) {
+        die "Oops, display->can(warp_pointer) still true: $coderef";
+      }
     }
   }
 }

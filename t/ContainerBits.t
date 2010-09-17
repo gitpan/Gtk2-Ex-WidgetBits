@@ -29,7 +29,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 require Gtk2::Ex::ContainerBits;
 
 {
-  my $want_version = 24;
+  my $want_version = 25;
   is ($Gtk2::Ex::ContainerBits::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::ContainerBits->VERSION,  $want_version,

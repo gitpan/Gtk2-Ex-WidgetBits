@@ -17,6 +17,11 @@ with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+Version 25, September 2010
+    - Test::Without::Gtk2Things new without warp_pointer
+    - Test::Weaken::Gtk2 contents_submenu() also MenuToolButton
+    - tests fix WidgetBits for no warp_pointer pre Gtk 2.8
+
 Version 24, September 2010
     - Test::Weaken::Gtk2
         - new contents_cell_renderers()
