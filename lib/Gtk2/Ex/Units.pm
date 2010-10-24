@@ -30,7 +30,7 @@ our @EXPORT_OK = qw(em ex char_width digit_width line_height
                     size_request_with_subsizes);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-our $VERSION = 25;
+our $VERSION = 26;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
@@ -181,6 +181,9 @@ sub height {
 sub _units {
   my ($target, $str, $h, $other) = @_;
   ### _units str: $str
+
+  # it's easy to forget the $target arg, so check
+  @_ == 4 or croak 'Units width()/height() expects 2 arguments';
 
   my ($amount,$unit) = ($str =~ /(.*?)\s*([[:alpha:]_]+)$/s)
     or return $str;
@@ -339,7 +342,7 @@ individually or with C<:all> in the usual way (see L<Exporter>).
 
 =item C<< $pixels = Gtk2::Ex::Units::height ($target, $str) >>
 
-Return a size in pixels on C<$target> for a string size C<$str> like
+Return a size in pixels on C<$target> for a string C<$str> like
 
     10 chars       # width of a average character
     6 ems          # width of an "M" character
@@ -351,11 +354,11 @@ Return a size in pixels on C<$target> for a string size C<$str> like
     5 pixels       # already pixels, just return 5
     100            # no units, just return 100
 
-Either singular like "inch" or plural "inches" can be given.  Decimals can
-be given, and the return may not be an integer.
+Either singular like "inch" or plural "inches" can be given.  The number
+part can include decimals, and the return may not be an integer.
 
 "em", "ex", "char", "digit" and "line" follow the basic sizes functions
-below, according to the font in C<$target>.  For them C<$target> can be a
+below, for the font in C<$target>.  For them C<$target> can be a
 C<Gtk2::Widget> or a Pango layout C<Gtk2::Pango::Layout>.
 
 "mm" and "inch" are based on the screen size for C<$target>.  For them
@@ -364,7 +367,7 @@ with a C<get_screen> giving a C<Gtk2::Gdk::Screen>.
 
 Currently "em" and "digit" are only for use as a width, and C<ex> and
 C<line> only for a height.  In the future they may be supported on the
-opposite axis, probably based on what rotated text would look like.  (The
+opposite axis, perhaps based on what rotated text would look like.  (The
 same pixels, or scaled if pixels aren't square?)
 
 =item C<< Gtk2::Ex::Units::set_default_size_with_subsizes ($toplevel, $subsize, ...) >>

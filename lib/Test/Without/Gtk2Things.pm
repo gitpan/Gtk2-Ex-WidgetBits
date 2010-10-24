@@ -22,10 +22,9 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 25;
+our $VERSION = 26;
 
 our $VERBOSE = 0;
-
 
 # Not sure the without_foo methods are a good idea.  Might prefer a hash of
 # names so can associate a gtk version number to a without-ness, to have a
@@ -93,27 +92,19 @@ sub all_without_methods {
 # }
 # print __PACKAGE__->all_without_methods();
 
+#------------------------------------------------------------------------------
+# withouts
+
 sub without_insert_with_values {
   require Gtk2;
   if ($VERBOSE) {
     print STDERR "Test::Without::Gtk2Things: without ListStore,TreeStore insert_with_values(), per Gtk before 2.6\n";
   }
 
-  # force autoload ... umm, or something
-  Gtk2::ListStore->can('insert_with_values');
-  Gtk2::TreeStore->can('insert_with_values');
-
-  { no warnings 'once';
-    undef *Gtk2::ListStore::insert_with_values;
-    undef *Gtk2::TreeStore::insert_with_values;
-  }
+  _without_methods ('Gtk2::ListStore', 'insert_with_values');
+  _without_methods ('Gtk2::TreeStore', 'insert_with_values');
 
   # check the desired effect ...
-  foreach my $class ('Gtk2::ListStore', 'Gtk2::TreeStore') {
-    if ($class->can('insert_with_values')) {
-      die "Oops, $class->can(insert_with_values) still true";
-    }
-  }
   {
     my $store = Gtk2::ListStore->new ('Glib::String');
     if (eval { $store->insert_with_values(0, 0=>'foo'); 1 }) {
@@ -136,7 +127,7 @@ sub without_blank_cursor {
 
   no warnings 'redefine', 'once';
   {
-    my $orig = Glib::Type->can('list_values'); # force autoload
+    my $orig = Glib::Type->can('list_values');
     *Glib::Type::list_values = sub {
       my ($class, $package) = @_;
       my @result = &$orig (@_);
@@ -147,7 +138,7 @@ sub without_blank_cursor {
     };
   }
   foreach my $func ('new', 'new_for_display') {
-    my $orig = Gtk2::Gdk::Cursor->can($func); # force autoload
+    my $orig = Gtk2::Gdk::Cursor->can($func);
     my $new = sub {
       my $cursor_type = $_[-1];
       if ($cursor_type eq 'blank-cursor') {
@@ -160,7 +151,6 @@ sub without_blank_cursor {
     no strict 'refs';
     *$func = $new;
   }
-
 }
 
 sub without_cell_layout_get_cells {
@@ -169,9 +159,7 @@ sub without_cell_layout_get_cells {
     print STDERR "Test::Without::Gtk2Things: without Gtk2::CellLayout get_cells() method, per Gtk before 2.12\n";
   }
 
-  { no warnings 'once';
-    undef *Gtk2::CellLayout::get_cells;
-  }
+  _without_methods ('Gtk2::CellLayout', 'get_cells');
 
   # check the desired effect ...
   foreach my $class ('Gtk2::CellView', 'Gtk2::TreeViewColumn',
@@ -188,21 +176,220 @@ sub without_warp_pointer {
     print STDERR "Test::Without::Gtk2Things: without Gtk2::Gdk::Display warp_pointer() method, per Gtk before 2.8\n";
   }
 
-  { no warnings 'once';
-    undef *Gtk2::Gdk::Display::warp_pointer;
-  }
+  _without_methods ('Gtk2::Gdk::Display', 'warp_pointer');
 
   # check the desired effect ...
-  foreach my $class ('Gtk2::Gdk::Display') {
-    if (my $coderef = $class->can('warp_pointer')) {
-      die "Oops, $class->can(warp_pointer) still true: $coderef";
-    }
-  }
   if (Gtk2::Gdk::Display->can('get_default')) { # new in Gtk 2.2
     if (my $display = Gtk2::Gdk::Display->get_default) {
       if (my $coderef = $display->can('warp_pointer')) {
         die "Oops, display->can(warp_pointer) still true: $coderef";
       }
+    }
+  }
+}
+
+sub without_widget_tooltip {
+  require Gtk2;
+  if ($VERBOSE) {
+    print STDERR "Test::Without::Gtk2Things: without Gtk2::Widget tooltips, per Gtk before 2.12\n";
+  }
+  _without_properties ('Gtk2::Widget',
+                       'tooltip-text', 'tooltip-markup', 'has-tooltip');
+  _without_methods ('Gtk2::Widget',
+                    'get_tooltip_text', 'set_tooltip_text',
+                    'get_tooltip_markup', 'set_tooltip_markup',
+                    'get_has_tooltip', 'set_has_tooltip',);
+  _without_signals ('Gtk2::Widget', 'query-tooltip');
+
+  # check the desired effect ...
+  if (Gtk2::Widget->can('get_tooltip_text')) {
+    die "Oops, Gtk2::Widget->can(get_tooltip_text) still true";
+  }
+  if (Gtk2::Widget->can('set_tooltip_markup')) {
+    die "Oops, Gtk2::Widget->can(get_tooltip_text) still true";
+  }
+  if (grep {$_->{'signal_name'} eq 'query-tooltip'}
+      Glib::Type->list_signals ('Gtk2::Widget')) {
+    die "Oops, Gtk2::Widget still has query-tooltip signal";
+  }
+}
+
+#------------------------------------------------------------------------------
+# removing stuff
+
+sub _without_methods {
+  my $class = shift;
+  foreach my $method (@_) {
+
+    # force autoload ... umm, or something
+    $class->can($method);
+
+    my $fullname = "${class}::$method";
+    { no strict 'refs'; undef *$fullname; }
+
+    if (my $coderef = $class->can($method)) {
+      die "Oops, $class->can($method) still true: $coderef";
+    }
+  }
+}
+
+sub _without_properties {
+  my ($without_class, @without_pnames) = @_;
+
+  foreach my $without_pname (@without_pnames) {
+    (my $method = $without_pname) =~ tr/-/_/;
+    _without_methods ('Gtk2::Widget', 'get_$method', 'set_$method');
+  }
+
+  my %without_pnames;
+  @without_pnames{@without_pnames} = (1) x scalar(@without_pnames); # slice
+
+  no warnings 'redefine', 'once';
+  {
+    my $orig = Glib::Object->can('list_properties');
+    *Glib::Object::list_properties = sub {
+      my ($class) = @_;
+      if ($class->isa($without_class)) {
+        return grep {! $without_pnames{$_->get_name}} &$orig (@_);
+      }
+      goto $orig;
+    };
+  }
+  {
+    my $orig = Glib::Object->can('find_property');
+    *Glib::Object::find_property = sub {
+      my ($class, $pname) = @_;
+      if ($class->isa($without_class)
+          && _pnames_match ($pname, \%without_pnames)) {
+        ### wrapped find_property() exclude
+        return undef;
+      }
+      goto $orig;
+    };
+  }
+  foreach my $func ('get', 'get_property') {
+    my $orig = Glib::Object->can($func);
+    my $new = sub {
+      if ($_[0]->isa($without_class)) {
+        for (my $i = 1; $i < @_; $i++) {
+          my $pname = $_[$i];
+          if (_pnames_match ($pname, \%without_pnames)) {
+            require Carp;
+            Carp::croak ("Test-Without-Gtk2Things: no get property $pname");
+          }
+        }
+      }
+      goto $orig;
+    };
+    my $func = "Glib::Object::$func";
+    no strict 'refs';
+    *$func = $new;
+  }
+  foreach my $func ('set', 'set_property') {
+    my $orig = Glib::Object->can($func); # force autoload
+    my $new = sub {
+      if ($_[0]->isa($without_class)) {
+        for (my $i = 1; $i < @_; $i += 2) {
+          my $pname = $_[$i];
+          if (_pnames_match ($pname, \%without_pnames)) {
+            require Carp;
+            Carp::croak ("Test-Without-Gtk2Things: no set property $pname");
+          }
+        }
+        goto $orig;
+      }
+    };
+    my $func = "Glib::Object::$func";
+    no strict 'refs';
+    *$func = $new;
+  }
+
+
+  # check the desired effect ...
+  foreach my $without_pname (@without_pnames) {
+    if (my $pspec = $without_class->find_property($without_pname)) {
+      die "Oops, $without_class->find_property() still finds $without_pname: $pspec";
+    }
+    if (my @pspecs = grep {$_->get_name eq $without_pname}
+        $without_class->list_properties) {
+      local $, = ' ';
+      die "Oops, $without_class->list_properties() still finds $without_pname: @pspecs";
+    }
+  }
+}
+
+sub _pnames_match {
+  my ($pname, $without_pnames) = @_;
+  ### $want
+  ### $pname
+  $pname =~ tr/_/-/;
+  return $without_pnames->{$pname};
+}
+
+sub _without_signals {
+  my ($without_class, @without_signames) = @_;
+
+  my %without_signames;
+  @without_signames{@without_signames} # hash slice
+    = (1) x scalar(@without_signames);
+
+  no warnings 'redefine', 'once';
+  {
+    require Glib;
+    my $orig = Glib::Type->can('list_signals');
+    *Glib::Type::list_signals = sub {
+      my (undef, $list_class) = @_;
+      if ($list_class->isa($without_class)) {
+        return grep {! $without_signames{$_->{'signal_name'}}} &$orig (@_);
+      }
+      goto $orig;
+    };
+  }
+  {
+    my $orig = Glib::Object->can('signal_query');
+    *Glib::Object::signal_query = sub {
+      my ($class, $signame) = @_;
+      if ($class->isa($without_class)
+          && _pnames_match ($signame, \%without_signames)) {
+        ### wrapped signal_query() exclude
+        return undef;
+      }
+      goto $orig;
+    };
+  }
+  foreach my $func ('signal_connect',
+                    'signal_connect_after',
+                    'signal_connect_swapped',
+                    'signal_emit',
+                    'signal_add_emission_hook',
+                    'signal_remove_emission_hook',
+                    'signal_stop_emission_by_name') {
+    my $orig = Glib::Object->can($func);
+    my $new = sub {
+      my ($obj, $signame) = @_;
+      if ($obj->isa($without_class)) {
+        if (_pnames_match ($signame, \%without_signames)) {
+          require Carp;
+          Carp::croak ("Test-Without-Gtk2Things: no signal $signame");
+        }
+      }
+      goto $orig;
+    };
+    my $func = "Glib::Object::$func";
+    no strict 'refs';
+    *$func = $new;
+  }
+
+
+  # check the desired effect ...
+  foreach my $without_signame (@without_signames) {
+    if (my $siginfo = $without_class->signal_query($without_signame)) {
+      die "Oops, $without_class->signal_query() still finds $without_signame: $siginfo";
+    }
+    if (my @siginfos = grep {$_->{'signal_name'} eq $without_signame}
+        Glib::Type->list_signals($without_class)) {
+      local $, = ' ';
+      die "Oops, Glib::Type->list_signals($without_class) still finds $without_signame: @siginfos";
     }
   }
 }
@@ -253,11 +440,12 @@ Or an equivalent explicit import,
     require Test::Without::Gtk2Things;
     Test::Without::Gtk2Things->import('insert_with_values');
 
-In each case generally "withouts" should be established before loading
+In each case generally the "withouts" should be established before loading
 application code in case it checks features at C<BEGIN> time.
 
-Currently C<Test::Without::Gtk2Things> loads C<Gtk2> if not already loaded.
-(A mangle-after-load instead might be good, if it could be done reliably.)
+Currently C<Test::Without::Gtk2Things> loads C<Gtk2> if not already loaded,
+but don't rely on that.  A mangle-after-load instead might be good, if it
+could be done reliably.
 
 =head1 WITHOUT THINGS
 
@@ -272,12 +460,6 @@ For example,
     =>
     Test::Without::Gtk2Things: without CursorType blank-cursor, per Gtk before 2.16
     ...
-
-=item C<insert_with_values>
-
-Remove the C<insert_with_values> method from C<Gtk2::ListStore> and
-C<Gtk2::TreeStore>.  That method is new in Gtk 2.6.  In earlier versions
-separate C<insert> and C<set> calls are necessary.
 
 =item C<blank_cursor>
 
@@ -302,6 +484,23 @@ interface method is new in Gtk 2.12 and removal affects all widget classes
 implementing that interface.  In earlier Gtk versions C<Gtk2::CellView> and
 C<Gtk2::TreeViewColumn> have individual C<get_cell_renderers> methods.
 Those methods are unaffected by this without.
+
+=item C<insert_with_values>
+
+Remove the C<insert_with_values> method from C<Gtk2::ListStore> and
+C<Gtk2::TreeStore>.  That method is new in Gtk 2.6.  In earlier versions
+separate C<insert> and C<set> calls are necessary.
+
+=item C<widget_tooltip>
+
+Remove from C<Gtk2::Widget> base tooltip support new in Gtk 2.12.  This
+means the C<tooltip-text>, C<tooltip-markup> and C<has-tooltip> properties,
+their direct get/set methods such as C<< $widget->set_tooltip_text >>, and
+the C<query-tooltip> signal.
+
+For code supporting both earlier and later than 2.12 it may be enough to
+just skip the tooltip setups for the earlier versions.  See
+C<set_property_maybe> in L<Glib::Ex::ObjectBits> for some help with that.
 
 =back
 

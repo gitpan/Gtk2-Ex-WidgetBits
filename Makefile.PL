@@ -34,6 +34,7 @@ MyMakeMakerExtras::WriteMakefile
    MIN_PERL_VERSION => '5.008',
 
    PREREQ_PM    => {
+                    'Glib' => 0,
                     # part of Glib, but used explicitly, so name it here
                     'Glib::Object::Subclass' => 0,
 
@@ -45,8 +46,9 @@ MyMakeMakerExtras::WriteMakefile
                     'Gtk2::Pango' => 0,
 
                     # my Glib-Ex-ObjectBits
-                    # only used by SyncCall actually
-                    'Glib::Ex::SignalIds' => 0,
+                    'Glib::Ex::SignalIds' => 1,    # new in version 1
+                    # FreezeNotify only used by TextBufferBits actually
+                    'Glib::Ex::FreezeNotify' => 1,
 
                     'Scope::Guard' => 0,
                    },

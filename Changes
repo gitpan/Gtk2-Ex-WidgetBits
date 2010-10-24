@@ -17,6 +17,10 @@ with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+Version 26, October 2010
+    - Units width()/height() arg checking
+    - Test::Without::Gtk2Things new without widget_tooltip
+
 Version 25, September 2010
     - Test::Without::Gtk2Things new without warp_pointer
     - Test::Weaken::Gtk2 contents_submenu() also MenuToolButton

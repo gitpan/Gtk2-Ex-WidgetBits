@@ -36,7 +36,7 @@ Gtk2->init_check
 plan tests => 14;
 
 {
-  my $want_version = 25;
+  my $want_version = 26;
   is ($Gtk2::Ex::ActionTooltips::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::ActionTooltips->VERSION,  $want_version,
@@ -85,7 +85,7 @@ HERE
   my $menuitem = $ui->get_widget('/MenuBar/FileMenu/Open');
   isa_ok ($menuitem, 'Gtk2::MenuItem');
  SKIP: {
-    $menuitem->can('set_tooltip_text')
+    $menuitem->can('get_tooltip_text')
       or skip 'get_tooltip_text() not available', 1;
     is ($menuitem->get('tooltip-text'),
         'The tooltip for Open',

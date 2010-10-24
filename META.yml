@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Gtk2-Ex-WidgetBits
-version:            25
+version:            26
 abstract:           Helpers for Gtk2 widgets.
 author:
     - Kevin Ryde <user42@zip.com.au>
@@ -11,7 +11,9 @@ configure_requires:
 build_requires:
     ExtUtils::MakeMaker:  0
 requires:
-    Glib::Ex::SignalIds:  0
+    Glib:                 0
+    Glib::Ex::FreezeNotify:  1
+    Glib::Ex::SignalIds:  1
     Glib::Object::Subclass:  0
     Gtk2:                 1.200
     Gtk2::Pango:          0

@@ -22,14 +22,13 @@ use warnings;
 use Carp;
 use Scalar::Util 'refaddr', 'weaken';
 
-use Glib;
 use Gtk2 1.183;  # for Glib::Flags->new and overloaded !=
 use Glib::Ex::SignalIds;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 25;
+our $VERSION = 26;
 
 
 # The following fields are hung on a target widget,
@@ -197,7 +196,7 @@ Gtk2::Ex::WidgetEvents -- event mask merging for widgets
 =head1 SYNOPSIS
 
  use Gtk2::Ex::WidgetEvents;
- my $wm = Gtk2::Ex::WidgetEvents->new ($widget, 'motion-notify-mask');
+ my $wm = Gtk2::Ex::WidgetEvents->new ($widget, ['motion-notify-mask']);
 
  my $we = Gtk2::Ex::WidgetEvents->new ($widget);
  $we->add (['motion-notify-mask','exposure-mask']);
