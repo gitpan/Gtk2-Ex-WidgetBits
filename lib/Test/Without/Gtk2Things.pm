@@ -22,7 +22,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 26;
+our $VERSION = 27;
 
 our $VERBOSE = 0;
 
@@ -160,14 +160,6 @@ sub without_cell_layout_get_cells {
   }
 
   _without_methods ('Gtk2::CellLayout', 'get_cells');
-
-  # check the desired effect ...
-  foreach my $class ('Gtk2::CellView', 'Gtk2::TreeViewColumn',
-                     'Gtk2::ComboBox') {
-    if ($class->can('get_cells')) {
-      die "Oops, $class->can(get_cells) still true";
-    }
-  }
 }
 
 sub without_warp_pointer {
@@ -200,18 +192,6 @@ sub without_widget_tooltip {
                     'get_tooltip_markup', 'set_tooltip_markup',
                     'get_has_tooltip', 'set_has_tooltip',);
   _without_signals ('Gtk2::Widget', 'query-tooltip');
-
-  # check the desired effect ...
-  if (Gtk2::Widget->can('get_tooltip_text')) {
-    die "Oops, Gtk2::Widget->can(get_tooltip_text) still true";
-  }
-  if (Gtk2::Widget->can('set_tooltip_markup')) {
-    die "Oops, Gtk2::Widget->can(get_tooltip_text) still true";
-  }
-  if (grep {$_->{'signal_name'} eq 'query-tooltip'}
-      Glib::Type->list_signals ('Gtk2::Widget')) {
-    die "Oops, Gtk2::Widget still has query-tooltip signal";
-  }
 }
 
 #------------------------------------------------------------------------------
@@ -226,7 +206,10 @@ sub _without_methods {
 
     my $fullname = "${class}::$method";
     { no strict 'refs'; undef *$fullname; }
+  }
 
+  # check the desired effect ...
+  foreach my $method (@_) {
     if (my $coderef = $class->can($method)) {
       die "Oops, $class->can($method) still true: $coderef";
     }
@@ -285,7 +268,7 @@ sub _without_properties {
     no strict 'refs';
     *$func = $new;
   }
-  foreach my $func ('set', 'set_property') {
+  foreach my $func ('new', 'set', 'set_property') {
     my $orig = Glib::Object->can($func); # force autoload
     my $new = sub {
       if ($_[0]->isa($without_class)) {
@@ -296,8 +279,8 @@ sub _without_properties {
             Carp::croak ("Test-Without-Gtk2Things: no set property $pname");
           }
         }
-        goto $orig;
       }
+      goto $orig;
     };
     my $func = "Glib::Object::$func";
     no strict 'refs';

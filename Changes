@@ -17,6 +17,11 @@ with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+Version 27, October 2010
+    - Test::Without::Gtk2Things fix for set_property mangling, and
+      hide from Glib::Object::new() too
+
+
 Version 26, October 2010
     - Units width()/height() arg checking
     - Test::Without::Gtk2Things new without widget_tooltip

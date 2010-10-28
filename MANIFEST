@@ -17,6 +17,7 @@ devel/grandom-array.c
 devel/grandom-zero.c
 devel/grandom.c
 devel/hook.pl
+devel/magic.pl
 devel/Makefile
 devel/menu-popup.pl
 devel/messageuntilkey-multi-display.pl
