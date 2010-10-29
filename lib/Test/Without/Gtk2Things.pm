@@ -22,7 +22,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 27;
+our $VERSION = 28;
 
 our $VERBOSE = 0;
 
@@ -59,7 +59,7 @@ sub import {
   }
   if ($VERBOSE) {
     print STDERR
-      "Test::Without::Gtk2Things: count without $count thing",
+      "Test::Without::Gtk2Things -- count without $count thing",
         ($count==1?'':'s'), "\n";
   }
 }
@@ -98,7 +98,7 @@ sub all_without_methods {
 sub without_insert_with_values {
   require Gtk2;
   if ($VERBOSE) {
-    print STDERR "Test::Without::Gtk2Things: without ListStore,TreeStore insert_with_values(), per Gtk before 2.6\n";
+    print STDERR "Test::Without::Gtk2Things -- without ListStore,TreeStore insert_with_values(), per Gtk before 2.6\n";
   }
 
   _without_methods ('Gtk2::ListStore', 'insert_with_values');
@@ -122,7 +122,7 @@ sub without_insert_with_values {
 sub without_blank_cursor {
   require Gtk2;
   if ($VERBOSE) {
-    print STDERR "Test::Without::Gtk2Things: without CursorType blank-cursor, per Gtk before 2.16\n";
+    print STDERR "Test::Without::Gtk2Things -- without CursorType blank-cursor, per Gtk before 2.16\n";
   }
 
   no warnings 'redefine', 'once';
@@ -143,7 +143,7 @@ sub without_blank_cursor {
       my $cursor_type = $_[-1];
       if ($cursor_type eq 'blank-cursor') {
         require Carp;
-        Carp::croak ('Test::Without::Gtk2Things: no blank-cursor');
+        Carp::croak ('Test::Without::Gtk2Things -- no blank-cursor');
       }
       goto $orig;
     };
@@ -156,16 +156,34 @@ sub without_blank_cursor {
 sub without_cell_layout_get_cells {
   require Gtk2;
   if ($VERBOSE) {
-    print STDERR "Test::Without::Gtk2Things: without Gtk2::CellLayout get_cells() method, per Gtk before 2.12\n";
+    print STDERR "Test::Without::Gtk2Things -- without Gtk2::CellLayout get_cells() method, per Gtk before 2.12\n";
   }
 
   _without_methods ('Gtk2::CellLayout', 'get_cells');
 }
 
+sub without_menuitem_label_property {
+  require Gtk2;
+  if ($VERBOSE) {
+    print STDERR "Test::Without::Gtk2Things -- without Gtk2::MenuItem label and use-underline properties, per Gtk before 2.16\n";
+  }
+  _without_properties ('Gtk2::MenuItem', 'label', 'use-underline');
+
+  # check the desired effect ...
+  {
+    if (eval { Gtk2::MenuItem->Glib::Object::new (label => 'hello') }) {
+      die 'Oops, Gtk2::MenuItem create with Glib::Object::new and label still succeeds';
+    }
+    if (eval { Gtk2::MenuItem->Glib::Object::new ('use-underline' => 1) }) {
+      die 'Oops, Gtk2::MenuItem create with Glib::Object::new and use-underline still succeeds';
+    }
+  }
+}
+
 sub without_warp_pointer {
   require Gtk2;
   if ($VERBOSE) {
-    print STDERR "Test::Without::Gtk2Things: without Gtk2::Gdk::Display warp_pointer() method, per Gtk before 2.8\n";
+    print STDERR "Test::Without::Gtk2Things -- without Gtk2::Gdk::Display warp_pointer() method, per Gtk before 2.8\n";
   }
 
   _without_methods ('Gtk2::Gdk::Display', 'warp_pointer');
@@ -183,7 +201,7 @@ sub without_warp_pointer {
 sub without_widget_tooltip {
   require Gtk2;
   if ($VERBOSE) {
-    print STDERR "Test::Without::Gtk2Things: without Gtk2::Widget tooltips, per Gtk before 2.12\n";
+    print STDERR "Test::Without::Gtk2Things -- without Gtk2::Widget tooltips, per Gtk before 2.12\n";
   }
   _without_properties ('Gtk2::Widget',
                        'tooltip-text', 'tooltip-markup', 'has-tooltip');
@@ -441,7 +459,7 @@ For example,
 
     perl -MTest::Without::Gtk2Things=verbose,blank_cursor foo.t
     =>
-    Test::Without::Gtk2Things: without CursorType blank-cursor, per Gtk before 2.16
+    Test::Without::Gtk2Things -- without CursorType blank-cursor, per Gtk before 2.16
     ...
 
 =item C<blank_cursor>
@@ -473,6 +491,15 @@ Those methods are unaffected by this without.
 Remove the C<insert_with_values> method from C<Gtk2::ListStore> and
 C<Gtk2::TreeStore>.  That method is new in Gtk 2.6.  In earlier versions
 separate C<insert> and C<set> calls are necessary.
+
+=item C<menuitem_label_property>
+
+Remove from C<Gtk2::MenuItem> C<label> and C<use-underline> properties and
+corresponding explicit C<get_label>, C<set_use_underline> etc methods.
+
+C<label> and C<use-underline> are new in Gtk 2.16.  (For prior versions
+C<new_with_label> or C<new_with_mnemonic> create and set a child label
+widget.)
 
 =item C<widget_tooltip>
 
