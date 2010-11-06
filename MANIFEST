@@ -81,6 +81,7 @@ t/MyTestHelpers.pm
 t/Statusbar-DynamicContext.t
 t/Statusbar-MessageUntilKey.t
 t/SyncCall.t
+t/Test-Weaken-Gtk2-igndisp.t
 t/Test-Weaken-Gtk2.t
 t/Test-Without-Gtk2Things.t
 t/TextBufferBits.t

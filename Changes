@@ -17,6 +17,10 @@ with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+Version 30, November 2010
+    - Units millimetres, MenuBits position and WidgetBits warp allow
+      for no GdkScreen in Gtk 2.0.x
+
 Version 29, November 2010
     - new Gtk2::Ex::MenuItem::Subclass
     - MessageUntilKey, SyncCall allow for no GdkDisplay in Gtk 2.0.x

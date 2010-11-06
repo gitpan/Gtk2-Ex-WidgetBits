@@ -22,7 +22,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 29;
+our $VERSION = 30;
 
 our $VERBOSE = 0;
 
@@ -217,17 +217,36 @@ sub without_EXPERIMENTAL_GdkDisplay {
   if ($VERBOSE) {
     print STDERR "Test::Without::Gtk2Things -- without Gdk2::Gdk::Display, per Gtk 2.0.x\n";
   }
-  _without_methods ('Gtk2::Widget',
-                    'get_display');
+  _without_methods ('Gtk2::Widget', 'get_display', 'get_screen');
+  _without_methods ('Gtk2::Gdk::Cursor', 'new_for_display');
+  _without_packages ('Gtk2::Gdk::Display', 'Gtk2::Gdk::Screen');
+
+  # check the desired effect ...
+  if (my $coderef = Gtk2::Gdk::Display->can('get_default')) {
+    die "Oops, Gtk2::Gdk::Display->can(get_default) still true: $coderef";
+  }
+  if (my $coderef = Gtk2::Gdk::Screen->can('get_display')) {
+    die "Oops, Gtk2::Gdk::Screen->can(get_display) still true: $coderef";
+  }
 }
 
 #------------------------------------------------------------------------------
 # removing stuff
 
+sub _without_packages {
+  foreach my $package (@_) {
+    $package->can('something'); # finish lazy loading, or some such
+    no strict 'refs';
+    foreach my $name (%{"${package}::"}) {
+      my $fullname = "${package}::$name";
+      undef *$fullname;
+    }
+  }
+}
+
 sub _without_methods {
   my $class = shift;
   foreach my $method (@_) {
-
     # force autoload ... umm, or something
     $class->can($method);
 

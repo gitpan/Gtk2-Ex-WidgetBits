@@ -29,7 +29,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 require Gtk2::Ex::WidgetBits;
 
 {
-  my $want_version = 29;
+  my $want_version = 30;
   is ($Gtk2::Ex::WidgetBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::WidgetBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::WidgetBits->VERSION($want_version); 1 },
@@ -130,8 +130,17 @@ SKIP: {
   #
   {
     my $label = Gtk2::Label->new ('foo');
-    ok (!eval{ Gtk2::Ex::WidgetBits::xy_distance_mm($label, 10,10, 20,20); 1});
-    like ($@, qr/not on a screen/);
+    if ($label->can('get_screen')) {
+      ok (!eval{ Gtk2::Ex::WidgetBits::xy_distance_mm($label, 10,10, 20,20);
+                 1},
+          'xy_distance_mm() error when not on a screen');
+      like ($@, qr/not on a screen/);
+    } else {
+      ok (eval{ Gtk2::Ex::WidgetBits::xy_distance_mm($label, 10,10, 20,20);
+                1},
+          'xy_distance_mm() on Gtk 2.0.x single-screen');
+      ok (1);
+    }
   }
   {
     my $toplevel = Gtk2::Window->new('toplevel');

@@ -25,7 +25,7 @@ use List::Util qw(max);
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 29;
+our $VERSION = 30;
 
 use Exporter;
 our @ISA = ('Exporter');
@@ -41,7 +41,8 @@ sub position_widget_topcentre {
   ### menu   screen: "@{[$menu->get_screen]}"
 
   if ($widget
-      && $widget->get_screen == $menu->get_screen
+      && (! $widget->can('get_screen') # Gtk 2.0.x single-screen
+          || $widget->get_screen == $menu->get_screen)
       && $widget->mapped) {
     ### mapped and same screen
 

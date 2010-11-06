@@ -25,6 +25,27 @@ use Gtk2 '-init';
 use Smart::Comments;
 
 {
+  # use Test::Without::Gtk2Things '-verbose', 'EXPERIMENTAL_GdkDisplay';
+  require Gtk2::Ex::WidgetBits;
+  my $toplevel = Gtk2::Window->new('toplevel');
+  $toplevel->realize;
+  print Gtk2::Ex::WidgetBits::xy_distance_mm($toplevel, 10,20, 50,60);
+  exit 0;
+}
+
+{
+  my $screen = Gtk2::Gdk::Display->get_default->get_default_screen;
+
+  my $mnum = 0;
+  my $width_mm = $screen->get_monitor_width_mm ($mnum);
+  my $height_mm = $screen->get_monitor_height_mm ($mnum);
+  ### $mnum
+  ### $width_mm
+  ### $height_mm
+  exit 0;
+}
+
+{
   require Test::Weaken;
   print Test::Weaken->VERSION,"\n";
   require Test::Weaken::Gtk2;

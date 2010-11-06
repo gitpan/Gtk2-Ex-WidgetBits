@@ -35,7 +35,7 @@ Gtk2->init_check
 plan tests => 7;
 
 {
-  my $want_version = 29;
+  my $want_version = 30;
   is ($Gtk2::Ex::MenuBits::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::MenuBits->VERSION,  $want_version,
@@ -54,14 +54,14 @@ plan tests => 7;
   is_deeply ([ Gtk2::Ex::MenuBits::position_widget_topcentre
                ($menu, -12345, -6789, $widget) ],
              [ -12345, -6789, 1 ],
-             'not in a toplevel');
+             'when not in a toplevel');
 
   my $toplevel = Gtk2::Window->new('toplevel');
   $toplevel->add ($widget);
   is_deeply ([ Gtk2::Ex::MenuBits::position_widget_topcentre
                ($menu, -12345, -6789, $widget) ],
              [ -12345, -6789, 1 ],
-             'not realized');
+             'when not realized');
 
   $toplevel->show_all;
   # MyTestHelpers::main_iterations();

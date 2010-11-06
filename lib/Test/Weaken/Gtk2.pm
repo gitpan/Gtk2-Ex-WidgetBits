@@ -33,7 +33,7 @@ our @EXPORT_OK = qw(contents_container
                     destructor_destroy_and_iterate
                     ignore_default_display);
 
-our $VERSION = 29;
+our $VERSION = 30;
 
 sub contents_container {
   my ($ref) = @_;
@@ -164,7 +164,7 @@ sub _main_iterations {
 #------------------------------------------------------------------------------
 sub ignore_default_display {
   my ($ref) = @_;
-  return (Gtk2::Gdk::Display->can('get_default') # if Gtk2 loaded
+  return (Gtk2::Gdk::Display->can('get_default') # Gtk2 loaded, and Gtk 2.2 up
           && Gtk2::Gdk::Display->get_default     # if Gtk2 inited
           && ($ref == (Gtk2::Gdk::Display->get_default)));
 }
@@ -303,8 +303,10 @@ the X server are run, but there's no read or wait for further events.
 Return true if C<$ref> is the default display
 C<< Gtk2::Gdk::Display->get_default_display >>.
 
-If C<Gtk2> is not loaded or C<< Gtk2->init >> has not been called then
-there's no default display yet and this function returns false always.
+If there's no default display object then this function returns false.  This
+happens if C<Gtk2> is not loaded yet, or C<< Gtk2->init >> has not been
+called yet, or if running under Gtk 2.0.x where there's no
+C<< Gtk2::Gdk::Display >> class at all.
 
     my $leaks = leaks({
       constructor => sub { make_something },

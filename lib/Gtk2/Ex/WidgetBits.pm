@@ -22,7 +22,10 @@ use warnings;
 use Carp;
 use Gtk2;
 
-our $VERSION = 29;
+# uncomment this to run the ### lines
+#use Smart::Comments;
+
+our $VERSION = 30;
 
 # get_root_position() might be done as
 #
@@ -65,6 +68,11 @@ sub xy_distance_mm {
   return _hypot ($xf * ($x1 - $x2),
                  $yf * ($y1 - $y2));
 }
+
+if (Gtk2::Gdk::Screen->can('get_width')) {
+  eval "#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
+  ### using widget->screen
+
 sub _widget_mm_factors {
   my ($widget) = @_;
 
@@ -103,6 +111,26 @@ sub _widget_mm_factors {
   return ($screen->get_width_mm / $screen->get_width,
           $screen->get_height_mm / $screen->get_height);
 }
+1
+HERE
+
+} else {
+  eval "#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
+  ### using Gtk 2.0.x single-screen size
+
+# Gtk 2.0.x single-screen sizes
+sub _widget_mm_factors {
+  return (Gtk2::Gdk->screen_width_mm / Gtk2::Gdk->screen_width,
+          Gtk2::Gdk->screen_height_mm / Gtk2::Gdk->screen_height);
+}
+1
+HERE
+}
+
+#------------------------------------------------------------------------------
+# generic
+
+# cf Math::Libm hypot()
 sub _hypot {
   my ($x, $y) = @_;
   return sqrt ($x ** 2 + $y ** 2);
@@ -142,7 +170,7 @@ be realized, since otherwise it doesn't have a screen position.
 
 See L<Gtk2::Gdk::Display> for the basic C<warp_pointer> which operates in
 root window coordinates.  The code here converts using C<get_root_position>
-above, so there's no server round-trip.
+above, so there's no server round-trip.  Warping is available in Gtk 2.2 up.
 
 (The underlying C<XWarpPointer> operates relative to any window, not just
 the root, but Gdk doesn't make that feature available.)

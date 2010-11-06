@@ -28,6 +28,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 require Test::Weaken::Gtk2;
 
 require Gtk2;
+MyTestHelpers::glib_gtk_versions();
 Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
 Gtk2->init_check
   or plan skip_all => 'due to no DISPLAY available';
@@ -35,7 +36,7 @@ Gtk2->init_check
 plan tests => 23;
 
 {
-  my $want_version = 29;
+  my $want_version = 30;
   is ($Test::Weaken::Gtk2::VERSION, $want_version,
       'VERSION variable');
   is (Test::Weaken::Gtk2->VERSION,  $want_version,
@@ -46,9 +47,6 @@ plan tests => 23;
   ok (! eval { Test::Weaken::Gtk2->VERSION($check_version); 1 },
       "VERSION class check $check_version");
 }
-
-require Gtk2;
-MyTestHelpers::glib_gtk_versions();
 
 #------------------------------------------------------------------------------
 # contents_submenu()

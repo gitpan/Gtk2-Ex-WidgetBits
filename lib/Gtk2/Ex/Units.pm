@@ -30,13 +30,17 @@ our @EXPORT_OK = qw(em ex char_width digit_width line_height
                     size_request_with_subsizes);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-our $VERSION = 29;
+our $VERSION = 30;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
 
 #------------------------------------------------------------------------------
+
+if (Gtk2::Gdk::Screen->can('get_width')) {
+  eval "#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
+  ### _to_screen() using target->screen
 
 sub _to_screen {
   my ($target) = @_;
@@ -46,6 +50,31 @@ sub _to_screen {
   return ($target
           || croak "No screen for target $target");
 }
+1
+
+HERE
+} else {
+  eval "#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
+  ### _to_screen() using Gtk 2.0.x single-screen
+
+{
+  package Gtk2::Ex::Units::DummyScreen;
+  sub get_width  { return Gtk2::Gdk->screen_width }
+  sub get_height { return Gtk2::Gdk->screen_height }
+  sub get_width_mm  { return Gtk2::Gdk->screen_width_mm }
+  sub get_height_mm { return Gtk2::Gdk->screen_height_mm }
+}
+{
+  my $dummy_screen = bless {}, 'Gtk2::Ex::Units::DummyScreen';
+  ### $dummy_screen
+  sub _to_screen {
+    return $dummy_screen;
+  }
+}
+1
+HERE
+}
+
 sub _pango_rect {
   my ($target, $str, $want_logical) = @_;
   ### _pango_rect(): [$target, $str]
@@ -363,7 +392,8 @@ C<Gtk2::Widget> or a Pango layout C<Gtk2::Pango::Layout>.
 
 "mm" and "inch" are based on the screen size for C<$target>.  For them
 C<$target> can be a C<Gtk2::Widget>, a C<Gtk2::Gdk::Window>, or anything
-with a C<get_screen> giving a C<Gtk2::Gdk::Screen>.
+with a C<get_screen> giving a C<Gtk2::Gdk::Screen>.  In Gtk 2.0.x there's
+only one screen and C<$target> is currently ignored in that case.
 
 Currently "em" and "digit" are only for use as a width, and C<ex> and
 C<line> only for a height.  In the future they may be supported on the
@@ -440,7 +470,8 @@ the glyphs in the target font, plus any Pango line spacing per
 
 =head1 SEE ALSO
 
-L<Gtk2::Gdk::Screen>, for screen size in pixels and millimetres.
+L<Gtk2::Gdk::Screen>, for screen size in pixels and millimetres (or
+L<Gtk2::Gdk> for the Gtk 2.0.x single-screen sizes).
 
 L<Math::Units>
 

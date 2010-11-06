@@ -37,7 +37,7 @@ MyTestHelpers::glib_gtk_versions();
 plan tests => 37;
 
 {
-  my $want_version = 29;
+  my $want_version = 30;
   is ($Gtk2::Ex::Units::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::Units->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::Units->VERSION($want_version); 1 },
@@ -94,10 +94,16 @@ my $label = Gtk2::Label->new;
   my $em = Gtk2::Ex::Units::em($target);
   my $digit_width = Gtk2::Ex::Units::digit_width($target);
   my $ex = Gtk2::Ex::Units::ex($target);
-  my $screen = $label->get_screen;
-  my $screen_width = $screen->get_width;
-  my $screen_height = $screen->get_height;
-  diag "em=$em, ex=$ex, char=$char_width, digit=$digit_width, screen=$screen";
+  my ($screen_width, $screen_height);
+  if ($label->can('get_screen')) {
+    my $screen = $label->get_screen;
+    $screen_width = $screen->get_width;
+    $screen_height = $screen->get_height;
+  } else {
+    $screen_width = Gtk2::Gdk->screen_width;
+    $screen_height = Gtk2::Gdk->screen_height;
+  }
+  diag "em=$em, ex=$ex, char=$char_width, digit=$digit_width";
 
   foreach my $elem (
                     # no unit
