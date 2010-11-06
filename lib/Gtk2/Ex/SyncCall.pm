@@ -26,16 +26,23 @@ use Gtk2;
 #use Smart::Comments;
 
 # version 2 was in with Gtk2-Ex-Dragger ...
-our $VERSION = 28;
+our $VERSION = 29;
 
 
 my $sync_call_atom;
+
+my $get_display = (Gtk2::Widget->can('get_display')
+                   ? 'get_display'
+                   : do {
+                     my $dummy_display = {};
+                     sub { $dummy_display }
+                   });
 
 sub sync {
   my ($class, $widget, $callback, $userdata) = @_;
   ### SyncCall sync()
 
-  my $display = $widget->get_display;
+  my $display = $widget->$get_display;
   my $data = ($display->{(__PACKAGE__)} ||= do {
     $widget->add_events ('property-change-mask');
 
@@ -89,7 +96,7 @@ sub _do_property_notify {
 
   # note, no overloaded != until Gtk2-Perl 1.183, only == prior to that
   if ($event->atom == $sync_call_atom) {
-    my $display = $widget->get_display;
+    my $display = $widget->$get_display;
     my $data = $display->{(__PACKAGE__)};
     _call_all ($data);
   }
@@ -101,7 +108,7 @@ sub _do_property_notify {
 # 'unrealize' or 'destroy' signal on the sync widget
 sub _do_widget_destroy {
   my ($widget) = @_;
-  my $display = $widget->get_display;
+  my $display = $widget->$get_display;
   if (my $data = delete $display->{(__PACKAGE__)}) {
     _call_all ($data);
   }

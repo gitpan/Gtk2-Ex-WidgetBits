@@ -36,7 +36,7 @@ MyTestHelpers::glib_gtk_versions();
 plan tests => 14;
 
 {
-  my $want_version = 28;
+  my $want_version = 29;
   is ($Gtk2::Ex::SyncCall::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::SyncCall->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::SyncCall->VERSION($want_version); 1 },
@@ -74,8 +74,12 @@ plan tests => 14;
     $toplevel->destroy;
     is ($called, 1,
         'callbacks run when widget destroyed');
-    my $display = $toplevel->get_display;
-    is (undef, $display->{'Gtk2::Ex::SyncCall'});
+  SKIP: {
+      $toplevel->can('get_display')
+        or skip 'due to no get_display(), per Gtk 2.0.x', 1;
+      my $display = $toplevel->get_display;
+      is (undef, $display->{'Gtk2::Ex::SyncCall'});
+    }
   }
 
   # callback on unrealize, and then as normal when re-realize
@@ -87,9 +91,13 @@ plan tests => 14;
     $toplevel->unrealize;
     is ($called, 1,
         'callbacks run when widget unrealized');
-    my $display = $toplevel->get_display;
-    is (undef, $display->{'Gtk2::Ex::SyncCall'},
-        'no data left behind on GdkDisplay');
+  SKIP: {
+      $toplevel->can('get_display')
+        or skip 'due to no get_display(), per Gtk 2.0.x', 1;
+      my $display = $toplevel->get_display;
+      is (undef, $display->{'Gtk2::Ex::SyncCall'},
+          'no data left behind on GdkDisplay');
+    }
 
     $called = 0;
     $toplevel->realize;

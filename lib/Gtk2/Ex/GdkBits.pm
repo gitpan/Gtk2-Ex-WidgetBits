@@ -28,7 +28,7 @@ our @EXPORT_OK = qw(window_get_root_position
                     window_clear_region);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-our $VERSION = 28;
+our $VERSION = 29;
 
 
 # The loop here is similar to what gtk_widget_translate_coordinates() does

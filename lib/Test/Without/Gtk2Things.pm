@@ -22,7 +22,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 28;
+our $VERSION = 29;
 
 our $VERBOSE = 0;
 
@@ -210,6 +210,15 @@ sub without_widget_tooltip {
                     'get_tooltip_markup', 'set_tooltip_markup',
                     'get_has_tooltip', 'set_has_tooltip',);
   _without_signals ('Gtk2::Widget', 'query-tooltip');
+}
+
+sub without_EXPERIMENTAL_GdkDisplay {
+  require Gtk2;
+  if ($VERBOSE) {
+    print STDERR "Test::Without::Gtk2Things -- without Gdk2::Gdk::Display, per Gtk 2.0.x\n";
+  }
+  _without_methods ('Gtk2::Widget',
+                    'get_display');
 }
 
 #------------------------------------------------------------------------------

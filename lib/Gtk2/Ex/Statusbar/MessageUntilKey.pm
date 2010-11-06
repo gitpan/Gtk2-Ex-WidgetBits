@@ -22,7 +22,7 @@ use warnings;
 use Gtk2;
 
 # WidgetBits 11 through 15 mistakenly had only $VERSION==1 here
-our $VERSION = 28;
+our $VERSION = 29;
 
 sub message {
   my ($class, $statusbar, $str) = @_;
@@ -80,7 +80,8 @@ sub _do_event {
 
   if ($event->type eq 'key-press' || $event->type eq 'button-press') {
     if (my $statusbar = $$ref_weak_statusbar) {
-      if ($widget->get_display == $statusbar->get_display) {
+      if (! $widget->can('get_display')
+          || $widget->get_display == $statusbar->get_display) {
         # call through object to allow for subclassing
         if (my $self = $statusbar->{(__PACKAGE__)}) {
           $self->remove ($statusbar);

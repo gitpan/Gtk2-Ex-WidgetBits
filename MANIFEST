@@ -48,6 +48,7 @@ lib/Gtk2/Ex/EntryBits.pm
 lib/Gtk2/Ex/GdkBits.pm
 lib/Gtk2/Ex/KeySnooper.pm
 lib/Gtk2/Ex/MenuBits.pm
+lib/Gtk2/Ex/MenuItem/Subclass.pm
 lib/Gtk2/Ex/Statusbar/DynamicContext.pm
 lib/Gtk2/Ex/Statusbar/MessageUntilKey.pm
 lib/Gtk2/Ex/SyncCall.pm
@@ -75,6 +76,7 @@ t/GdkBits.t
 t/KeySnooper.t
 t/MenuBits-import.t
 t/MenuBits.t
+t/MenuItem-Subclass.t
 t/MyTestHelpers.pm
 t/Statusbar-DynamicContext.t
 t/Statusbar-MessageUntilKey.t

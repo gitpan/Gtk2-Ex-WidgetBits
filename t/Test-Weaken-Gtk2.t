@@ -35,7 +35,7 @@ Gtk2->init_check
 plan tests => 23;
 
 {
-  my $want_version = 28;
+  my $want_version = 29;
   is ($Test::Weaken::Gtk2::VERSION, $want_version,
       'VERSION variable');
   is (Test::Weaken::Gtk2->VERSION,  $want_version,
