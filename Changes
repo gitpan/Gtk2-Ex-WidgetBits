@@ -17,7 +17,11 @@ with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+Version 31, November 2010
+    - WidgetBits new xy_root_to_widget()
+
 Version 30, November 2010
+    - fix MenuItem::Subclass missed $VERSION variable
     - Units millimetres, MenuBits position and WidgetBits warp allow
       for no GdkScreen in Gtk 2.0.x
 

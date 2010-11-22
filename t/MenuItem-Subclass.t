@@ -27,6 +27,8 @@ BEGIN {
   MyTestHelpers::nowarnings();
 }
 
+use Gtk2::Ex::MenuItem::Subclass;
+
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
@@ -34,7 +36,25 @@ Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
 Gtk2->init_check
   or plan skip_all => 'due to no DISPLAY available';
 
-plan tests => 14;
+plan tests => 18;
+
+#------------------------------------------------------------------------------
+# VERSION
+
+{
+  my $want_version = 31;
+  is ($Gtk2::Ex::MenuItem::Subclass::VERSION, $want_version,
+      'VERSION variable');
+  is (Gtk2::Ex::MenuItem::Subclass->VERSION,  $want_version,
+      'VERSION class method');
+  ok (eval { Gtk2::Ex::MenuItem::Subclass->VERSION($want_version); 1 },
+      "VERSION class check $want_version");
+  my $check_version = $want_version + 1000;
+  ok (! eval { Gtk2::Ex::MenuItem::Subclass->VERSION($check_version); 1 },
+      "VERSION class check $check_version");
+}
+
+#------------------------------------------------------------------------------
 
 {
   package TestWidgetOne;

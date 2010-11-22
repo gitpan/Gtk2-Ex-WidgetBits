@@ -46,7 +46,7 @@ sub leftover_fields {
 
 #------------------------------------------------------------------------------
 
-my $want_version = 30;
+my $want_version = 31;
 my $check_version = $want_version + 1000;
 is ($Gtk2::Ex::WidgetEvents::VERSION, $want_version, 'VERSION variable');
 is (Gtk2::Ex::WidgetEvents->VERSION,  $want_version, 'VERSION class method');

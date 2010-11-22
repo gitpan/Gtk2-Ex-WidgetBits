@@ -22,7 +22,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 30;
+our $VERSION = 31;
 
 our $VERBOSE = 0;
 
@@ -217,9 +217,21 @@ sub without_EXPERIMENTAL_GdkDisplay {
   if ($VERBOSE) {
     print STDERR "Test::Without::Gtk2Things -- without Gdk2::Gdk::Display, per Gtk 2.0.x\n";
   }
-  _without_methods ('Gtk2::Widget', 'get_display', 'get_screen');
-  _without_methods ('Gtk2::Gdk::Cursor', 'new_for_display');
   _without_packages ('Gtk2::Gdk::Display', 'Gtk2::Gdk::Screen');
+
+  _without_methods ('Gtk2::Gdk::Cursor',
+                    'new_for_display','new_from_name','new_from_pixbuf',
+                    'get_display');
+  _without_methods ('Gtk2::Gdk::Colormap', 'get_screen');
+  _without_methods ('Gtk2::Gdk::Drawable', 'get_display', 'get_screen');
+  _without_methods ('Gtk2::Gdk::GC', 'get_screen');
+  _without_methods ('Gtk2::Gdk::Event', 'get_screen','set_screen');
+
+  _without_methods ('Gtk2::Menu', 'set_screen');
+  _without_methods ('Gtk2::Widget', 'get_display', 'get_screen');
+
+  _without_methods ('Gtk2::Window', 'get_screen','set_screen');
+  _without_properties ('Gtk2::Window', 'screen');
 
   # check the desired effect ...
   if (my $coderef = Gtk2::Gdk::Display->can('get_default')) {
@@ -227,6 +239,25 @@ sub without_EXPERIMENTAL_GdkDisplay {
   }
   if (my $coderef = Gtk2::Gdk::Screen->can('get_display')) {
     die "Oops, Gtk2::Gdk::Screen->can(get_display) still true: $coderef";
+  }
+}
+
+sub without_EXPERIMENTAL_Buildable {
+  require Gtk2;
+  if ($VERBOSE) {
+    print STDERR "Test::Without::Gtk2Things -- without Gdk2::Buildable interface, per Gtk before 2.12\n";
+  }
+
+  no warnings 'redefine', 'once';
+  {
+    my $orig = UNIVERSAL->can('isa');
+    *UNIVERSAL::isa = sub {
+      my ($class_or_instance, $type) = @_;
+      if ($type eq 'Gtk2::Buildable') {
+        return !1; # false
+      }
+      goto $orig;
+    };
   }
 }
 

@@ -21,7 +21,9 @@ use Gtk2;
 use strict;
 use warnings;
 
-# not sure about exporting ...
+# not sure about exporting ... would be an easy way to take just the
+# new_with_label() new_with_mnemonic() though
+#
 # use base 'Exporter';
 # our @EXPORT_OK = qw(new new_with_label new_with_mnemonic);
 # our %EXPORT_TAGS = (all => \@EXPORT_OK);
@@ -29,6 +31,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
+our $VERSION = 31;
 
 BEGIN {
   if (Gtk2::MenuItem->find_property('label')) {

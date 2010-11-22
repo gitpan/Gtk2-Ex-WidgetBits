@@ -25,7 +25,7 @@ use Gtk2;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 30;
+our $VERSION = 31;
 
 # get_root_position() might be done as
 #
@@ -60,6 +60,18 @@ sub warp_pointer {
   my $screen = $widget->get_screen;
   my $display = $widget->get_display;
   $display->warp_pointer ($screen, $origin_x + $x, $origin_y + $y);
+}
+
+sub xy_root_to_widget {
+  my ($widget, $root_x, $root_y) = @_;
+  ### _xy_root_to_widget(): "$widget", $root_x, $root_y
+  my ($x, $y) = Gtk2::Ex::WidgetBits::get_root_position ($widget);
+  if (! defined $x) {
+    ### widget unrealized
+    return;
+  } else {
+    return ($root_x - $x, $root_y - $y);
+  }
 }
 
 sub xy_distance_mm {
@@ -151,6 +163,8 @@ Gtk2::Ex::WidgetBits - miscellaneous Gtk widget helpers
 
 =head1 FUNCTIONS
 
+=head2 Widget Position
+
 =over 4
 
 =item C<($x,$y) = Gtk2::Ex::WidgetBits::get_root_position ($widget)>
@@ -168,12 +182,24 @@ Warp, ie. forcibly move, the mouse pointer to C<$x>,C<$y> in C<$widget>
 coordinates (ie. relative to the widget's top-left corner).  C<$widget> must
 be realized, since otherwise it doesn't have a screen position.
 
-See L<Gtk2::Gdk::Display> for the basic C<warp_pointer> which operates in
-root window coordinates.  The code here converts using C<get_root_position>
-above, so there's no server round-trip.  Warping is available in Gtk 2.2 up.
+See L<Gtk2::Gdk::Display> for the basic C<warp_pointer> in root window
+coordinates.  The code here converts using C<get_root_position> above, so
+there's no server round-trip.  Warping is available in Gtk 2.2 up.
 
-(The underlying C<XWarpPointer> operates relative to any window, not just
-the root, but Gdk doesn't make that feature available.)
+The underlying C<XWarpPointer> operates relative to any window, not just the
+root, but Gdk doesn't make that feature available.
+
+=item C<< ($x,$y) = Gtk2::Ex::WidgetBits::xy_root_to_widget ($widget, $root_x,$root_y) >>
+
+Convert a root window X,Y position to widget coordinates.  If C<$widget> is
+not realized then it doesn't have a screen position and the return is an
+empty list.
+
+=back
+
+=head2 Widget Distance
+
+=over
 
 =item C<< $mm = Gtk2::Ex::WidgetBits::xy_distance_mm ($widget, $x1,$y1, $x2,$y2) >>
 
@@ -181,9 +207,10 @@ Return the distance in millimetres between pixel points C<$x1>,C<$y1> and
 C<$x2>,C<$y2> in C<$widget>.
 
 Pixels are converted to millimetres using the screen size from
-C<Gtk2::Gdk::Screen>.  C<$widget> must have been added into a toplevel
-widget hierarchy (eg. C<Gtk2::Window>), since the toplevel widget determines
-the screen.
+C<Gtk2::Gdk::Screen>.  If C<$widget> isn't yet under a toplevel
+C<Gtk2::Window> (ie. C<< $widget->has_screen >> false) then currently an
+error is thrown.  In Gtk 2.0.x there's only ever one screen so it's always
+used.
 
 =back
 
