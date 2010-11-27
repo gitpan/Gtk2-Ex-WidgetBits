@@ -28,7 +28,7 @@ use Glib::Ex::SignalIds;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 31;
+our $VERSION = 32;
 
 
 # The following fields are hung on a target widget,
@@ -158,7 +158,7 @@ sub _update_widget {
 
     ### establish base_events: "$base_events"
   }
-  
+
   my $want_events = $base_events + $widget->get_events;
   foreach my $obj (values %{$widget->{__PACKAGE__.'.obj_hash'}}) {
     if (defined $obj) {  # possible weakening
@@ -185,7 +185,7 @@ sub _update_widget {
 1;
 __END__
 
-=for stopwords WidgetEvents GtkWidget ie arrayref builtin
+=for stopwords WidgetEvents GtkWidget ie arrayref builtin Gtk2-Ex-WidgetBits Ryde
 
 =head1 NAME
 

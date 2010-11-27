@@ -25,7 +25,7 @@ use List::Util qw(max);
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 31;
+our $VERSION = 32;
 
 use Exporter;
 our @ISA = ('Exporter');

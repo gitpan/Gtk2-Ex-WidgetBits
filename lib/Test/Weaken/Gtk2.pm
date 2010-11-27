@@ -17,7 +17,7 @@
 
 
 package Test::Weaken::Gtk2;
-use 5.006;  # for "our"
+use 5.006;  # for "our" (which Test::Weaken itself uses)
 use strict;
 use warnings;
 
@@ -33,7 +33,7 @@ our @EXPORT_OK = qw(contents_container
                     destructor_destroy_and_iterate
                     ignore_default_display);
 
-our $VERSION = 31;
+our $VERSION = 32;
 
 sub contents_container {
   my ($ref) = @_;
@@ -82,7 +82,7 @@ sub contents_cell_renderers {
   } else {
     return;
   }
-  
+
   # as of Gtk 2.20.1 GtkCellView tries to set the data into the cells
   # returned by either the get_cells interface or
   # gtk_cell_view_get_cell_renderers().  If there's no display_row set then
@@ -173,7 +173,7 @@ sub ignore_default_display {
 1;
 __END__
 
-=for stopwords destructors arrayref submenu MenuItem Destructor toplevel AccelLabel finalizations Ryde Gtk2-Ex-WidgetBits Gtk
+=for stopwords destructors arrayref submenu MenuItem Destructor toplevel AccelLabel finalizations Ryde Gtk2-Ex-WidgetBits Gtk Gtk2 MenuToolButton renderers CellViews
 
 =head1 NAME
 

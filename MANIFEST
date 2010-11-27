@@ -45,6 +45,7 @@ inc/MyMakeMakerExtras.pm
 lib/Gtk2/Ex/ActionTooltips.pm
 lib/Gtk2/Ex/ContainerBits.pm
 lib/Gtk2/Ex/EntryBits.pm
+lib/Gtk2/Ex/FreezeChildNotify.pm
 lib/Gtk2/Ex/GdkBits.pm
 lib/Gtk2/Ex/KeySnooper.pm
 lib/Gtk2/Ex/MenuBits.pm
@@ -71,6 +72,7 @@ t/ActionTooltips-import.t
 t/ActionTooltips.t
 t/ContainerBits.t
 t/EntryBits.t
+t/FreezeChildNotify.t
 t/GdkBits-import.t
 t/GdkBits.t
 t/KeySnooper.t
@@ -87,6 +89,7 @@ t/Test-Without-Gtk2Things.t
 t/TextBufferBits.t
 t/TreeModel-ImplBits-import.t
 t/TreeModel-ImplBits.t
+t/TreeModelBits-import.t
 t/TreeModelBits.t
 t/TreeModelFilter-Change.t
 t/TreeViewBits.t

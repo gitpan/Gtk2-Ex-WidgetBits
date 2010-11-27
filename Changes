@@ -17,6 +17,10 @@ with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+Version 32, November 2010
+    - new Gtk2::Ex::FreezeChildNotify
+    - TreeModelBits new iter_prev(), and allow export of individual funcs
+
 Version 31, November 2010
     - WidgetBits new xy_root_to_widget()
 

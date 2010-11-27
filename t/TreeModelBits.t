@@ -20,7 +20,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 16;
+use Test::More tests => 23;
 
 use lib 't';
 use MyTestHelpers;
@@ -29,7 +29,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 require Gtk2::Ex::TreeModelBits;
 
 {
-  my $want_version = 31;
+  my $want_version = 32;
   is ($Gtk2::Ex::TreeModelBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::TreeModelBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::TreeModelBits->VERSION($want_version); 1 },
@@ -143,6 +143,56 @@ sub tree_insert {
   is_deeply ([ Gtk2::Ex::TreeModelBits::all_column_types ($store) ],
              [ 'Glib::String', 'Glib::Int' ],
              'all_column_types');
+}
+
+#------------------------------------------------------------------------------
+# iter_prev
+
+{
+  my $store = Gtk2::TreeStore->new ('Glib::String');
+  tree_insert ($store, [0], 'one');
+  tree_insert ($store, [0,0], 'one-one');
+  tree_insert ($store, [1], 'two');
+  tree_insert ($store, [1,0], 'two-one');
+  tree_insert ($store, [1,1], 'two-two');
+  tree_insert ($store, [1,2], 'two-three');
+  tree_insert ($store, [2], 'three');
+
+
+  is (Gtk2::Ex::TreeModelBits::iter_prev ($store, $store->get_iter_first),
+      undef, 'iter_prev() from first');
+  {
+    my $prev = Gtk2::Ex::TreeModelBits::iter_prev
+      ($store, $store->iter_nth_child(undef,1));
+    is ($store->get($prev,0), 'one',
+        'iter_prev() from second');
+  }
+  {
+    my $prev = Gtk2::Ex::TreeModelBits::iter_prev
+      ($store, $store->iter_nth_child(undef,2));
+    is ($store->get($prev,0), 'two',
+        'iter_prev() from third');
+  }
+
+  is (Gtk2::Ex::TreeModelBits::iter_prev
+      ($store, $store->get_iter(Gtk2::TreePath->new('0:0'))),
+      undef, 'iter_prev() from one-one');
+
+  is (Gtk2::Ex::TreeModelBits::iter_prev
+      ($store, $store->get_iter(Gtk2::TreePath->new('1:0'))),
+      undef, 'iter_prev() from two-one');
+  {
+    my $prev = Gtk2::Ex::TreeModelBits::iter_prev
+      ($store, $store->get_iter(Gtk2::TreePath->new('1:1')));
+    is ($store->get($prev,0), 'two-one',
+        'iter_prev() from two-two');
+  }
+  {
+    my $prev = Gtk2::Ex::TreeModelBits::iter_prev
+      ($store, $store->get_iter(Gtk2::TreePath->new('1:2')));
+    is ($store->get($prev,0), 'two-two',
+        'iter_prev() from two-three');
+  }
 }
 
 exit 0;

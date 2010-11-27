@@ -16,13 +16,14 @@
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 package Test::Without::Gtk2Things;
+use 5.008;
 use strict;
 use warnings;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 31;
+our $VERSION = 32;
 
 our $VERBOSE = 0;
 
@@ -298,7 +299,7 @@ sub _without_properties {
 
   foreach my $without_pname (@without_pnames) {
     (my $method = $without_pname) =~ tr/-/_/;
-    _without_methods ('Gtk2::Widget', 'get_$method', 'set_$method');
+    _without_methods ('Gtk2::Widget', "get_$method", "set_$method");
   }
 
   my %without_pnames;
@@ -456,6 +457,8 @@ sub _without_signals {
 
 1;
 __END__
+
+=for stopwords Gtk2-Ex-WidgetBits Gtk withouts tooltip Ryde
 
 =head1 NAME
 

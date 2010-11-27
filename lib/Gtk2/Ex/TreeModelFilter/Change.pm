@@ -23,7 +23,7 @@ use warnings;
 use Gtk2 1.200; # for $iter->set()
 use Carp;
 
-our $VERSION = 31;
+our $VERSION = 32;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
@@ -209,7 +209,7 @@ sub set_value {
 1;
 __END__
 
-=for stopwords TreeModelFilter multi-inheritance iter ListStore TreeStore arg ie Ryde Gtk2-Ex-WidgetBits Gtk2
+=for stopwords TreeModelFilter multi-inheritance iter ListStore TreeStore arg ie Ryde Gtk2-Ex-WidgetBits Gtk
 
 =head1 NAME
 

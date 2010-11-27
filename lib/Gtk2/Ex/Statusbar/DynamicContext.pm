@@ -22,7 +22,7 @@ use warnings;
 use Carp;
 use Scalar::Util;
 
-our $VERSION = 31;
+our $VERSION = 32;
 
 # Data hung on the $statusbar:
 #
@@ -87,8 +87,7 @@ sub DESTROY {
 1;
 __END__
 
-=for stopwords Statusbar DynamicContext runtime DynamicContexts statusbar
-Ryde Gtk2-Ex-WidgetBits
+=for stopwords Statusbar DynamicContext runtime DynamicContexts statusbar statusbars Ryde Gtk2-Ex-WidgetBits
 
 =head1 NAME
 

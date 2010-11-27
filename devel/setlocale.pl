@@ -26,5 +26,5 @@ BEGIN {
   Gtk2->init;
 }
 
-use Gtk2 '1.160';
+use Gtk2 1.160;
 exit 0;

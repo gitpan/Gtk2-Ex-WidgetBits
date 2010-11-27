@@ -30,7 +30,7 @@ our @EXPORT_OK = qw(em ex char_width digit_width line_height
                     size_request_with_subsizes);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-our $VERSION = 31;
+our $VERSION = 32;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
@@ -327,7 +327,7 @@ __END__
 
 #-----------------------------------------------------------------------------
 
-=for stopwords toplevel Pango arrayref ie MMM Pango's Ryde Gtk2-Ex-WidgetBits
+=for stopwords toplevel Pango arrayref ie MMM Pango's Ryde Gtk2-Ex-WidgetBits Gtk
 
 =head1 NAME
 

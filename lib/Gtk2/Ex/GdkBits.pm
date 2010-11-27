@@ -26,9 +26,8 @@ use Exporter;
 our @ISA = ('Exporter');
 our @EXPORT_OK = qw(window_get_root_position
                     window_clear_region);
-our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-our $VERSION = 31;
+our $VERSION = 32;
 
 
 # The loop here is similar to what gtk_widget_translate_coordinates() does
@@ -68,7 +67,7 @@ sub rect_contains_rect {
 1;
 __END__
 
-=for stopwords Gdk Ryde Gtk2-Ex-WidgetBits
+=for stopwords Gdk Ryde Gtk2-Ex-WidgetBits pixmap
 
 =head1 NAME
 

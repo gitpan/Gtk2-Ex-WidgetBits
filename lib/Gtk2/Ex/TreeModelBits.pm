@@ -21,7 +21,14 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 31;
+use Exporter;
+our @ISA = ('Exporter');
+our @EXPORT_OK = qw(column_contents
+                    remove_matching_rows
+                    all_column_types
+                    iter_prev);
+
+our $VERSION = 32;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
@@ -90,10 +97,18 @@ sub all_column_types {
   return map { $model->get_column_type($_) } 0 .. $model->get_n_columns - 1;
 }
 
+sub iter_prev {
+  my ($model, $iter) = @_;
+  my $path = $model->get_path ($iter);
+  return ($path->prev
+          ? $model->get_iter ($path)  # path moved
+          : undef); # no more nodes (last path index was 0)
+}
+
 1;
 __END__
 
-=for stopwords TreeModel ListStore Ryde Gtk2 Gtk2-Ex-WidgetBits Gtk
+=for stopwords TreeModel ListStore Ryde Gtk2 Gtk2-Ex-WidgetBits Perl-Gtk Gtk lookup
 
 =head1 NAME
 
@@ -106,6 +121,14 @@ Gtk2::Ex::TreeModelBits - miscellaneous TreeModel helpers
 =head1 FUNCTIONS
 
 =over 4
+
+=item C<@types = Gtk2::Ex::TreeModelBits::all_column_types ($model)>
+
+Return a list of all the column types in C<$model>.  For example to create
+another ListStore with the same types as an existing one,
+
+    my $new_store = Gtk2::ListStore->new
+      (Gtk2::Ex::TreeModelBits::all_column_types ($old_store));
 
 =item C<@values = Gtk2::Ex::TreeModelBits::column_contents ($model, $col)>
 
@@ -128,31 +151,43 @@ where C<$iter> is the row being considered, and any extra arguments to
 C<remove_matching_rows> are passed on to C<$subr>.  C<$subr> should return
 true if it wants to remove the row.
 
-The order rows are considered and removed is unspecified, except that a
-parent row is tested before its children (the children of course tested only
-if the parent is not removed).
+The order rows are considered and removed is unspecified except that a
+parent row is tested before its children, and the children of course are not
+tested if the parent is removed.
 
-=item C<@types = Gtk2::Ex::TreeModelBits::all_column_types ($model)>
+If you use an old Gtk 2.0.x and might pass a C<Gtk2::ListStore> or
+C<Gtk2::TreeStore> to C<remove_matching_rows> then get Perl-Gtk 1.240 or
+higher to have the C<remove> method on those classes return a flag the same
+as in Gtk 2.2 and up.  Otherwise on those stores C<remove_matching_rows>
+will stop after the first row removed.
 
-Return a list of all the column types in C<$model>.  For example to create
-another ListStore with the same types as an existing one,
+=item C<$iter = Gtk2::Ex::TreeModelBits::iter_prev ($model, $iter)>
 
-    my $new_store = Gtk2::ListStore->new
-      (Gtk2::Ex::TreeModelBits::all_column_types ($old_store));
+Return a new C<Gtk2::TreeIter> which is the row preceding the given
+C<$iter>, at the same depth.  If C<$iter> is the first element at its depth
+then the return is C<undef>.
+
+This is like a reverse of C<iter_next>.  Going to the previous row is not a
+native operation and might be a touch slow if a model uses say a linked list
+and so must chase through data for a path lookup.
 
 =back
 
-=head1 OTHER NOTES
+=head1 EXPORTS
 
-If you use an old Gtk 2.0.x and want to pass a C<Gtk2::ListStore> or
-C<Gtk2::TreeStore> to C<remove_matching_rows> then get Perl-Gtk 1.240 or
-higher to have the C<remove> method on those Stores return a flag the same
-as in Gtk 2.2 and up.  Otherwise C<remove_matching_rows> will stop after the
-first row removed.
+Nothing is exported by default, but the functions can be requested in usual
+C<Exporter> style,
+
+    use Gtk2::Ex::TreeModelBits 'remove_matching_rows';
+    remove_matching_rows ($store, sub { ... });
+
+There's no C<:all> tag since this module is meant as a grab-bag of functions
+and to import as-yet unknown things would be asking for name clashes.
 
 =head1 SEE ALSO
 
-L<Gtk2::ListStore>, L<Gtk2::TreeModel>, L<Gtk2::Ex::WidgetBits>
+L<Gtk2::ListStore>, L<Gtk2::TreeModel>, L<Gtk2::Ex::WidgetBits>,
+L<Gtk2::Ex::TreeModel::ImplBits>
 
 =head1 HOME PAGE
 

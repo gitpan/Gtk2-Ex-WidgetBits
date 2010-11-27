@@ -65,29 +65,24 @@ Gtk2::Ex::ActionTooltips::group_tooltips_to_menuitems ($actiongroup);
 
 $actiongroup->add_actions
   ([
-    [ 'FileMenu',  # name
-      undef,       # stock-id
-      '_File'      # label
-    ],
+    { name  => 'FileMenu',
+      label => '_File',
+    },
 
-    [ 'MyAction',  # name
-      undef,       # stock-id
-      '_MyAction', # label
-      undef,       # accelerator
-      undef,       # tooltip (set in the code below)
-      sub {        # code when action activated
+    { name  => 'MyAction',
+      label => '_MyAction',
+      # tooltip is set in the code below
+      callback => sub {
         print "MyAction runs\n";
-      }
-    ],
-    [ 'Quit',      # name
-      undef,       # stock-id
-      '_Quit',     # label
-      undef,       # accelerator
-      'Quit means close the window and exit the program',  # tooltip
-      sub {        # code when action activated
+      },
+    },
+    { name => 'Quit',
+      label => '_Quit',
+      tooltip => 'Quit means close the window and exit the program',
+      callback => sub {
         $toplevel->destroy;
-      }
-    ],
+      },
+    },
    ]);
 
 my $my_action = $actiongroup->get_action('MyAction');

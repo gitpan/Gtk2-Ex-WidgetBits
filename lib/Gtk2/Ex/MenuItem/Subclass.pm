@@ -31,7 +31,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 31;
+our $VERSION = 32;
 
 BEGIN {
   if (Gtk2::MenuItem->find_property('label')) {
@@ -105,7 +105,7 @@ HERE
 1;
 __END__
 
-=for stopwords subclassing
+=for stopwords subclassing MenuItem Ryde Gtk2-Ex-WidgetBits
 
 =head1 NAME
 
