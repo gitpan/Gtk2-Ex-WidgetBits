@@ -49,3 +49,53 @@ if (1) {
 
 Gtk2->main;
 exit 0;
+
+
+
+__END__
+
+sub sync {
+  my ($class, $widget, $callback, $userdata) = @_;
+  push @$sync_list, $class->new (widget => $widget,
+                                 callback => $callback,
+                                 callback_args => [$userdata],
+                                 _permanent => 1)
+}
+
+sub new_for_object {
+  my ($class, $widget, $callback, $obj) = @_;
+  return $class->new (widget => $widget,
+                      callback => $callback,
+                      callback_obj => $obj);
+}
+
+# widget =>
+# callback =>
+# callback_obj =>
+# and_idle => bool
+# and_idle_timeout => ms
+# and_idle_limited => ms
+# idle_priority => 
+# timeout_priority => 
+# and_priority => 
+# priority => 
+#
+# or_timeout
+
+sub new {
+  my ($class, %self) = @_;
+  my $widget = $self{'widget'} || croak 'SyncCall: no target widget';
+  my $callback = $self{'callback'} || croak 'SyncCall: no callback';
+  my $display = $widget->$get_display;
+
+  my $self = bless \%self, $class;
+  push @$sync_list, $self;
+  unless (delete $self{'_permanent'}) {
+    Scalar::Util::weaken ($sync_list->[-1]);
+  }
+  return $self;
+}
+
+sub DESTROY {
+  
+}

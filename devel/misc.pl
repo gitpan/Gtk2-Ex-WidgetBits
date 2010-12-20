@@ -25,7 +25,12 @@ use Gtk2 '-init';
 use Smart::Comments;
 
 {
-  use Test::Without::Gtk2Things '-verbose', 'EXPERIMENTAL_GdkDisplay';
+  ### isa: Foo->isa('bar')
+  exit 0;
+}
+{
+  require Test::Without::Gtk2Things;
+  Test::Without::Gtk2Things->import('-verbose', 'EXPERIMENTAL_GdkDisplay');
   require Gtk2::Ex::WidgetBits;
   my $label = Gtk2::Label->new('hello');
   print Gtk2::Ex::WidgetBits::xy_distance_mm($label, 10,20, 50,60);

@@ -30,7 +30,7 @@ our @EXPORT_OK = qw(em ex char_width digit_width line_height
                     size_request_with_subsizes);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-our $VERSION = 32;
+our $VERSION = 33;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;

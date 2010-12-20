@@ -37,7 +37,7 @@ MyTestHelpers::glib_gtk_versions();
 plan tests => 37;
 
 {
-  my $want_version = 32;
+  my $want_version = 33;
   is ($Gtk2::Ex::Units::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::Units->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::Units->VERSION($want_version); 1 },

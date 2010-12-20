@@ -22,7 +22,7 @@ use warnings;
 use Gtk2;
 
 # WidgetBits 11 through 15 mistakenly had only $VERSION==1 here
-our $VERSION = 32;
+our $VERSION = 33;
 
 sub message {
   my ($class, $statusbar, $str) = @_;

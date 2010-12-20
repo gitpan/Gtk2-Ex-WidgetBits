@@ -35,7 +35,7 @@ Gtk2->init_check
 plan tests => 7;
 
 {
-  my $want_version = 32;
+  my $want_version = 33;
   is ($Gtk2::Ex::MenuBits::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::MenuBits->VERSION,  $want_version,

@@ -28,7 +28,7 @@ use Glib::Ex::SignalIds;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 32;
+our $VERSION = 33;
 
 
 # The following fields are hung on a target widget,

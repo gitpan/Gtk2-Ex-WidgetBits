@@ -23,7 +23,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 32;
+our $VERSION = 33;
 
 our $VERBOSE = 0;
 
@@ -96,30 +96,6 @@ sub all_without_methods {
 #------------------------------------------------------------------------------
 # withouts
 
-sub without_insert_with_values {
-  require Gtk2;
-  if ($VERBOSE) {
-    print STDERR "Test::Without::Gtk2Things -- without ListStore,TreeStore insert_with_values(), per Gtk before 2.6\n";
-  }
-
-  _without_methods ('Gtk2::ListStore', 'insert_with_values');
-  _without_methods ('Gtk2::TreeStore', 'insert_with_values');
-
-  # check the desired effect ...
-  {
-    my $store = Gtk2::ListStore->new ('Glib::String');
-    if (eval { $store->insert_with_values(0, 0=>'foo'); 1 }) {
-      die 'Oops, Gtk2::ListStore call store->insert_with_values() still succeeds';
-    }
-  }
-  {
-    my $store = Gtk2::TreeStore->new ('Glib::String');
-    if (eval { $store->insert_with_values(undef, 0, 0=>'foo'); 1 }) {
-      die 'Oops, Gtk2::TreeStore call store->insert_with_values() still succeeds';
-    }
-  }
-}
-
 sub without_blank_cursor {
   require Gtk2;
   if ($VERBOSE) {
@@ -163,6 +139,53 @@ sub without_cell_layout_get_cells {
   _without_methods ('Gtk2::CellLayout', 'get_cells');
 }
 
+sub without_draw_as_radio {
+  require Gtk2;
+  if ($VERBOSE) {
+    print STDERR "Test::Without::Gtk2Things -- without Gtk2::CheckMenuItem/ToggleAction draw-as-radio property, per Gtk before 2.4\n";
+  }
+  _without_properties ('Gtk2::CheckMenuItem', 'draw-as-radio');
+  _without_properties ('Gtk2::ToggleAction', 'draw-as-radio');
+
+  # check the desired effect ...
+  {
+    if (eval { Gtk2::CheckMenuItem->Glib::Object::new (draw_as_radio => 1) }) {
+      die 'Oops, Gtk2::CheckMenuItem create with Glib::Object::new and draw-as-radio still succeeds';
+    }
+    if (Gtk2::CheckMenuItem->find_property ('draw_as_radio')) {
+      die 'Oops, Gtk2::CheckMenuItem find_property("draw_as_radio") still succeeds';
+    }
+    my $action = Gtk2::ToggleAction->new (name => 'Test-Without-Gtk2Things');
+    if (eval { $action->get_draw_as_radio() }) {
+      die 'Oops, Gtk2::ToggleAction get_draw_as_radio() still available';
+    }
+  }
+}
+
+sub without_insert_with_values {
+  require Gtk2;
+  if ($VERBOSE) {
+    print STDERR "Test::Without::Gtk2Things -- without ListStore,TreeStore insert_with_values(), per Gtk before 2.6\n";
+  }
+
+  _without_methods ('Gtk2::ListStore', 'insert_with_values');
+  _without_methods ('Gtk2::TreeStore', 'insert_with_values');
+
+  # check the desired effect ...
+  {
+    my $store = Gtk2::ListStore->new ('Glib::String');
+    if (eval { $store->insert_with_values(0, 0=>'foo'); 1 }) {
+      die 'Oops, Gtk2::ListStore call store->insert_with_values() still succeeds';
+    }
+  }
+  {
+    my $store = Gtk2::TreeStore->new ('Glib::String');
+    if (eval { $store->insert_with_values(undef, 0, 0=>'foo'); 1 }) {
+      die 'Oops, Gtk2::TreeStore call store->insert_with_values() still succeeds';
+    }
+  }
+}
+
 sub without_menuitem_label_property {
   require Gtk2;
   if ($VERBOSE) {
@@ -177,6 +200,9 @@ sub without_menuitem_label_property {
     }
     if (eval { Gtk2::MenuItem->Glib::Object::new ('use-underline' => 1) }) {
       die 'Oops, Gtk2::MenuItem create with Glib::Object::new and use-underline still succeeds';
+    }
+    if (Gtk2::MenuItem->can('get_label')) {
+      die 'Oops, Gtk2::MenuItem still can("get_label")';
     }
   }
 }
@@ -213,24 +239,40 @@ sub without_widget_tooltip {
   _without_signals ('Gtk2::Widget', 'query-tooltip');
 }
 
-sub without_EXPERIMENTAL_GdkDisplay {
+sub without_gdkdisplay {
   require Gtk2;
   if ($VERBOSE) {
-    print STDERR "Test::Without::Gtk2Things -- without Gdk2::Gdk::Display, per Gtk 2.0.x\n";
+    print STDERR "Test::Without::Gtk2Things -- without Gdk2::Gdk::Display and Gtk2::Gdk::Screen, per Gtk 2.0.x\n";
   }
   _without_packages ('Gtk2::Gdk::Display', 'Gtk2::Gdk::Screen');
 
+  _without_methods ('Gtk2::Gdk',
+                    'get_display_arg_name',
+                    'text_property_to_text_list_for_display',
+                    'text_property_to_utf8_list_for_display',
+                    'utf8_to_compound_text_for_display');
   _without_methods ('Gtk2::Gdk::Cursor',
-                    'new_for_display','new_from_name','new_from_pixbuf',
-                    'get_display');
+                    'get_display',
+                    'new_for_display','new_from_name','new_from_pixbuf');
   _without_methods ('Gtk2::Gdk::Colormap', 'get_screen');
   _without_methods ('Gtk2::Gdk::Drawable', 'get_display', 'get_screen');
-  _without_methods ('Gtk2::Gdk::GC', 'get_screen');
-  _without_methods ('Gtk2::Gdk::Event', 'get_screen','set_screen');
+  _without_methods ('Gtk2::Gdk::Font',     'get_display');
+  _without_methods ('Gtk2::Gdk::GC',       'get_screen');
+  _without_methods ('Gtk2::Gdk::Event',    'get_screen','set_screen',
+                    'send_client_message_for_display');
+  _without_methods ('Gtk2::Gdk::Visual',   'get_screen');
 
-  _without_methods ('Gtk2::Menu', 'set_screen');
-  _without_methods ('Gtk2::Widget', 'get_display', 'get_screen');
+  # mangle the base Gtk2::Widget class so can() is false for subclasses
+  _without_methods ('Gtk2::Widget',        'get_display', 'get_screen',
+                   'has_screen');
+  _without_signals ('Gtk2::Widget', 'screen-changed');
 
+  _without_methods ('Gtk2::Clipboard',     'get_display', 'get_for_display');
+  _without_methods ('Gtk2::Invisible',     'get_screen','set_screen',
+                   'new_for_screen');
+  _without_methods ('Gtk2::Menu',          'set_screen');
+  _without_methods ('Gtk2::MountOperation','get_screen');
+  _without_methods ('Gtk2::StatusIcon',    'get_screen','set_screen');
   _without_methods ('Gtk2::Window', 'get_screen','set_screen');
   _without_properties ('Gtk2::Window', 'screen');
 
@@ -243,27 +285,36 @@ sub without_EXPERIMENTAL_GdkDisplay {
   }
 }
 
-sub without_EXPERIMENTAL_Buildable {
+sub without_builder {
   require Gtk2;
   if ($VERBOSE) {
-    print STDERR "Test::Without::Gtk2Things -- without Gdk2::Buildable interface, per Gtk before 2.12\n";
+    print STDERR "Test::Without::Gtk2Things -- without Gtk2::Builder and Buildable interface, per Gtk before 2.12\n";
   }
+  _without_packages ('Gtk2::Builder');
+  _without_interfaces ('Gtk2::Buildable');
+}
 
-  no warnings 'redefine', 'once';
+#------------------------------------------------------------------------------
+# removing stuff
+
+sub _without_interfaces {
+  _without_packages (@_);
+
   {
+    no warnings 'redefine', 'once';
+    my %without;
+    @without{@_} = (); # hash slice
     my $orig = UNIVERSAL->can('isa');
+
     *UNIVERSAL::isa = sub {
       my ($class_or_instance, $type) = @_;
-      if ($type eq 'Gtk2::Buildable') {
+      if (exists $without{$type}) {
         return !1; # false
       }
       goto $orig;
     };
   }
 }
-
-#------------------------------------------------------------------------------
-# removing stuff
 
 sub _without_packages {
   foreach my $package (@_) {
@@ -540,6 +591,28 @@ can be made by applications with a no-pixels-set bitmap as described by
 C<gdk_cursor_new> in such earlier versions.  (See L<Gtk2::Ex::WidgetCursor>
 for some help with that.)
 
+=item C<builder>
+
+Remove C<Gtk2::Builder> and the C<Gtk2::Buildable> interface, as per Gtk
+before 2.12.
+
+The Buildable interface is removed by removing the class and by mangling
+C<UNIVERSAL::isa()> to pretend nothing is a Buildable.  Actual package
+C<@ISA> lists are not changed currently.  This should mean Buildable still
+works in C code, but not from Perl (neither currently loaded nor later
+loaded classes).
+
+In a Perl widget implementation it can be fairly easy to support Gtk
+pre-2.12 by omitting the Buildable interface if not available.
+
+    use Glib::Object::Subclass
+      'Gtk2::DrawingArea',
+      interfaces => [ # Buildable new in Gtk 2.12, omit otherwise
+                      Gtk2::Widget->isa('Gtk2::Buildable')
+                      ? ('Gtk2::Buildable')
+                      : (),
+      ];
+
 =item C<cell_layout_get_cells>
 
 Remove the C<get_cells> method from the C<Gtk2::CellLayout> interface.  That
@@ -547,6 +620,27 @@ interface method is new in Gtk 2.12 and removal affects all widget classes
 implementing that interface.  In earlier Gtk versions C<Gtk2::CellView> and
 C<Gtk2::TreeViewColumn> have individual C<get_cell_renderers> methods.
 Those methods are unaffected by this without.
+
+=item C<draw_as_radio>
+
+Remove the C<Gtk2::CheckMenuItem> and C<Gtk2::ToggleAction> C<draw-as-radio>
+property and corresponding explicit get/set methods.
+
+C<draw-as-radio> on those two classes is new in Gtk 2.4.  For prior versions
+it was only a builtin drawing feature of C<Gtk2::RadioMenuItem>, or some
+such.  Simply skipping it may be good enough in those prior versions.
+
+=item C<gdkdisplay>
+
+Remove C<Gtk2::Gdk::Display> and C<Gtk2::Gdk::Screen> classes, and the
+various C<get_display>, C<set_screen>, etc widget methods, as would be the
+case in Gtk 2.0.x.
+
+In Gtk 2.0.x there was a single implicit screen and display, and some
+methods for querying their attributes (see L<Gtk2::Gdk>).  Most widget code
+doesn't need to do much with a screen or display object, and it can be
+reasonably easy to support 2.0.x by checking for a C<set_screen> method etc
+if say putting a dialog on the same screen as its originating main window.
 
 =item C<insert_with_values>
 
@@ -581,6 +675,9 @@ C<set_property_maybe> in L<Glib::Ex::ObjectBits> for some help with that.
 L<Gtk2>,
 L<Test::Without::Module>,
 L<Test::Weaken::Gtk2>
+
+L<Glib::Ex::ObjectBits> C<set_property_maybe()> for skipping non-existent
+properties.
 
 =head1 COPYRIGHT
 

@@ -21,8 +21,9 @@ use Gtk2;
 use strict;
 use warnings;
 
-# not sure about exporting ... would be an easy way to take just the
-# new_with_label() new_with_mnemonic() though
+# Not sure about exporting.  Would be a way to take just new_with_label()
+# and new_with_mnemonic() and leave key/value new().  Maybe a tag
+# ":all_except_new".
 #
 # use base 'Exporter';
 # our @EXPORT_OK = qw(new new_with_label new_with_mnemonic);
@@ -31,7 +32,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 32;
+our $VERSION = 33;
 
 BEGIN {
   if (Gtk2::MenuItem->find_property('label')) {

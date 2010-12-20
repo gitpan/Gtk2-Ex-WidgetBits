@@ -33,7 +33,7 @@ our @EXPORT_OK = qw(contents_container
                     destructor_destroy_and_iterate
                     ignore_default_display);
 
-our $VERSION = 32;
+our $VERSION = 33;
 
 sub contents_container {
   my ($ref) = @_;
@@ -303,10 +303,10 @@ the X server are run, but there's no read or wait for further events.
 Return true if C<$ref> is the default display
 C<< Gtk2::Gdk::Display->get_default_display >>.
 
-If there's no default display object then this function returns false.  This
-happens if C<Gtk2> is not loaded yet, or C<< Gtk2->init >> has not been
-called yet, or if running under Gtk 2.0.x where there's no
-C<< Gtk2::Gdk::Display >> class at all.
+If there's no default display object then return false.  This happens if
+C<Gtk2> is not loaded yet, or C<< Gtk2->init >> has not been called yet, or
+if running under Gtk 2.0.x where there's no C<< Gtk2::Gdk::Display >> class
+at all.
 
     my $leaks = leaks({
       constructor => sub { make_something },
@@ -329,8 +329,8 @@ C<Exporter> style.
     use Test::Weaken::Gtk2 'contents_container';
 
 There's no C<:all> tag since new functions are likely to be added in the
-future and an import of all would run the risk of name clashes with
-application functions etc.
+future and an import of all would risk name clashes with application
+functions etc.
 
 =head1 SEE ALSO
 

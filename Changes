@@ -17,6 +17,9 @@ with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+Version 33, December 2010
+    - Test::Without::Gtk2Things new without builder, draw_as_radio, gdkdisplay
+
 Version 32, November 2010
     - new Gtk2::Ex::FreezeChildNotify
     - TreeModelBits new iter_prev(), and allow export of individual funcs

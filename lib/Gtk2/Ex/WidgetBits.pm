@@ -25,7 +25,7 @@ use Gtk2;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 32;
+our $VERSION = 33;
 
 # get_root_position() might be done as
 #
@@ -194,6 +194,13 @@ root, but Gdk doesn't make that feature available.
 Convert a root window X,Y position to widget coordinates.  If C<$widget> is
 not realized then it doesn't have a screen position and the return is an
 empty list.
+
+    if (my ($x,$y) = Gtk2::Ex::WidgetBits::xy_root_to_widget
+                        ($widget, $x_root, $y_root)) {
+       # widget $x,$y
+    } else {
+       # $widget is not realized, no values
+    }
 
 =back
 
