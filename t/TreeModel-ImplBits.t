@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -29,7 +29,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 require Gtk2::Ex::TreeModel::ImplBits;
 
 {
-  my $want_version = 33;
+  my $want_version = 34;
   is ($Gtk2::Ex::TreeModel::ImplBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::TreeModel::ImplBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::TreeModel::ImplBits->VERSION($want_version); 1 },

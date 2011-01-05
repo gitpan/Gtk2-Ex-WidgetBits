@@ -1,4 +1,4 @@
-# Copyright 2010 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # Gtk2-Ex-WidgetBits is shared by several distributions.
 #
@@ -23,7 +23,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 33;
+our $VERSION = 34;
 
 our $VERBOSE = 0;
 
@@ -681,7 +681,7 @@ properties.
 
 =head1 COPYRIGHT
 
-Copyright 2010 Kevin Ryde
+Copyright 2010, 2011 Kevin Ryde
 
 Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

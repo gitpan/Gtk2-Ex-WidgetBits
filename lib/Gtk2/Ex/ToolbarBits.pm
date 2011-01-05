@@ -1,4 +1,4 @@
-# Copyright 2007, 2008, 2009, 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -15,27 +15,38 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
-package Gtk2::Ex::EntryBits;
-use 5.008;
+
+package Gtk2::Ex::ToolbarBits;
+use 5.010;
 use strict;
 use warnings;
-use Gtk2;
-use Scope::Guard;
+
+use Exporter;
+our @ISA = ('Exporter');
+our @EXPORT_OK = qw(move_item_after);
 
 our $VERSION = 34;
 
-sub select_region_noclip {
-  my ($entry, $start, $end) = @_;
+# uncomment this to run the ### lines
+#use Smart::Comments;
 
-  # Gtk2::Entry::select_region won't error out, but a subclassed method
-  # might, or $entry might not be a Gtk2::Entry at all, so guard the temp
-  # change to the realized() flag
+sub move_item_after {
+  my ($toolbar, $item, $after_item) = @_;
+
+  # get_item_index() gives a g_log() if $after_item is not in $toolbar.
+  # Believe that's enough error report.  Could check the parent and croak if
+  # something stricter was wanted.
   #
-  my $save = $entry->realized;
-  my $guard = Scope::Guard->new (sub { $entry->realized($save) });
+  my $target_pos = $toolbar->get_item_index($after_item) + 1;
 
-  $entry->realized (0);
-  $entry->select_region ($start, $end);
+  if (my $parent = $item->get_parent) {
+    if ($parent == $toolbar
+        && $toolbar->get_item_index ($item) == $target_pos) {
+      return; # already right
+    }
+    $toolbar->remove ($item);
+  }
+  $toolbar->insert ($item, $target_pos);
 }
 
 1;
@@ -45,30 +56,39 @@ __END__
 
 =head1 NAME
 
-Gtk2::Ex::EntryBits -- misc functions for Gtk2::Entry widgets
+Gtk2::Ex::ToolbarBits -- helpers for Gtk2::Toolbar objects
 
 =head1 SYNOPSIS
 
- use Gtk2::Ex::EntryBits;
+ use Gtk2::Ex::ToolbarBits;
 
 =head1 FUNCTIONS
 
 =over 4
 
-=item C<< Gtk2::Ex::EntryBits::select_region_noclip ($entry, $start, $end) >>
+=item C<< Gtk2::Ex::ToolbarBits::move_item_after ($toolbar, $item, $after_item) >>
 
-Select text from C<$start> to C<$end> like C<< $entry->select_region >>, but
-don't put it on the clipboard.  This is a good way to let the user type over
-previous text, without upsetting any cut and paste in progress.
+Move C<$item> to immediately after C<$after_item> within C<$toolbar>.
 
-This is implemented with a nasty hack temporarily pretending C<$entry> is
-unrealized.
+There's no native move operation in C<Gtk2::Toolbar> so this is done by a
+remove and re-insert, if C<$item> isn't already in the right position.
 
 =back
 
+=head1 EXPORTS
+
+Nothing is exported by default, but the functions can be requested in usual
+C<Exporter> style,
+
+    use Gtk2::Ex::ToolbarBits 'move_item_after';
+    move_item_after ($toolbar, $item, $after_item);
+
+There's no C<:all> tag since this module is meant as a grab-bag of functions
+and to import as-yet unknown things would be asking for name clashes.
+
 =head1 SEE ALSO
 
-L<Gtk2::Entry>, L<Gtk2::Editable>
+L<Gtk2::Toolbar>, L<Gtk2::Ex::WidgetBits>
 
 =head1 HOME PAGE
 
@@ -76,7 +96,7 @@ L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 
-Copyright 2007, 2008, 2009, 2010, 2011 Kevin Ryde
+Copyright 2010, 2011 Kevin Ryde
 
 Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

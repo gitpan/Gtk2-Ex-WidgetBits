@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -27,7 +27,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 
 require Test::Without::Gtk2Things;
 {
-  my $want_version = 33;
+  my $want_version = 34;
   is ($Test::Without::Gtk2Things::VERSION, $want_version,
       'VERSION variable');
   is (Test::Without::Gtk2Things->VERSION,  $want_version,

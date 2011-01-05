@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2008, 2009, 2010 Kevin Ryde
+# Copyright 2008, 2009, 2010, 2011 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -36,7 +36,7 @@ MyTestHelpers::glib_gtk_versions();
 # VERSION
 
 {
-  my $want_version = 12;
+  my $want_version = 34;
   is ($Gtk2::Ex::FreezeChildNotify::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::FreezeChildNotify->VERSION, $want_version,

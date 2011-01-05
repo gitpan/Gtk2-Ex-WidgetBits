@@ -54,6 +54,7 @@ lib/Gtk2/Ex/Statusbar/DynamicContext.pm
 lib/Gtk2/Ex/Statusbar/MessageUntilKey.pm
 lib/Gtk2/Ex/SyncCall.pm
 lib/Gtk2/Ex/TextBufferBits.pm
+lib/Gtk2/Ex/ToolbarBits.pm
 lib/Gtk2/Ex/TreeModel/ImplBits.pm
 lib/Gtk2/Ex/TreeModelBits.pm
 lib/Gtk2/Ex/TreeModelFilter/Change.pm
@@ -77,6 +78,7 @@ t/GdkBits-import.t
 t/GdkBits.t
 t/KeySnooper.t
 t/MenuBits-import.t
+t/MenuBits-load.t
 t/MenuBits.t
 t/MenuItem-Subclass.t
 t/MyTestHelpers.pm
@@ -84,9 +86,11 @@ t/Statusbar-DynamicContext.t
 t/Statusbar-MessageUntilKey.t
 t/SyncCall.t
 t/Test-Weaken-Gtk2-igndisp.t
+t/Test-Weaken-Gtk2-load.t
 t/Test-Weaken-Gtk2.t
 t/Test-Without-Gtk2Things.t
 t/TextBufferBits.t
+t/ToolbarBits-load.t
 t/TreeModel-ImplBits-import.t
 t/TreeModel-ImplBits.t
 t/TreeModelBits-import.t
