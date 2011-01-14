@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -25,14 +25,16 @@ use lib 't';
 use MyTestHelpers;
 BEGIN { MyTestHelpers::nowarnings() }
 
-use Gtk2::Ex::MenuBits qw(position_widget_topcentre);
+use Gtk2::Ex::MenuBits qw(position_widget_topcentre
+                          mnemonic_escape
+                          mnemonic_undo);
 
 require Gtk2;
 Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
 Gtk2->init_check
   or plan skip_all => 'due to no DISPLAY available';
 
-plan tests => 1;
+plan tests => 3;
 
 {
   my $menu = Gtk2::Menu->new;
@@ -42,5 +44,8 @@ plan tests => 1;
              [ -12345, -6789, 1 ],
              'when not in a toplevel');
 }
+
+is (mnemonic_escape('_'),'__');
+is (mnemonic_undo('_X'),'X');
 
 exit 0;

@@ -24,6 +24,7 @@ This is some helpers for working with Gtk2 widgets and stuff.
 * Gtk2::Ex::EntryBits -- misc funcs
 * Gtk2::Ex::GdkBits -- misc funcs
 * Gtk2::Ex::MenuBits -- misc funcs
+* Gtk2::Ex::PixbufBits -- misc funcs
 * Gtk2::Ex::TextBufferBits -- misc funcs
 * Gtk2::Ex::ToolbarBits -- misc funcs
 * Gtk2::Ex::TreeModelBits -- misc funcs

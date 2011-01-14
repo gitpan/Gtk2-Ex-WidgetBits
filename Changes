@@ -17,6 +17,11 @@ with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+Version 35, January 2011
+    - new Gtk2::Ex::PixbufBits with save_adapt(), save_adapt_options(),
+      type_to_format(), sampled_majority_color()
+    - MenuBits new mnemonic_escape(), mnemonic_undo()
+
 Version 34, January 2011
     - new Gtk2::Ex::ToolbarBits move_item_after()
 
@@ -71,7 +76,8 @@ Version 22, August 2010
     - reduce some stray "use 5.010"s
 
 Version 21, August 2010
-    - new Gtk2::Ex::ContainerBits, Gtk2::Ex::WidgetEvents
+    - new Gtk2::Ex::ContainerBits with remove_widgets(), remove_all()
+    - new Gtk2::Ex::WidgetEvents
 
 Version 20, August 2010
     - new Gtk2::Ex::Statusbar::DynamicContext

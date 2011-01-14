@@ -25,11 +25,13 @@ use List::Util qw(max);
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 34;
+our $VERSION = 35;
 
 use Exporter;
 our @ISA = ('Exporter');
-our @EXPORT_OK = qw(position_widget_topcentre);
+our @EXPORT_OK = qw(position_widget_topcentre
+                    mnemonic_escape
+                    mnemonic_undo);
 
 sub position_widget_topcentre {
   my ($menu, $x, $y, $widget) = @_;
@@ -62,6 +64,31 @@ sub position_widget_topcentre {
   ### $y
   return ($x, $y, 1);  # push_in to be visible on screen
 }
+
+#------------------------------------------------------------------------------
+
+# gtkfilesel.c has an escape_underscores() doing this (not made public), for
+# the same sort of "aribtrary string incorporated into menu label" intended
+# here
+sub mnemonic_escape {
+  my ($str) = @_;
+  $str =~ s/_/__/g;
+  return $str;
+}
+
+sub mnemonic_undo {
+  my ($str) = @_;
+  $str =~ s/_(.)/$1/g;
+  return $str;
+}
+
+# maybe ...
+# sub _mnemonic_to_markup {
+#   my ($str) = @_;
+#   $str =~ s{_(.)}
+#            {$1 eq '_' ? '_' : "<u>$1</u>"}ge;
+#   return $str;
+# }
 
 1;
 __END__
@@ -115,6 +142,30 @@ future is to go to the mouse position fallback in this case, since the
 widget is not on-screen.  Of course when iconified a widget won't get
 keyboard or button events to cause a menu popup, so in practice this doesn't
 arise.
+
+=back
+
+=head2 Mnemonic Strings
+
+=over
+
+=item C<$mstr = Gtk2::Ex::MenuBits::mnemonic_escape ($str)>
+
+Return C<$str> with underscores doubled.  This can be used to ensure C<$str>
+will appear as-is in a "mnemonic" type label etc.  For example,
+
+    Gtk2::Ex::MenuBits::mnemonic_undo ("Some_Thing_XYZ")
+    # gives "Some__Thing__XYZ"
+
+=item C<$str = Gtk2::Ex::MenuBits::mnemonic_undo ($mstr)>
+
+Return C<$mstr> with "_" underscore mnemonic markers removed.  This is how
+C<$mstr> would appear, without the underlining implied by the "_" marker.
+
+Doubled underscores "__" mean a literal single underscore.  So for example,
+
+    Gtk2::Ex::MenuBits::mnemonic_undo ("Save _As X__Y__Z")
+    # gives "Save As X_Y_Z"
 
 =back
 

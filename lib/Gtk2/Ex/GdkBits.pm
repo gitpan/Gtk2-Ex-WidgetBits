@@ -27,7 +27,7 @@ our @ISA = ('Exporter');
 our @EXPORT_OK = qw(window_get_root_position
                     window_clear_region);
 
-our $VERSION = 34;
+our $VERSION = 35;
 
 
 # The loop here is similar to what gtk_widget_translate_coordinates() does

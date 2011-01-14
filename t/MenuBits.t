@@ -32,10 +32,10 @@ Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
 Gtk2->init_check
   or plan skip_all => 'due to no DISPLAY available';
 
-plan tests => 7;
+plan tests => 21;
 
 {
-  my $want_version = 34;
+  my $want_version = 35;
   is ($Gtk2::Ex::MenuBits::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::MenuBits->VERSION,  $want_version,
@@ -74,5 +74,27 @@ plan tests => 7;
 
   $toplevel->destroy;
 }
+
+#------------------------------------------------------------------------------
+# mnemonic_escape()
+
+is (Gtk2::Ex::MenuBits::mnemonic_escape(''), '');
+is (Gtk2::Ex::MenuBits::mnemonic_escape('_'), '__');
+is (Gtk2::Ex::MenuBits::mnemonic_escape('__'), '____');
+is (Gtk2::Ex::MenuBits::mnemonic_escape('X_'), 'X__');
+is (Gtk2::Ex::MenuBits::mnemonic_escape('_ X _ Y _'), '__ X __ Y __');
+
+#------------------------------------------------------------------------------
+# mnemonic_undo()
+
+is (Gtk2::Ex::MenuBits::mnemonic_undo(''), '');
+is (Gtk2::Ex::MenuBits::mnemonic_undo('__'), '_');
+is (Gtk2::Ex::MenuBits::mnemonic_undo('____'), '__');
+is (Gtk2::Ex::MenuBits::mnemonic_undo('X_'), 'X_'); # invalid, but passes
+is (Gtk2::Ex::MenuBits::mnemonic_undo('X__'), 'X_');
+is (Gtk2::Ex::MenuBits::mnemonic_undo('_File'), 'File');
+is (Gtk2::Ex::MenuBits::mnemonic_undo('Save _As'), 'Save As');
+is (Gtk2::Ex::MenuBits::mnemonic_undo('_X_Y_Z__'), 'XYZ_');
+is (Gtk2::Ex::MenuBits::mnemonic_undo('X_______Y'), 'X___Y');
 
 exit 0;
