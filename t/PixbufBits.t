@@ -20,7 +20,7 @@
 
 use strict;
 use warnings;
-use Test::More;
+use Test::More tests => 35;
 
 use lib 't';
 use MyTestHelpers;
@@ -28,16 +28,9 @@ BEGIN { MyTestHelpers::nowarnings() }
 
 require Gtk2::Ex::PixbufBits;
 
-require Gtk2;
-Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
-Gtk2->init_check
-  or plan skip_all => 'due to no DISPLAY available';
-
-plan tests => 35;
-
 #----------------------------------------------------------------------------
 {
-  my $want_version = 35;
+  my $want_version = 36;
   is ($Gtk2::Ex::PixbufBits::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::PixbufBits->VERSION,  $want_version,
@@ -49,6 +42,7 @@ plan tests => 35;
       "VERSION class check $check_version");
 }
 
+# no init needed for pixbufs
 require Gtk2;
 MyTestHelpers::glib_gtk_versions();
 
@@ -85,7 +79,8 @@ MyTestHelpers::glib_gtk_versions();
          zlib_compression => 3);
       is_deeply (\@ret,
                  [ $pixbuf, $filename, $type,
-                   ($type eq 'png' ? (compression => 3) : ()) ]);;
+                   ($type eq 'png' && ! Gtk2->check_version(2,8,0)
+                    ? (compression => 3) : ()) ]);;
     }
     {
       my @ret = Gtk2::Ex::PixbufBits::save_adapt_options
@@ -93,7 +88,8 @@ MyTestHelpers::glib_gtk_versions();
          tiff_compression_type => 'lzw');
       is_deeply (\@ret,
                  [ $pixbuf, $filename, $type,
-                   ($type eq 'tiff' ? (compression => 5) : ()) ]);;
+                   ($type eq 'tiff' && ! Gtk2->check_version(2,20,0)
+                    ? (compression => 5) : ()) ]);;
     }
     {
       my @ret = Gtk2::Ex::PixbufBits::save_adapt_options
@@ -101,7 +97,8 @@ MyTestHelpers::glib_gtk_versions();
          tiff_compression_type => 1);
       is_deeply (\@ret,
                  [ $pixbuf, $filename, $type,
-                   ($type eq 'tiff' ? (compression => 1) : ()) ]);;
+                   ($type eq 'tiff' && ! Gtk2->check_version(2,20,0)
+                    ? (compression => 1) : ()) ]);;
     }
     {
       my @ret = Gtk2::Ex::PixbufBits::save_adapt_options

@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -22,7 +22,7 @@
 
 use strict;
 use warnings;
-use 5.010;
+use 5.008;
 use Gtk2;
 use Storable;
 use Gtk2::Ex::Statusbar::DynamicContext;

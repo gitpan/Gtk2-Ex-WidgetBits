@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2009, 2010, 2011 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -20,34 +20,23 @@
 use 5.008;
 use strict;
 use warnings;
-use Test::More tests => 104;
+use Gtk2;
+use Test::More tests => 2;
 
 use lib 't';
 use MyTestHelpers;
 BEGIN { MyTestHelpers::nowarnings() }
 
-require Gtk2::Ex::TreeModel::ImplBits;
-
 {
-  my $want_version = 36;
-  is ($Gtk2::Ex::TreeModel::ImplBits::VERSION, $want_version, 'VERSION variable');
-  is (Gtk2::Ex::TreeModel::ImplBits->VERSION,  $want_version, 'VERSION class method');
-  ok (eval { Gtk2::Ex::TreeModel::ImplBits->VERSION($want_version); 1 },
-      "VERSION class check $want_version");
-  my $check_version = $want_version + 1000;
-  ok (! eval { Gtk2::Ex::TreeModel::ImplBits->VERSION($check_version); 1 },
-      "VERSION class check $check_version");
+  package MyBucket;
+  use Glib::Object::Subclass 'Gtk2::HBox';
+  use Gtk2::Ex::ContainerBits 'remove_all';
 }
-
-
-{
-  my $obj = {};
-  foreach (1 .. 50) {
-    my $old = $obj->{'stamp'};
-    Gtk2::Ex::TreeModel::ImplBits::random_stamp($obj);
-    cmp_ok ($obj->{'stamp'}, '>=', 1);
-    isnt ($obj->{'stamp'}, $old, 'random_stamp() different from old');
-  }
-}
-
+my $bucket = MyBucket->new;
+my $label = Gtk2::Label->new;
+$bucket->add ($label);
+is_deeply ([$bucket->get_children],[$label], 'MyBucket initial children');
+$bucket->remove_all;
+is_deeply ([$bucket->get_children],[], 'MyBucket remove_all() empties');
 exit 0;
+

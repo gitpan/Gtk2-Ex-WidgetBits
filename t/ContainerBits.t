@@ -29,7 +29,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 require Gtk2::Ex::ContainerBits;
 
 {
-  my $want_version = 35;
+  my $want_version = 36;
   is ($Gtk2::Ex::ContainerBits::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::ContainerBits->VERSION,  $want_version,
@@ -42,6 +42,8 @@ require Gtk2::Ex::ContainerBits;
 }
 
 require Gtk2;
+MyTestHelpers::glib_gtk_versions();
+
 {
   my $hbox = Gtk2::HBox->new;
   Gtk2::Ex::ContainerBits::remove_all ($hbox);

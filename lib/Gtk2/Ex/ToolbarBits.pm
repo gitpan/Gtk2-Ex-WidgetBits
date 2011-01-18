@@ -17,7 +17,7 @@
 
 
 package Gtk2::Ex::ToolbarBits;
-use 5.010;
+use 5.008;
 use strict;
 use warnings;
 
@@ -25,7 +25,7 @@ use Exporter;
 our @ISA = ('Exporter');
 our @EXPORT_OK = qw(move_item_after);
 
-our $VERSION = 35;
+our $VERSION = 36;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;

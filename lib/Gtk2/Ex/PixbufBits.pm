@@ -30,7 +30,7 @@ our @EXPORT_OK = qw(type_to_format
                     save_adapt_options
                     sampled_majority_color);
 
-our $VERSION = 35;
+our $VERSION = 36;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
@@ -85,7 +85,6 @@ sub save_adapt_options {
 
     } elsif ($key =~ /^tEXt:/) {
       next unless $type eq 'png';
-      next if Gtk2->check_version(2,8,0); # compression new in 2.8.0
       # Gtk2-Perl 1.221 doesn't upgrade byte values to utf8 the way it does
       # in other wrappers, ensure utf8 for output
       utf8::upgrade($value);

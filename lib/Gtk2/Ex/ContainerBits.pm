@@ -21,7 +21,12 @@ use 5.008;
 use strict;
 use warnings;
 
-our $VERSION = 35;
+use Exporter;
+our @ISA = ('Exporter');
+our @EXPORT_OK = qw(remove_all
+                    remove_widgets);
+
+our $VERSION = 36;
 
 sub remove_all {
   my ($container) = @_;
@@ -30,9 +35,10 @@ sub remove_all {
 }
 
 # Shifting off each $child arg lets each get garbage collected immediately
-# if nothing else refers to them.  Probably not important, and not a
-# documented feature yet, but destroy immediately after remove is probably
-# what would be hoped for from remove_all().
+# if nothing else refers to them.  Probably not very important, and not a
+# documented feature yet, but it means the widget is destroyed immediately
+# after remove if not referred to elsewhere, which is probably what would be
+# hoped for from remove_all().
 #
 sub remove_widgets {
   my $container = shift;
@@ -82,6 +88,26 @@ causes new children to be added then they're not removed, only those present
 at the start.
 
 =back
+
+=head1 EXPORTS
+
+Nothing is exported by default, but the functions can be requested in usual
+C<Exporter> style,
+
+    use Gtk2::Ex::ContainerBits 'remove_widgets';
+    remove_widgets ($container, $widget1, $widget2);
+
+There's no C<:all> tag since this module is meant as a grab-bag of functions
+and to import as-yet unknown things would be asking for name clashes.
+
+When making a container subclass the functions could be imported to have
+them available as methods on the new class if the names and purpose suit.
+
+    package MyBucket;                         # new class
+    use Glib::Object::Subclass 'Gtk2::HBox';
+    use Gtk2::Ex::ContainerBits 'remove_all'; # import
+
+    $bucket->remove_all;  # available as a method
 
 =head1 SEE ALSO
 

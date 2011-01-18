@@ -22,16 +22,16 @@ use warnings;
 use Gtk2;
 use List::Util qw(max);
 
-# uncomment this to run the ### lines
-#use Smart::Comments;
-
-our $VERSION = 35;
-
 use Exporter;
 our @ISA = ('Exporter');
 our @EXPORT_OK = qw(position_widget_topcentre
                     mnemonic_escape
                     mnemonic_undo);
+
+our $VERSION = 36;
+
+# uncomment this to run the ### lines
+#use Smart::Comments;
 
 sub position_widget_topcentre {
   my ($menu, $x, $y, $widget) = @_;

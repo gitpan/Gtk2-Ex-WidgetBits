@@ -17,37 +17,34 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
-use 5.008;
 use strict;
 use warnings;
-use Test::More tests => 104;
+use Gtk2;
+use Test::More tests => 4;
 
 use lib 't';
 use MyTestHelpers;
 BEGIN { MyTestHelpers::nowarnings() }
 
-require Gtk2::Ex::TreeModel::ImplBits;
+use Gtk2::Ex::ContainerBits qw(remove_all
+                               remove_widgets);
 
 {
-  my $want_version = 36;
-  is ($Gtk2::Ex::TreeModel::ImplBits::VERSION, $want_version, 'VERSION variable');
-  is (Gtk2::Ex::TreeModel::ImplBits->VERSION,  $want_version, 'VERSION class method');
-  ok (eval { Gtk2::Ex::TreeModel::ImplBits->VERSION($want_version); 1 },
-      "VERSION class check $want_version");
-  my $check_version = $want_version + 1000;
-  ok (! eval { Gtk2::Ex::TreeModel::ImplBits->VERSION($check_version); 1 },
-      "VERSION class check $check_version");
-}
+  my $hbox = Gtk2::HBox->new;
+  my $label = Gtk2::Label->new;
 
+  $hbox->add ($label);
+  is_deeply ([$hbox->get_children],[$label]);
+  remove_widgets($hbox, $label);
+  is_deeply ([$hbox->get_children],[]);
 
-{
-  my $obj = {};
-  foreach (1 .. 50) {
-    my $old = $obj->{'stamp'};
-    Gtk2::Ex::TreeModel::ImplBits::random_stamp($obj);
-    cmp_ok ($obj->{'stamp'}, '>=', 1);
-    isnt ($obj->{'stamp'}, $old, 'random_stamp() different from old');
-  }
+  $hbox->add ($label);
+  remove_all($hbox);
+  is_deeply ([$hbox->get_children],[]);
+
+  remove_widgets($hbox);
+  remove_all($hbox);
+  is_deeply ([$hbox->get_children],[]);
 }
 
 exit 0;

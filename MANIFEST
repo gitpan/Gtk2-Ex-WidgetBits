@@ -23,6 +23,7 @@ devel/menu-popup.pl
 devel/messageuntilkey-multi-display.pl
 devel/messageuntilkey.pl
 devel/misc.pl
+devel/overflow-dialog.pl
 devel/plug.pl
 devel/position-menuitem.pl
 devel/property-change.pl
@@ -56,6 +57,8 @@ lib/Gtk2/Ex/Statusbar/MessageUntilKey.pm
 lib/Gtk2/Ex/SyncCall.pm
 lib/Gtk2/Ex/TextBufferBits.pm
 lib/Gtk2/Ex/ToolbarBits.pm
+lib/Gtk2/Ex/ToolItem/OverflowToDialog.pm
+lib/Gtk2/Ex/ToolItem/OverflowToDialog/Dialog.pm
 lib/Gtk2/Ex/TreeModel/ImplBits.pm
 lib/Gtk2/Ex/TreeModelBits.pm
 lib/Gtk2/Ex/TreeModelFilter/Change.pm
@@ -72,6 +75,8 @@ README
 SIGNATURE
 t/ActionTooltips-import.t
 t/ActionTooltips.t
+t/ContainerBits-import.t
+t/ContainerBits-subclass.t
 t/ContainerBits.t
 t/EntryBits.t
 t/FreezeChildNotify.t
@@ -94,6 +99,8 @@ t/Test-Weaken-Gtk2.t
 t/Test-Without-Gtk2Things.t
 t/TextBufferBits.t
 t/ToolbarBits-load.t
+t/ToolItem-OverflowToDialog-weaken.t
+t/ToolItem-OverflowToDialog.t
 t/TreeModel-ImplBits-import.t
 t/TreeModel-ImplBits.t
 t/TreeModelBits-import.t
