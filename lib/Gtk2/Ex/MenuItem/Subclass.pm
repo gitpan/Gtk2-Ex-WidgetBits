@@ -32,7 +32,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 36;
+our $VERSION = 37;
 
 BEGIN {
   if (Gtk2::MenuItem->find_property('label')) {

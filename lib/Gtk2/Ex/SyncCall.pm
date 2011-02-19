@@ -26,7 +26,7 @@ use Gtk2;
 #use Smart::Comments;
 
 # version 2 was in with Gtk2-Ex-Dragger ...
-our $VERSION = 36;
+our $VERSION = 37;
 
 
 my $sync_call_atom;
@@ -54,8 +54,8 @@ sub sync {
     ({ sync_list => [],
        signal_ids => Glib::Ex::SignalIds->new
        ($widget,
-        $widget->signal_connect (property_notify_event
-                                 => \&_do_property_notify),
+        $widget->signal_connect (property_notify_event =>
+                                 \&_do_property_notify),
         $widget->signal_connect (unrealize => \&_do_widget_destroy),
         $widget->signal_connect (destroy   => \&_do_widget_destroy)) })
   });

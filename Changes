@@ -16,6 +16,9 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+Version 37, February 2011
+    - PixbufBits fix save_adapt_options() return, affecting save_adapt() too
+
 Version 36, January 2011
     - ContainerBits allow export (of remove_all and remove_widgets)
     - ToolbarBits fix stray 5.010 meant to be 5.008

@@ -20,7 +20,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 35;
+use Test::More tests => 38;
 
 use lib 't';
 use MyTestHelpers;
@@ -30,7 +30,7 @@ require Gtk2::Ex::PixbufBits;
 
 #----------------------------------------------------------------------------
 {
-  my $want_version = 36;
+  my $want_version = 37;
   is ($Gtk2::Ex::PixbufBits::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::PixbufBits->VERSION,  $want_version,
@@ -48,6 +48,20 @@ MyTestHelpers::glib_gtk_versions();
 
 
 #----------------------------------------------------------------------------
+# save_adapt()
+
+{
+  my $pixbuf = Gtk2::Gdk::Pixbuf->new ('rgb',0,8,30,20);
+  my $filename = 'test-filename.tmp';
+  unlink $filename;
+  ok (! -e $filename, "$filename removed");
+  Gtk2::Ex::PixbufBits::save_adapt ($pixbuf, $filename, 'png');
+  ok (-e $filename, "$filename saved");
+  unlink $filename;
+  ok (! -e $filename, "$filename removed again");
+}
+
+#----------------------------------------------------------------------------
 # save_adapt_options()
 
 {
@@ -60,7 +74,7 @@ MyTestHelpers::glib_gtk_versions();
         ($pixbuf, $filename, $type,
          'tEXt::Title' => 'Foo');
       is_deeply (\@ret,
-                 [ $pixbuf, $filename, $type,
+                 [ $filename, $type,
                    ($type eq 'png' ? ('tEXt::Title' => 'Foo') : ()) ]);;
     }
     {
@@ -69,7 +83,7 @@ MyTestHelpers::glib_gtk_versions();
          x_hot => 1,
          y_hot => 2);
       is_deeply (\@ret,
-                 [ $pixbuf, $filename, $type,
+                 [ $filename, $type,
                    ($type eq 'ico' ? (x_hot => 1, y_hot => 2) : ()) ]);;
     }
 
@@ -78,7 +92,7 @@ MyTestHelpers::glib_gtk_versions();
         ($pixbuf, $filename, $type,
          zlib_compression => 3);
       is_deeply (\@ret,
-                 [ $pixbuf, $filename, $type,
+                 [ $filename, $type,
                    ($type eq 'png' && ! Gtk2->check_version(2,8,0)
                     ? (compression => 3) : ()) ]);;
     }
@@ -87,7 +101,7 @@ MyTestHelpers::glib_gtk_versions();
         ($pixbuf, $filename, $type,
          tiff_compression_type => 'lzw');
       is_deeply (\@ret,
-                 [ $pixbuf, $filename, $type,
+                 [ $filename, $type,
                    ($type eq 'tiff' && ! Gtk2->check_version(2,20,0)
                     ? (compression => 5) : ()) ]);;
     }
@@ -96,7 +110,7 @@ MyTestHelpers::glib_gtk_versions();
         ($pixbuf, $filename, $type,
          tiff_compression_type => 1);
       is_deeply (\@ret,
-                 [ $pixbuf, $filename, $type,
+                 [ $filename, $type,
                    ($type eq 'tiff' && ! Gtk2->check_version(2,20,0)
                     ? (compression => 1) : ()) ]);;
     }
@@ -105,7 +119,7 @@ MyTestHelpers::glib_gtk_versions();
         ($pixbuf, $filename, $type,
          quality_percent => 99);
       is_deeply (\@ret,
-                 [ $pixbuf, $filename, $type,
+                 [ $filename, $type,
                    ($type eq 'jpeg' ? (quality => 99) : ()) ]);;
     }
 

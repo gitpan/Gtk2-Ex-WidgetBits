@@ -68,6 +68,24 @@ $toolitem->signal_connect
    });
 $toolbar->insert($toolitem,-1);
 
+{
+  my $a = $toolitem->get_ancestor('Gtk2::ToolItem');
+  ### ancestor: "$a"
+}
+
+sub gets {
+  my $t = Gtk2::Ex::ToolItem::OverflowToDialog->child_get_toolitem
+    ($child_widget);
+  my $t2 = Gtk2::Ex::ToolItem::OverflowToDialog->child_get_ancestor
+    ($child_widget, 'Gtk2::ToolItem');
+  my $top = Gtk2::Ex::ToolItem::OverflowToDialog->child_get_ancestor
+    ($child_widget, 'Gtk2::Window');
+  ### t: "$t"
+  ### t2: "$t2"
+  ### top: "$top"
+}
+gets();
+
 my $menuitem;
 {
   my $button = Gtk2::Button->new_with_label ('Get MenuItem');
@@ -123,6 +141,15 @@ my $menuitem;
   $button->show_all;
   $vbox->pack_start ($button, 0, 0, 0);
 }
+{
+  my $button = Gtk2::Button->new_with_label ('Show get_s');
+  $button->signal_connect
+    (clicked => sub {
+       gets();
+     });
+  $button->show_all;
+  $vbox->pack_start ($button, 0, 0, 0);
+}
 
 {
   my $button = Gtk2::CheckButton->new_with_label ('Toolitem Sensitive');
@@ -165,3 +192,69 @@ $toplevel->show;
 Gtk2->main;
 exit 0;
 
+
+no Smart::Comments;
+
+package Gtk2::Ex::ToolItem::OverflowToDialog;
+
+# =item C<< $toolitem = Gtk2::Ex::ToolItem::OverflowToDialog->child_get_toolitem ($child) >>
+# 
+# If C<$child> is the C<child-widget> of a
+# C<Gtk2::Ex::ToolItem::OverflowToDialog> then return that toolitem parent,
+# otherwise return C<undef>.
+# 
+# As noted above, the dialog reparenting may mean C<< $child->get_parent >> is
+# somewhere in the dialog, not the toolitem.  C<child_get_toolitem> gives the
+# toolitem wherever the child is currently shown.
+# 
+# =cut
+
+sub child_get_toolitem {
+  my ($class, $child) = @_;
+
+  my ($toolitem, $dialog);
+  if (# in the toolitem
+      (($toolitem = $child->get_parent)
+       && $toolitem->isa('Gtk2::Ex::ToolItem::OverflowToDialog'))
+      ||
+      # or in the dialog
+      (($dialog = $child->get_ancestor('Gtk2::Ex::ToolItem::OverflowToDialog::Dialog'))
+       && ($toolitem = $dialog->{'toolitem'}))) {
+    ### found toolitem: $toolitem
+
+    # only allow $child as the actual child-widget, don't return the
+    # toolitem if $child is another part of the dialog, like the buttons, or
+    # if it's a sub-part of the child widget (which could reach the dialog
+    # from get_ancestor())
+    #
+    my $child_widget;
+    if (($child_widget = $toolitem->{'child_widget'}) # has a child-widget
+        && $child == $child_widget) {                 # and this is it
+      return $toolitem;
+    }
+  }
+  return undef;
+}
+
+# =item C<< $toolitem = Gtk2::Ex::ToolItem::OverflowToDialog->child_get_ancestor ($child, $ancestor_class) >>
+# 
+# If C<$child> is the C<child-widget> of a
+# C<Gtk2::Ex::ToolItem::OverflowToDialog> then do a
+# C<< $toolitem->get_ancestor($ancestor_class) >> from its toolitem.
+#
+# If it's not a C<child-widget> or there's no C<$ancestor_class> then return
+# C<undef>, which is also what the C<< $toolitem->get_ancestor >> returns if
+# the requested C<$ancestor_class> is then not found.
+# 
+# =cut
+
+sub child_get_ancestor {
+  my ($class, $child, $ancestor_class) = @_;
+  ### child_get_ancestor()
+  my $toolitem;
+  return (($toolitem = $class->child_get_toolitem($child))
+          && do {
+            ### ancestor from toolitem: $class->child_get_toolitem($child)
+            $toolitem->get_ancestor ($ancestor_class)
+          });
+}

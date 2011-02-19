@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2008, 2009, 2010 Kevin Ryde
+# Copyright 2008, 2009, 2010, 2011 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -53,32 +53,32 @@ MyMakeMakerExtras::WriteMakefile
                     'Scope::Guard' => 0,
                    },
 
-   META_MERGE
-   => { resources
-        => { homepage => 'http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html' },
-#         optional_features
-#         => { maximum_tests
-#              => { description => 'Have "make test" do as much as possible.',
-#                   requires => { 
-#                               },
-#                 },
-#            },
-      },
+   META_MERGE =>
+   { resources =>
+     { homepage => 'http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html' },
+     #         optional_features
+     #         => { maximum_tests
+     #              => { description => 'Have "make test" do as much as possible.',
+     #                   requires => {
+     #                               },
+     #                 },
+     #            },
+   },
 
    MY_NO_HTML => 1,
-   MyMakeMakerExtras_Pod_Coverage
-   => [ 'Gtk2::Ex::ActionTooltips',
-        'Gtk2::Ex::GdkBits',
-        'Gtk2::Ex::EntryBits',
-        'Gtk2::Ex::KeySnooper',
-        'Gtk2::Ex::SyncCall',
-        'Gtk2::Ex::MenuBits',
-        'Gtk2::Ex::TextBufferBits',
-        'Gtk2::Ex::TreeModelBits',
-        'Gtk2::Ex::TreeModel::ImplBits',
-        'Gtk2::Ex::TreeModelFilter::Change',
-        'Gtk2::Ex::TreeViewBits',
-        'Gtk2::Ex::WidgetBits',
-        'Test::Weaken::Gtk2',
-      ],
+   MyMakeMakerExtras_Pod_Coverage =>
+   [ 'Gtk2::Ex::ActionTooltips',
+     'Gtk2::Ex::GdkBits',
+     'Gtk2::Ex::EntryBits',
+     'Gtk2::Ex::KeySnooper',
+     'Gtk2::Ex::SyncCall',
+     'Gtk2::Ex::MenuBits',
+     'Gtk2::Ex::TextBufferBits',
+     'Gtk2::Ex::TreeModelBits',
+     'Gtk2::Ex::TreeModel::ImplBits',
+     'Gtk2::Ex::TreeModelFilter::Change',
+     'Gtk2::Ex::TreeViewBits',
+     'Gtk2::Ex::WidgetBits',
+     'Test::Weaken::Gtk2',
+   ],
   );

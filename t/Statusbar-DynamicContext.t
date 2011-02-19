@@ -27,7 +27,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 
 require Gtk2::Ex::Statusbar::DynamicContext;
 
-my $want_version = 36;
+my $want_version = 37;
 my $check_version = $want_version + 1000;
 is ($Gtk2::Ex::Statusbar::DynamicContext::VERSION, $want_version,
     'VERSION variable');

@@ -23,7 +23,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 36;
+our $VERSION = 37;
 
 our $VERBOSE = 0;
 
@@ -571,7 +571,7 @@ Have C<Test::Without::Gtk2Things> print some diagnostic messages to C<STDERR>.
 For example,
 
     perl -MTest::Without::Gtk2Things=verbose,blank_cursor foo.t
-    =>
+
     Test::Without::Gtk2Things -- without CursorType blank-cursor, per Gtk before 2.16
     ...
 

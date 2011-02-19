@@ -25,6 +25,7 @@ devel/messageuntilkey.pl
 devel/misc.pl
 devel/overflow-dialog.pl
 devel/plug.pl
+devel/pname-translations.pl
 devel/position-menuitem.pl
 devel/property-change.pl
 devel/setlocale.pl

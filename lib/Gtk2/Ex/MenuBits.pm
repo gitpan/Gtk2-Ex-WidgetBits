@@ -28,7 +28,7 @@ our @EXPORT_OK = qw(position_widget_topcentre
                     mnemonic_escape
                     mnemonic_undo);
 
-our $VERSION = 36;
+our $VERSION = 37;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;

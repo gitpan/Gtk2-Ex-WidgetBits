@@ -24,7 +24,7 @@ use Carp;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 36;
+our $VERSION = 37;
 
 
 sub toggle_expand_row {

@@ -30,10 +30,12 @@ our @EXPORT_OK = qw(type_to_format
                     save_adapt_options
                     sampled_majority_color);
 
-our $VERSION = 36;
+our $VERSION = 37;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
+
+#------------------------------------------------------------------------------
 
 sub type_to_format {
   my ($type) = @_;
@@ -64,7 +66,7 @@ sub save_adapt_options {
   if (@_ & 1) {
     croak 'PixbufBits save_adapt(): option key without value (odd number of arguments)';
   }
-  my @first = ($pixbuf, $filename, $type);
+  my @first = ($filename, $type);
   my @rest;
   my %seen;
 
@@ -238,19 +240,22 @@ Gtk2::Ex::PixbufBits -- misc Gtk2::Gdk::Pixbuf helpers
 
 =item C<< Gtk2::Ex::PixbufBits::save_adapt ($pixbuf, $filename, $type, key => value, ...) >>
 
-=item C<< @args = Gtk2::Ex::PixbufBits::save_adapt_options ($pixbuf, $filename, $type, key => value, ...) >>
+=item C<< ($filename, $type, ...) = Gtk2::Ex::PixbufBits::save_adapt_options ($pixbuf, $filename, $type, key => value, ...) >>
 
 C<save_adapt()> saves a C<Gtk2::Gdk::Pixbuf> with various options adapted
 for the target C<$type> and the options supported by the Gtk in use.
 C<$type> is a string per C<< $pixbuf->save >>, such as "png" or "jpeg".
 
-C<save_adapt_options()> adapts options and returns them, without saving.
-The return can be passed to a C<< $pixbuf->save >>.
+C<save_adapt_options()> adapts options and returns them without saving.  The
+return can be passed to a C<< $pixbuf->save >>,
 
-The idea is to give a full set of save options and have them automatically
+    $pixbuf->save (save_adapt_options($pixbuf, $filename, $type,
+                                      zlib_compression => 4));
+
+The idea is to give a full set of options and have them automatically
 reduced if not applicable to the C<$type> or not available in the Gtk
-version.  For example the C<compression> option must be set different ways
-for PNG or for TIFF.  The two separate compression options here are used
+version.  For example the C<compression> option must be set differently for
+PNG or for TIFF.  The two separate compression options here are used
 according to the C<$type>.
 
 =over
@@ -274,19 +279,21 @@ An image quality percentage for lossy formats such as JPEG.  For C<$type>
 =item C<tEXt:foo> (string)
 
 A PNG style keyword string.  For C<$type> "png" and Gtk 2.8 up this is
-passed through as C<tEXt>, with a C<utf8::upgrade> if necessary in Gtk2-Perl
-1.221.  These options are also moved to before any C<compression> option as
-a workaround for a Gtk bug (if C<tEXt> after C<compression> then wrong text
-strings are written).
+passed through as C<tEXt>, with a C<utf8::upgrade> if necessary for
+Gtk2-Perl 1.221.
+
+These C<tEXt> options are moved to before any C<compression> option as a
+workaround for a Gtk bug where if C<tEXt> is after C<compression> then wrong
+text strings are written.
 
 =item C<x_hot>, C<y_hot> (integer or C<undef>)
 
 The cursor hotspot position for C<$type> "ico".  C<undef> means no hotspot.
-The default is the pixbuf C<get_option> C<x_hot>,C<y_hot> set when reading
-an ICO or XPM file.
+The default is the pixbuf C<get_option> C<x_hot>,C<y_hot> which is set when
+reading an ICO or XPM file.
 
 XPM is not writable as of Gtk 2.22 but if it becomes writable then perhaps
-its hotspot can be set this way too.
+its hotspot could be set from these options too.
 
 =back
 
