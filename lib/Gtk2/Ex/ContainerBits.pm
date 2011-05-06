@@ -26,7 +26,7 @@ our @ISA = ('Exporter');
 our @EXPORT_OK = qw(remove_all
                     remove_widgets);
 
-our $VERSION = 37;
+our $VERSION = 38;
 
 sub remove_all {
   my ($container) = @_;

@@ -33,10 +33,10 @@ Gtk2->init_check
   or plan skip_all => 'due to no DISPLAY available';
 MyTestHelpers::glib_gtk_versions();
 
-plan tests => 6;
+plan tests => 7;
 
 {
-  my $want_version = 37;
+  my $want_version = 38;
   is ($Gtk2::Ex::GdkBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::GdkBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::GdkBits->VERSION($want_version); 1 },
@@ -45,6 +45,9 @@ plan tests => 6;
   ok (! eval { Gtk2::Ex::GdkBits->VERSION($check_version); 1 },
       "VERSION class check $check_version");
 }
+
+#------------------------------------------------------------------------------
+# window_get_root_position()
 
 {
   my $root = Gtk2::Gdk->get_default_root_window;
@@ -61,6 +64,19 @@ plan tests => 6;
   is_deeply ([ Gtk2::Ex::GdkBits::window_get_root_position ($win) ],
              [ 200, 100 ],
              'window_get_root_position() on temp window');
+}
+
+
+#------------------------------------------------------------------------------
+# draw_rectangle_corners()
+
+{
+  my $root = Gtk2::Gdk->get_default_root_window;
+  my $pixmap = Gtk2::Gdk::Pixmap->new ($root, 10,10, -1);
+  my $gc = Gtk2::Gdk::GC->new ($pixmap);
+  Gtk2::Ex::GdkBits::draw_rectangle_corners ($pixmap, $gc, 0, 0,0, 9,9);
+  Gtk2::Ex::GdkBits::draw_rectangle_corners ($pixmap, $gc, 1, 0,0, 9,9);
+  ok (1);
 }
 
 exit 0;

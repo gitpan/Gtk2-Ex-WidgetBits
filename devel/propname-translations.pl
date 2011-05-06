@@ -26,7 +26,7 @@ use Module::Util;
 use Locale::Messages;
 use Module::Load;
 
-my $filename = '/tmp/pname-translations.tmp';
+my $tempfile = '/tmp/propname-translations.tmp';
 
 sub pname_is_superclass {
   my ($class, $pname) = @_;
@@ -71,11 +71,12 @@ if (! @ARGV) {
     }
   }
   print "total pspecs ",scalar(@props),"\n";
-  store \@props, '/tmp/pname-translations.tmp';
+  store \@props, $tempfile;
 
   foreach my $filename (glob '/usr/share/locale/*/LC_MESSAGES/gtk20-properties.mo') {
     $filename =~ m{locale/([^/]+)};
     my $lang = $1;
+    print "lang $lang\n";
     # $ENV{'LANG'} = 'fr;
     $ENV{'LANGUAGE'} = $lang;
     print "perl $0 file\n";
@@ -83,8 +84,8 @@ if (! @ARGV) {
   }
 
 } else {
-  # print "$filename\n";
-  my $props = retrieve($filename);
+  print "$tempfile\n";
+  my $props = retrieve($tempfile);
   # print "total pspecs ",scalar(@$props),"\n";
   foreach my $elem (@$props) {
     my ($class, $pname, $raw_nick) = @$elem;
@@ -99,4 +100,5 @@ if (! @ARGV) {
     }
   }
 }
+
 exit 0;

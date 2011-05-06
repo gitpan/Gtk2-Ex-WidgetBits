@@ -30,7 +30,7 @@ our @EXPORT_OK = qw(type_to_format
                     save_adapt_options
                     sampled_majority_color);
 
-our $VERSION = 37;
+our $VERSION = 38;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
@@ -41,6 +41,42 @@ sub type_to_format {
   my ($type) = @_;
   return List::Util::first {$_->{'name'} eq $type}
     Gtk2::Gdk::Pixbuf->get_formats;
+}
+
+# Not absolutely sure of the BMP limit, but io-bmp.c reads and writes it as
+# a signed 32-bit, hence 2^31-1.
+#
+# PNG spec requires width>=1 and height>=1.
+#
+my %type_max_size = (ico  => 255,
+                     jpeg => 65500,
+                     png  => 0x7FFF_FFFF,
+                     bmp  => 0x7FFF_FFFF,
+                     tiff => 0xFFFF_FFFF,
+                    );
+my %type_min_size = (png  => 1,
+                    );
+sub type_max_size {
+  my ($type) = @_;
+  if (my $size = $type_max_size{$type}) {
+    return ($size, $size);
+  } else {
+    return;
+  }
+}
+sub type_supports_size {
+  my ($type, $width, $height) = @_;
+  if (my $size = $type_max_size{$type}) {
+    if ($width > $size || $height > $size) {
+      return 0;
+    }
+  }
+  if (my $size = $type_min_size{$type}) {
+    if ($width < $size || $height < $size) {
+      return 0;
+    }
+  }
+  return 1;
 }
 
 #------------------------------------------------------------------------------
@@ -224,7 +260,7 @@ sub _hash_key_with_max_value {
 1;
 __END__
 
-=for stopwords Ryde pixbuf Gtk Gtk2 PNG Zlib png huffman lzw jpeg lossy JPEG filename PixbufFormat Gtk2-Perl fakery
+=for stopwords Gtk2-Ex-WidgetBits Ryde pixbuf Gtk Gtk2 PNG Zlib png huffman lzw jpeg lossy JPEG filename PixbufFormat Gtk2-Perl fakery hotspot ico ICO XPM RGB RGBA GdkPixbuf libpng malloced WidgetBits
 
 =head1 NAME
 
@@ -235,6 +271,8 @@ Gtk2::Ex::PixbufBits -- misc Gtk2::Gdk::Pixbuf helpers
  use Gtk2::Ex::PixbufBits;
 
 =head1 FUNCTIONS
+
+=head2 Saving
 
 =over
 
@@ -307,7 +345,13 @@ For example
        quality_percent       => 100,
        tiff_compression_type => "deflate",
        tEXt:Author           => "Yorick");
+
+=back
        
+=head2 Colours
+
+=over
+
 =item C<< $str = Gtk2::Ex::PixbufBits::sampled_majority_color($pixbuf) >>
 
 Return a string which is the apparent majority colour in C<$pixbuf>,
@@ -327,14 +371,42 @@ hitting a grid or pattern in the image which is not the majority colour.
 For small images all pixels are checked (currently anything up to 1800
 pixels).
 
+=back
+       
+=head2 Type Info
+
+=over
+
+=item C<< ($width, $height) = Gtk2::Ex::PixbufBits::type_max_size ($type) >>
+
+=item C<< $bool = Gtk2::Ex::PixbufBits::type_supports_size ($type, $width, $height) >>
+
+C<type_max_size()> returns the maximum which file format C<$type> supports,
+or no values if there's no maximum known.  C<type_supports_size()> returns
+true if the given size is supported by C<$type> (and true if unknown too).
+
+The maximum sizes are
+
+    png       2**31-1 x 2**31-1
+    jpeg      65500x65500
+    tiff      2**32-1 x 2**32-1
+    bmp       2**31-1 x 2**31-1
+    ico       255x255
+
+The PNG spec allows 2^31-1 and that's given here, but libpng (in
+C<png_check_IHDR()>) restricts the width to 2^29-130 (RGBA row in 32-bit
+malloced block), and also has compiled-in C<PNG_USER_WIDTH_MAX> and
+C<PNG_USER_HEIGHT_MAX> defaulting to 1,000,000.  Might try to include those
+limits here, if they can be identified reliably.
+
 =item C<< $format = Gtk2::Ex::PixbufBits::type_to_format ($type) >>
 
 Return a C<Gtk2::Gdk::PixbufFormat> object for the given C<$type> string.
 C<$type> is the format name, such as "png", "jpeg", etc (lower case).  If
 C<$type> is unknown then return C<undef>.
 
-C<Gtk2::Gdk::PixbufFormat> is new in Gtk 2.2.  It's unspecified what this
-function does in Gtk 2.0.x.
+C<Gtk2::Gdk::PixbufFormat> is new in Gtk 2.2.  It's unspecified yet what
+this function does in Gtk 2.0.x.
 
 =back
 

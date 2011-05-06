@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Gtk2-Ex-WidgetBits
-version:            37
+version:            38
 abstract:           Helpers for Gtk2 widgets.
 author:
     - Kevin Ryde <user42@zip.com.au>
@@ -37,6 +37,7 @@ optional_features:
         description:  Stuff used variously for development.
         requires:
             Pod::Simple::HTML:  0
+            Smart::Comments:    0
             warnings::unused:   0
     maximum_tests:
         description:  Have "make test" do as much as possible.

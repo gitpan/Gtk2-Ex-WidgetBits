@@ -20,14 +20,16 @@ use 5.008;
 use strict;
 use warnings;
 use Carp;
+use List::Util qw(min);
 use Gtk2;
 
 use Exporter;
 our @ISA = ('Exporter');
-our @EXPORT_OK = qw(window_get_root_position
+our @EXPORT_OK = qw(draw_rectangle_corners
+                    window_get_root_position
                     window_clear_region);
 
-our $VERSION = 37;
+our $VERSION = 38;
 
 
 # The loop here is similar to what gtk_widget_translate_coordinates() does
@@ -52,6 +54,16 @@ sub window_clear_region {
   foreach my $rect ($region->get_rectangles) {
     $win->clear_area ($rect->values);
   }
+}
+
+sub draw_rectangle_corners {
+  my ($drawable, $gc, $filled, $x1,$y1, $x2,$y2) = @_;
+  #### draw rect: "$x1,$y1 - $x2,$y2"
+  $drawable->draw_rectangle ($gc, $filled,
+                             min ($x1, $x2),
+                             min ($y1, $y2),
+                             abs ($x1 - $x2) + ($filled ? 1 : 0),
+                             abs ($y1 - $y2) + ($filled ? 1 : 0));
 }
 
 # Not yet documented, might move elsewhere ...
@@ -94,6 +106,10 @@ window positions rather than making an X server round-trip.
 
 Clear the area of C<$region> in C<$window> to its background pixel colour or
 pixmap contents.
+
+=item C<Gtk2::Ex::GdkBits::draw_rectangle_corners ($drawable, $gc, $filled, $x1,$y1, $x2,$y2)>
+
+Draw a rectangle with corners at C<$x1>,C<$y1> and C<$x2>,C<$y2>.
 
 =cut
 

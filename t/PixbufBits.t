@@ -20,7 +20,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 38;
+use Test::More tests => 44;
 
 use lib 't';
 use MyTestHelpers;
@@ -30,7 +30,7 @@ require Gtk2::Ex::PixbufBits;
 
 #----------------------------------------------------------------------------
 {
-  my $want_version = 37;
+  my $want_version = 38;
   is ($Gtk2::Ex::PixbufBits::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::PixbufBits->VERSION,  $want_version,
@@ -45,6 +45,24 @@ require Gtk2::Ex::PixbufBits;
 # no init needed for pixbufs
 require Gtk2;
 MyTestHelpers::glib_gtk_versions();
+
+
+#----------------------------------------------------------------------------
+# type_max_size()
+
+is_deeply ([Gtk2::Ex::PixbufBits::type_max_size('png')],
+           [0x7FFFFFFF,0x7FFFFFFF]);
+is_deeply ([Gtk2::Ex::PixbufBits::type_max_size('ico')],
+           [0xFF,0xFF]);
+
+
+#----------------------------------------------------------------------------
+# type_supports_size()
+
+ok (  Gtk2::Ex::PixbufBits::type_supports_size('png',0x7FFFFFFF,0x7FFFFFFF));
+ok (! Gtk2::Ex::PixbufBits::type_supports_size('png',0x80000000,1));
+ok (! Gtk2::Ex::PixbufBits::type_supports_size('png',0x80000000,1));
+ok (! Gtk2::Ex::PixbufBits::type_supports_size('png',0xFFFFFFFF,0xFFFFFFFF));
 
 
 #----------------------------------------------------------------------------

@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License along
 # with this file.  If not, see <http://www.gnu.org/licenses/>.
 
+BEGIN { require 5 }
 package MyTestHelpers;
 use strict;
 use Exporter;
@@ -84,7 +85,7 @@ sub dump {
     MyTestHelpers::diag (Data::Dumper::Dumper ($thing));
   } else {
     MyTestHelpers::diag ("Data::Dumper not available");
-  }    
+  }
 }
 
 #-----------------------------------------------------------------------------
@@ -113,10 +114,11 @@ sub test_weaken_show_leaks {
   MyTestHelpers::dump ($leaks);
 
   my $unfreed = $leaks->unfreed_proberefs;
-  foreach my $proberef (@$unfreed) {
+  my $proberef;
+  foreach $proberef (@$unfreed) {
     MyTestHelpers::diag ("  unfreed ", $proberef);
   }
-  foreach my $proberef (@$unfreed) {
+  foreach $proberef (@$unfreed) {
     MyTestHelpers::diag ("search ", $proberef);
     MyTestHelpers::findrefs($proberef);
   }
@@ -244,5 +246,57 @@ sub wait_for_event {
   Glib::Source->remove ($timer_id);
 }
 
-1;
+
+#-----------------------------------------------------------------------------
+# X11::Protocol helpers
+
+sub X11_chosen_screen_number {
+  my ($X) = @_;
+  foreach my $i (0 .. $#{$X->{'screens'}}) {
+    if ($X->{'screens'}->[$i]->{'root'} == $X->{'root'}) {
+      return $i;
+    }
+  }
+  die "Oops, current screen not found";
+}
+
+sub X11_server_info {
+  my ($X) = @_;
+  MyTestHelpers::diag("");
+  MyTestHelpers::diag("X server info");
+  MyTestHelpers::diag("vendor: ",$X->{'vendor'});
+  MyTestHelpers::diag("release_number: ",$X->{'release_number'});
+  MyTestHelpers::diag("protocol_major_version: ",$X->{'protocol_major_version'});
+  MyTestHelpers::diag("protocol_minor_version: ",$X->{'protocol_minor_version'});
+  MyTestHelpers::diag("byte_order: ",$X->{'byte_order'});
+  MyTestHelpers::diag("num screens: ",scalar(@{$X->{'screens'}}));
+  MyTestHelpers::diag("width_in_pixels:  ",$X->{'width_in_pixels'});
+  MyTestHelpers::diag("height_in_pixels: ",$X->{'height_in_pixels'});
+  MyTestHelpers::diag("width_in_millimeters:  ",$X->{'width_in_millimeters'});
+  MyTestHelpers::diag("height_in_millimeters: ",$X->{'height_in_millimeters'});
+
+  MyTestHelpers::diag("root_visual: ",$X->{'root_visual'});
+  my $visual_info = $X->{'visuals'}->{$X->{'root_visual'}};
+  MyTestHelpers::diag("  depth: ",$visual_info->{'depth'});
+  MyTestHelpers::diag("  class: ",$visual_info->{'class'},
+                      ' ', $X->interp('VisualClass', $visual_info->{'class'}));
+  MyTestHelpers::diag("  colormap_entries: ",$visual_info->{'colormap_entries'});
+  MyTestHelpers::diag("  bits_per_rgb_value: ",$visual_info->{'bits_per_rgb_value'});
+  MyTestHelpers::diag("  red_mask:   ",sprintf('%#X',$visual_info->{'red_mask'}));
+  MyTestHelpers::diag("  green_mask: ",sprintf('%#X',$visual_info->{'green_mask'}));
+  MyTestHelpers::diag("  blue_mask:  ",sprintf('%#X',$visual_info->{'blue_mask'}));
+
+  MyTestHelpers::diag("ima"."ge_byte_order: ",$X->{'ima'.'ge_byte_order'},
+                      ' ', $X->interp('Significance', $X->{'ima'.'ge_byte_order'}));
+  MyTestHelpers::diag("black_pixel: ",sprintf('%#X',$X->{'black_pixel'}));
+  MyTestHelpers::diag("white_pixel: ",sprintf('%#X',$X->{'white_pixel'}));
+  foreach  (0 .. $#{$X->{'screens'}}) {
+    if ($X->{'screens'}->[$_]->{'root'} == $X->{'root'}) {
+      MyTestHelpers::diag("chosen screen: $_");
+    }
+  }
+  MyTestHelpers::diag("");
+}
+
+  1;
 __END__

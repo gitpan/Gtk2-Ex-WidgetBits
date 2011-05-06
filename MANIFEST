@@ -24,10 +24,11 @@ devel/messageuntilkey-multi-display.pl
 devel/messageuntilkey.pl
 devel/misc.pl
 devel/overflow-dialog.pl
+devel/pixbuf-max.pl
 devel/plug.pl
-devel/pname-translations.pl
 devel/position-menuitem.pl
 devel/property-change.pl
+devel/propname-translations.pl
 devel/setlocale.pl
 devel/socket.pl
 devel/synccall.pl
@@ -113,6 +114,8 @@ t/Units.t
 t/WidgetBits.t
 t/WidgetEvents.t
 xt/0-META-read.t
+xt/0-no-debug-left-on.t
+xt/0-Test-ConsistentVersion.t
 xt/0-Test-DistManifest.t
 xt/0-Test-Pod.t
 xt/0-Test-Synopsis.t
