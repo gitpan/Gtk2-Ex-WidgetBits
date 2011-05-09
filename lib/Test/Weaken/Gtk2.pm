@@ -33,7 +33,7 @@ our @EXPORT_OK = qw(contents_container
                     destructor_destroy_and_iterate
                     ignore_default_display);
 
-our $VERSION = 38;
+our $VERSION = 39;
 
 sub contents_container {
   my ($ref) = @_;
@@ -169,6 +169,34 @@ sub ignore_default_display {
           && ($ref == (Gtk2::Gdk::Display->get_default)));
 }
 
+sub ignore_default_screen {
+  my ($ref) = @_;
+  return (Gtk2::Gdk::Screen->can('get_default') # Gtk2 loaded, and Gtk 2.2 up
+          && Gtk2::Gdk::Screen->get_default     # if Gtk2 inited
+          && ($ref == (Gtk2::Gdk::Screen->get_default)));
+}
+
+sub ignore_default_root_window {
+  my ($ref) = @_;
+  return (
+          # must have Gtk2 loaded
+          Gtk2::Gdk->can('get_default_root_window')
+
+          # in Gtk 2.2 up must have default screen from Gtk2->init_check()
+          # otherwise Gtk2::Gdk->get_default_root_window() gives a g_log()
+          # warning
+          #
+          && (! Gtk2::Gdk::Screen->can('get_default')
+              || Gtk2::Gdk::Screen->get_default)
+
+          # in Gtk 2.0 get NULL from gdk_get_default_root_window() if no
+          # Gtk2->init_check() yet
+          && Gtk2::Gdk->get_default_root_window
+
+          && ($ref == Gtk2::Gdk->get_default_root_window));
+}
+
+
 #------------------------------------------------------------------------------
 1;
 __END__
@@ -300,24 +328,32 @@ the X server are run, but there's no read or wait for further events.
 
 =item C<< $bool = Test::Weaken::Gtk2::ignore_default_display ($ref) >>
 
-Return true if C<$ref> is the default display
-C<< Gtk2::Gdk::Display->get_default_display >>.
+=item C<< $bool = Test::Weaken::Gtk2::ignore_default_screen ($ref) >>
 
-If there's no default display object then return false.  This happens if
-C<Gtk2> is not loaded yet, or C<< Gtk2->init >> has not been called yet, or
-if running under Gtk 2.0.x where there's no C<< Gtk2::Gdk::Display >> class
-at all.
+=item C<< $bool = Test::Weaken::Gtk2::ignore_default_root_window ($ref) >>
+
+Return true if C<$ref> is respectively the default display, screen or root
+window, as per
+
+    Gtk2::Gdk::Display->get_default
+    Gtk2::Gdk::Screen->get_default
+    Gtk2::Gdk->get_default_root_window
+
+If there's no respective default then return false.  This happens if C<Gtk2>
+is not loaded yet, or C<< Gtk2->init >> not called yet, and under Gtk 2.0.x
+there's no C<< Gtk2::Gdk::Display >> class and C<< Gtk2::Gdk::Screen >>
+classes at all (only a default root window).
 
     my $leaks = leaks({
       constructor => sub { make_something },
       ignore => \&Test::Weaken::Gtk2::ignore_default_display,
     });
 
-The default display is generally a permanent object, existing across a test,
-and on that basis should not be tracked for leaking.  Usually the display
-object is not seen by C<leaks> anyway, since it's only in the C structures
-of a widget or window.  This function can be used if it might appear
-elsewhere, such as a Perl code sub-object.
+These default objects are generally permanent, existing across a test, and
+on that basis will not normally be tracked for leaking.  Usually they're not
+seen by C<leaks()> anyway, since they're only in the C structures of
+widgets, windows, etc.  These ignores can be used if operating on the root
+window, or holding a display or screen in Perl code.
 
 =back
 

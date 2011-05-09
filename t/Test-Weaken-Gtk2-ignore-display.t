@@ -25,27 +25,36 @@ use lib 't';
 use MyTestHelpers;
 BEGIN { MyTestHelpers::nowarnings() }
 
-use Gtk2::Ex::MenuBits qw(position_widget_topcentre
-                          mnemonic_escape
-                          mnemonic_undo);
+require Test::Weaken::Gtk2;
+
+plan tests => 4;
+
+my $dummy_obj = [];
+ok (! Test::Weaken::Gtk2::ignore_default_display ($dummy_obj),
+    'ignore_default_display() when Gtk2 not loaded');
 
 require Gtk2;
+ok (! Test::Weaken::Gtk2::ignore_default_display ($dummy_obj),
+    'ignore_default_display() when Gtk2->init not called');
+
 Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
-Gtk2->init_check
-  or plan skip_all => 'due to Gtk2->init_check() unsuccessful';
+my $have_init = Gtk2->init_check;
 
-plan tests => 3;
+SKIP: {
+  $have_init
+    or skip 'due to Gtk2->init_check() unsuccessful', 2;
 
-{
-  my $menu = Gtk2::Menu->new;
-  my $widget = Gtk2::Label->new;
-  $widget->show;
-  is_deeply ([ position_widget_topcentre ($menu, -12345, -6789, $widget) ],
-             [ -12345, -6789, 1 ],
-             'when not in a toplevel');
+  ok (! Test::Weaken::Gtk2::ignore_default_display ($dummy_obj),
+      'ignore_default_display() dummy after Gtk2->init');
+
+ SKIP: {
+    Gtk2::Gdk::Display->can('get_default')
+        or skip 'due to no Gtk2::Gdk::Display->get_default, per Gtk 2.0.x', 1;
+
+    my $default_display = Gtk2::Gdk::Display->get_default;
+    ok (Test::Weaken::Gtk2::ignore_default_display ($default_display),
+        'ignore_default_display() recognise default display');
+  }
 }
-
-is (mnemonic_escape('_'),'__');
-is (mnemonic_undo('_X'),'X');
 
 exit 0;

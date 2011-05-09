@@ -95,7 +95,9 @@ t/PixbufBits.t
 t/Statusbar-DynamicContext.t
 t/Statusbar-MessageUntilKey.t
 t/SyncCall.t
-t/Test-Weaken-Gtk2-igndisp.t
+t/Test-Weaken-Gtk2-ignore-display.t
+t/Test-Weaken-Gtk2-ignore-root.t
+t/Test-Weaken-Gtk2-ignore-screen.t
 t/Test-Weaken-Gtk2-load.t
 t/Test-Weaken-Gtk2.t
 t/Test-Without-Gtk2Things.t

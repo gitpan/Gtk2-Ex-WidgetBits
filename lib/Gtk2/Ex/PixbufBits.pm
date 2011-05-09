@@ -30,7 +30,7 @@ our @EXPORT_OK = qw(type_to_format
                     save_adapt_options
                     sampled_majority_color);
 
-our $VERSION = 38;
+our $VERSION = 39;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
@@ -54,8 +54,6 @@ my %type_max_size = (ico  => 255,
                      bmp  => 0x7FFF_FFFF,
                      tiff => 0xFFFF_FFFF,
                     );
-my %type_min_size = (png  => 1,
-                    );
 sub type_max_size {
   my ($type) = @_;
   if (my $size = $type_max_size{$type}) {
@@ -68,11 +66,6 @@ sub type_supports_size {
   my ($type, $width, $height) = @_;
   if (my $size = $type_max_size{$type}) {
     if ($width > $size || $height > $size) {
-      return 0;
-    }
-  }
-  if (my $size = $type_min_size{$type}) {
-    if ($width < $size || $height < $size) {
       return 0;
     }
   }

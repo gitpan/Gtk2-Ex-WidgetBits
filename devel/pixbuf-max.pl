@@ -22,6 +22,28 @@ use warnings;
 use Gtk2;
 
 {
+  foreach my $type ('bmp',
+                    'tiff',
+                    'png',
+                    'jpeg',
+                    'ico',
+                   ) {
+    print "$type\n";
+    my $pixbuf = Gtk2::Gdk::Pixbuf->new ('rgb', 0, 8, 0,0);
+    $pixbuf->fill (0);
+    if (eval {
+      $pixbuf->save ("/tmp/xxx.$type", $type);
+      1
+    }) {
+      print "$type ok 0,0\n";
+    } else {
+      print "$type 0,0 -- $@";
+    }
+  }
+  exit 0;
+}
+
+{
   my @formats = Gtk2::Gdk::Pixbuf->get_formats;
   @formats = grep {$_->{'is_writable'}} @formats;
   print "writables: ", join(' ', map{$_->{'name'}}@formats), "\n";

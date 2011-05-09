@@ -16,7 +16,14 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
-Version 38, April 2011
+Version 39, May 2011
+    - Test::Weaken::Gtk2 new ignore_default_screen() and
+      ignore_default_root_window()
+    - Test::Without::Gtk2Things without gdkdisplay quieten
+      Gtk2::Gdk->get_default_root_window()
+    - PixbufBits type_supports_size() don't enforce 1x1 minimum for now
+
+Version 38, May 2011
     - GdkBits new draw_rectangle_corners()
     - PixbufBits new type_max_size(), type_supports_size()
 

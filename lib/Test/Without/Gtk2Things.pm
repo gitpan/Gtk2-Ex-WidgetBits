@@ -23,7 +23,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 38;
+our $VERSION = 39;
 
 our $VERBOSE = 0;
 
@@ -244,6 +244,24 @@ sub without_gdkdisplay {
   if ($VERBOSE) {
     print STDERR "Test::Without::Gtk2Things -- without Gdk2::Gdk::Display and Gtk2::Gdk::Screen, per Gtk 2.0.x\n";
   }
+
+  # In Gtk 2.2 up Gtk2::Gdk->get_default_root_window() gives a g_log()
+  # warning if no Gtk2->init() yet.  Wrap it to quietly give undef the same
+  # as in Gtk 2.0.0.
+  {
+    my $get_default_screen = Gtk2::Gdk::Screen->can('get_default');
+    my $orig = Gtk2::Gdk->can('get_default_root_window') || die;
+    no warnings 'redefine';
+    *Gtk2::Gdk::get_default_root_window = sub {
+      if (! Gtk2::Gdk::Screen->$get_default_screen()) {
+        return undef;
+      }
+      # this could have been "goto $orig" but have seen trouble in 5.8.9
+      # jumping to an XSUB like that
+      return &$orig(@_);
+    };
+  }
+
   _without_packages ('Gtk2::Gdk::Display', 'Gtk2::Gdk::Screen');
 
   _without_methods ('Gtk2::Gdk',
@@ -264,12 +282,12 @@ sub without_gdkdisplay {
 
   # mangle the base Gtk2::Widget class so can() is false for subclasses
   _without_methods ('Gtk2::Widget',        'get_display', 'get_screen',
-                   'has_screen');
+                    'has_screen');
   _without_signals ('Gtk2::Widget', 'screen-changed');
 
   _without_methods ('Gtk2::Clipboard',     'get_display', 'get_for_display');
   _without_methods ('Gtk2::Invisible',     'get_screen','set_screen',
-                   'new_for_screen');
+                    'new_for_screen');
   _without_methods ('Gtk2::Menu',          'set_screen');
   _without_methods ('Gtk2::MountOperation','get_screen');
   _without_methods ('Gtk2::StatusIcon',    'get_screen','set_screen');

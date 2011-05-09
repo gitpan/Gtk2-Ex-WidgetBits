@@ -30,7 +30,7 @@ require Gtk2::Ex::WidgetEvents;
 require Gtk2;
 MyTestHelpers::glib_gtk_versions();
 Gtk2->init_check
-  or plan skip_all => 'due to no DISPLAY available';
+  or plan skip_all => 'due to Gtk2->init_check() unsuccessful';
 plan tests => 30;
 
 # return an arrayref
@@ -46,7 +46,7 @@ sub leftover_fields {
 
 #------------------------------------------------------------------------------
 
-my $want_version = 38;
+my $want_version = 39;
 my $check_version = $want_version + 1000;
 is ($Gtk2::Ex::WidgetEvents::VERSION, $want_version, 'VERSION variable');
 is (Gtk2::Ex::WidgetEvents->VERSION,  $want_version, 'VERSION class method');

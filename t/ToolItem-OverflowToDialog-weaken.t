@@ -31,7 +31,7 @@ require Gtk2::Ex::ToolItem::OverflowToDialog;
 require Gtk2;
 Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
 Gtk2->init_check
-  or plan skip_all => 'due to no DISPLAY available';
+  or plan skip_all => 'due to Gtk2->init_check() unsuccessful';
 
 # Test::Weaken 3 for "contents"
 eval "use Test::Weaken 3; 1"

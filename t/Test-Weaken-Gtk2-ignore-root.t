@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -30,31 +30,26 @@ require Test::Weaken::Gtk2;
 plan tests => 4;
 
 my $dummy_obj = [];
-ok (! Test::Weaken::Gtk2::ignore_default_display ($dummy_obj),
-    'ignore_default_display() when Gtk2 not loaded');
+ok (! Test::Weaken::Gtk2::ignore_default_root_window ($dummy_obj),
+    'ignore_default_root_window() when Gtk2 not loaded');
 
 require Gtk2;
-ok (! Test::Weaken::Gtk2::ignore_default_display ($dummy_obj),
-    'ignore_default_display() when Gtk2->init not called');
+ok (! Test::Weaken::Gtk2::ignore_default_root_window ($dummy_obj),
+    'ignore_default_root_window() when Gtk2->init not called');
 
 Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
-my $have_display = Gtk2->init_check;
+my $have_init = Gtk2->init_check;
 
 SKIP: {
-  $have_display
-    or skip 'due to no DISPLAY available', 2;
+  $have_init
+    or skip 'due to Gtk2->init_check() unsuccessful', 2;
 
-  ok (! Test::Weaken::Gtk2::ignore_default_display ($dummy_obj),
-      'ignore_default_display() dummy after Gtk2->init');
+  ok (! Test::Weaken::Gtk2::ignore_default_root_window ($dummy_obj),
+      'ignore_default_root_window() dummy after Gtk2->init');
 
- SKIP: {
-    Gtk2::Gdk::Display->can('get_default')
-        or skip 'due to no Gtk2::Gdk::Display->get_default, per Gtk 2.0.x', 1;
-
-    my $default_display = Gtk2::Gdk::Display->get_default;
-    ok (Test::Weaken::Gtk2::ignore_default_display ($default_display),
-        'ignore_default_display() recognise default display');
-  }
+  my $default_root_window = Gtk2::Gdk->get_default_root_window;
+  ok (Test::Weaken::Gtk2::ignore_default_root_window ($default_root_window),
+      'ignore_default_root_window() recognise default root window');
 }
 
 exit 0;

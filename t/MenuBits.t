@@ -30,12 +30,12 @@ require Gtk2::Ex::MenuBits;
 require Gtk2;
 Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
 Gtk2->init_check
-  or plan skip_all => 'due to no DISPLAY available';
+  or plan skip_all => 'due to Gtk2->init_check() unsuccessful';
 
 plan tests => 21;
 
 {
-  my $want_version = 38;
+  my $want_version = 39;
   is ($Gtk2::Ex::MenuBits::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::MenuBits->VERSION,  $want_version,

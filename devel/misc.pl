@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -19,10 +19,22 @@
 
 use strict;
 use warnings;
-use Gtk2 '-init';
+use Gtk2;
 
 # uncomment this to run the ### lines
 use Smart::Comments;
+
+
+{
+  my $default_screen = Gtk2::Gdk::Screen->get_default;
+  ### $default_screen
+
+  my $default_root_window = Gtk2::Gdk->get_default_root_window;
+  ### $default_root_window
+
+  Gtk2->init_check;
+  exit 0;
+}
 
 {
   ### isa: Foo->isa('bar')

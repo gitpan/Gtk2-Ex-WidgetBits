@@ -29,7 +29,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 require Gtk2::Ex::WidgetBits;
 
 {
-  my $want_version = 38;
+  my $want_version = 39;
   is ($Gtk2::Ex::WidgetBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::WidgetBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::WidgetBits->VERSION($want_version); 1 },
@@ -48,7 +48,7 @@ MyTestHelpers::glib_gtk_versions();
 
 SKIP: {
   Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
-  if (! Gtk2->init_check) { skip 'due to no DISPLAY available', 13; }
+  if (! Gtk2->init_check) { skip 'due to Gtk2->init_check() unsuccessful', 13; }
 
   # get_root_position()
   #

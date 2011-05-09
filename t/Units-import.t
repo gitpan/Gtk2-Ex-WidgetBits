@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2008, 2009, 2010 Kevin Ryde
+# Copyright 2008, 2009, 2010, 2011 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -28,7 +28,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 
 require Gtk2;
 Gtk2->init_check
-  or plan skip_all => 'due to no DISPLAY available';
+  or plan skip_all => 'due to Gtk2->init_check() unsuccessful';
 
 plan tests => 12;
 
