@@ -36,7 +36,7 @@ MyTestHelpers::glib_gtk_versions();
 # VERSION
 
 {
-  my $want_version = 39;
+  my $want_version = 40;
   is ($Gtk2::Ex::FreezeChildNotify::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::FreezeChildNotify->VERSION, $want_version,

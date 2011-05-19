@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
+use 5.008;
 use strict;
 use warnings;
 
@@ -29,7 +30,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 require Gtk2::Ex::TreeModelFilter::Change;
 
 {
-  my $want_version = 39;
+  my $want_version = 40;
   is ($Gtk2::Ex::TreeModelFilter::Change::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::TreeModelFilter::Change->VERSION,  $want_version,

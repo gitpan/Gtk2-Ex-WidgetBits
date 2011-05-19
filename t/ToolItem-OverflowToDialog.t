@@ -33,7 +33,7 @@ Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
 Gtk2->init_check
   or plan skip_all => 'due to Gtk2->init_check() unsuccessful';
 
-plan tests => 24;
+plan tests => 29;
 
 sub force_dialog {
   my ($toolitem) = @_;
@@ -158,6 +158,47 @@ sub force_dialog {
       'set undef with dialog - get_child');
   is ($toolitem->get('child_widget'), undef,
       'set undef with dialog - child_widget');
+}
+
+#-----------------------------------------------------------------------------
+# initial menuitem "sensitive" property
+
+{
+  my $toolitem = Gtk2::Ex::ToolItem::OverflowToDialog->new;
+  my $menuitem = $toolitem->retrieve_proxy_menu_item;
+  is (!! $menuitem->get('sensitive'), !! 1, 'menuitem sensitive initial 0');
+}
+{
+  my $toolitem = Gtk2::Ex::ToolItem::OverflowToDialog->new
+    (sensitive => 0);
+  my $menuitem = $toolitem->retrieve_proxy_menu_item;
+  is (!! $menuitem->get('sensitive'), !! 0, 'menuitem sensitive initial 0');
+}
+
+#-----------------------------------------------------------------------------
+# propagate "sensitive" property
+
+{
+  my $toolitem = Gtk2::Ex::ToolItem::OverflowToDialog->new;
+  my $menuitem = $toolitem->retrieve_proxy_menu_item;
+  $toolitem->set (sensitive => 0);
+  is (!! $menuitem->get('sensitive'), !! 0, 'menuitem sensitive propagate 0');
+  $toolitem->set (sensitive => 1);
+  is (!! $menuitem->get('sensitive'), !! 1, 'menuitem sensitive propagate 1');
+}
+
+#-----------------------------------------------------------------------------
+# "tooltip-text" propagate
+
+SKIP: {
+  my $toolitem = Gtk2::Ex::ToolItem::OverflowToDialog->new;
+  $toolitem->find_property('tooltip-text')
+    or skip "due to no tooltip-text property", 1;
+
+  my $menuitem = $toolitem->retrieve_proxy_menu_item;
+  my $str = 'Blah blah tooltip text.';
+  $toolitem->set (tooltip_text => $str);
+  is ($menuitem->get ('tooltip-text'), $str, 'menuitem tooltip-text');
 }
 
 exit 0;

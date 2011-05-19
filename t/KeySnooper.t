@@ -35,7 +35,7 @@ Gtk2->init_check
 plan tests => 11;
 
 {
-  my $want_version = 39;
+  my $want_version = 40;
   is ($Gtk2::Ex::KeySnooper::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::KeySnooper->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::KeySnooper->VERSION($want_version); 1 },

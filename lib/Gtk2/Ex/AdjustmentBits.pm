@@ -1,4 +1,4 @@
-# Copyright 2007, 2008, 2009, 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -15,60 +15,60 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
-package Gtk2::Ex::EntryBits;
+package Gtk2::Ex::AdjustmentBits;
 use 5.008;
 use strict;
 use warnings;
-use Gtk2;
-use Scope::Guard;
+use Carp;
+use Gtk2 1.220;
+use List::Util 'min', 'max';
+
+# uncomment this to run the ### lines
+#use Smart::Comments;
 
 our $VERSION = 40;
 
-sub select_region_noclip {
-  my ($entry, $start, $end) = @_;
-
-  # Gtk2::Entry::select_region won't error out, but a subclassed method
-  # might, or $entry might not be a Gtk2::Entry at all, so guard the temp
-  # change to the realized() flag
-  #
-  my $save = $entry->realized;
-  my $guard = Scope::Guard->new (sub { $entry->realized($save) });
-
-  $entry->realized (0);
-  $entry->select_region ($start, $end);
+sub scroll_value {
+  my ($adj, $amount) = @_;
+  my $oldval = $adj->value;
+  $adj->value (max ($adj->lower,
+                    min ($adj->upper - $adj->page_size,
+                         $oldval + $amount)));
+  # re-fetch $adj->value() for comparison to allow round-off on storing if
+  # perl NV is a long double
+  if ($adj->value != $oldval) {
+    $adj->notify ('value');
+    $adj->signal_emit ('value-changed');
+  }
 }
 
 1;
 __END__
 
-=for stopwords Ryde Gtk2-Ex-WidgetBits
+=for stopwords Ryde Gtk2-Ex-WidgetBits scrollbar
 
 =head1 NAME
 
-Gtk2::Ex::EntryBits -- misc functions for Gtk2::Entry widgets
+Gtk2::Ex::AdjustmentBits -- helpers for Gtk2::Adjustment objects
 
 =head1 SYNOPSIS
 
- use Gtk2::Ex::EntryBits;
+ use Gtk2::Ex::AdjustmentBits;
 
 =head1 FUNCTIONS
 
 =over 4
 
-=item C<< Gtk2::Ex::EntryBits::select_region_noclip ($entry, $start, $end) >>
+=item C<< Gtk2::Ex::AdjustmentBits::scroll_value ($adj, $amount) >>
 
-Select text from C<$start> to C<$end> like C<< $entry->select_region >>, but
-don't put it on the clipboard.  This is a good way to let the user type over
-previous text, without upsetting any cut and paste in progress.
-
-This is implemented with a nasty hack temporarily pretending C<$entry> is
-unrealized.
+Add C<$amount> to the value in C<$adj>, restricting the result to between
+C<lower> and S<C<upper - page>>, as suitable for a scrollbar range etc.
 
 =back
 
 =head1 SEE ALSO
 
-L<Gtk2::Entry>, L<Gtk2::Editable>
+L<Gtk2::Adjustment>, L<Gtk2::Ex::WidgetBits>
 
 =head1 HOME PAGE
 
@@ -76,7 +76,7 @@ L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 
-Copyright 2007, 2008, 2009, 2010, 2011 Kevin Ryde
+Copyright 2010, 2011 Kevin Ryde
 
 Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

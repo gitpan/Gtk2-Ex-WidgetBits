@@ -18,6 +18,7 @@
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+use 5.008;
 use strict;
 use warnings;
 use Test::More;
@@ -37,7 +38,7 @@ MyTestHelpers::glib_gtk_versions();
 plan tests => 12;
 
 {
-  my $want_version = 39;
+  my $want_version = 40;
   is ($Gtk2::Ex::EntryBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::EntryBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::EntryBits->VERSION($want_version); 1 },

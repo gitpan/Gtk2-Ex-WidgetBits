@@ -16,6 +16,11 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+Version 40, May 2011
+    - new Gtk2::Ex::AdjustmentBits with scroll_value()
+    - WidgetBits new pixel_size_mm(), pixel_aspect_ratio()
+    - WidgetBits xy_distance_mm() undef if no screen instead of croak
+
 Version 39, May 2011
     - Test::Weaken::Gtk2 new ignore_default_screen() and
       ignore_default_root_window()

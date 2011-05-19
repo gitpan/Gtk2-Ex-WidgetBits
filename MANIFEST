@@ -8,6 +8,7 @@ debian/rules
 debian/source/format
 debian/watch
 devel/action-tooltips.pl
+devel/aspect-frame.pl
 devel/container-remove.pl
 devel/dynamic-context-statusbar.pl
 devel/dynamic-context.pl
@@ -46,6 +47,7 @@ examples/treeview-toggle-expand.pl
 inc/my_pod2html
 inc/MyMakeMakerExtras.pm
 lib/Gtk2/Ex/ActionTooltips.pm
+lib/Gtk2/Ex/AdjustmentBits.pm
 lib/Gtk2/Ex/ContainerBits.pm
 lib/Gtk2/Ex/EntryBits.pm
 lib/Gtk2/Ex/FreezeChildNotify.pm

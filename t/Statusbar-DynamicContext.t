@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
+use 5.008;
 use strict;
 use warnings;
 use Test::More tests => 16;
@@ -27,7 +28,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 
 require Gtk2::Ex::Statusbar::DynamicContext;
 
-my $want_version = 39;
+my $want_version = 40;
 my $check_version = $want_version + 1000;
 is ($Gtk2::Ex::Statusbar::DynamicContext::VERSION, $want_version,
     'VERSION variable');

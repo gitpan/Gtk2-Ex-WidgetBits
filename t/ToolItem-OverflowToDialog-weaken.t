@@ -58,9 +58,8 @@ plan tests => 6;
   my $leaks = Test::Weaken::leaks
     ({ constructor => sub {
          my $toolitem = Gtk2::Ex::ToolItem::OverflowToDialog->new;
-         # $toolitem->signal_emit ('create-menu-proxy');
-         my $menuitem = $toolitem->retrieve_proxy_menu_item;
-         return [ $toolitem, $menuitem ];
+         my $menuitem_ref = \($toolitem->retrieve_proxy_menu_item);
+         return [ $toolitem, $menuitem_ref ];
        },
        contents => \&Test::Weaken::Gtk2::contents_container,
      });

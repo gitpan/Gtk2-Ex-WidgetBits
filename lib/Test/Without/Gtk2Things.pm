@@ -23,7 +23,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 39;
+our $VERSION = 40;
 
 our $VERBOSE = 0;
 

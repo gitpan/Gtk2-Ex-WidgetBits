@@ -18,6 +18,7 @@
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+use 5.008;
 use strict;
 use warnings;
 use Gtk2::Ex::TreeViewBits;
@@ -29,7 +30,7 @@ use MyTestHelpers;
 BEGIN { MyTestHelpers::nowarnings() }
 
 {
-  my $want_version = 39;
+  my $want_version = 40;
   is ($Gtk2::Ex::TreeViewBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::TreeViewBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::TreeViewBits->VERSION($want_version); 1 },

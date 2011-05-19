@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
+use 5.010;
 use strict;
 use warnings;
 use Gtk2;
@@ -24,6 +25,25 @@ use Gtk2;
 # uncomment this to run the ### lines
 use Smart::Comments;
 
+
+{
+  require Test::Without::Gtk2Things;
+  Test::Without::Gtk2Things->import('-verbose', 'gdkdisplay');
+
+   Gtk2->init;
+  require Gtk2::Ex::WidgetBits;
+  my $label = Gtk2::Label->new('hello');
+  # my $toplevel = Gtk2::Window->new('toplevel');
+  # $toplevel->add ($label);
+  $, = ' ';
+  my $width = 0.5;
+  my $height = 0.0;
+#  say $width/$height;
+  say Gtk2::Ex::WidgetBits::xy_distance_mm($label, 10,20, 50,60);
+  say Gtk2::Ex::WidgetBits::pixel_size_mm($label, 10,20, 50,60);
+  say Gtk2::Ex::WidgetBits::pixel_aspect_ratio($label, 10,20, 50,60);
+  exit 0;
+}
 
 {
   my $default_screen = Gtk2::Gdk::Screen->get_default;
@@ -40,14 +60,7 @@ use Smart::Comments;
   ### isa: Foo->isa('bar')
   exit 0;
 }
-{
-  require Test::Without::Gtk2Things;
-  Test::Without::Gtk2Things->import('-verbose', 'EXPERIMENTAL_GdkDisplay');
-  require Gtk2::Ex::WidgetBits;
-  my $label = Gtk2::Label->new('hello');
-  print Gtk2::Ex::WidgetBits::xy_distance_mm($label, 10,20, 50,60);
-  exit 0;
-}
+
 
 {
   # use Test::Without::Gtk2Things '-verbose', 'EXPERIMENTAL_GdkDisplay';

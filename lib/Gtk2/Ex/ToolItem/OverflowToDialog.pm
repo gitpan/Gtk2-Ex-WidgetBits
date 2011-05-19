@@ -27,7 +27,7 @@ use Gtk2::Ex::MenuBits 35;  # v.35 for mnemonic_escape, mnemonic_undo
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 39;
+our $VERSION = 40;
 
 use Glib::Object::Subclass
   'Gtk2::ToolItem',
@@ -107,11 +107,12 @@ sub _do_notify {
   # Send it to the dialog too.
   my $pname = $pspec->get_name;
   if ($pname eq 'sensitive' || $pname eq 'tooltip_text') {
+    my $newval = $self->get($pname);
     foreach my $target ($self->{'menuitem'},
                         $self->{'dialog'} && $self->{'dialog'}->{'child_vbox'}) {
       if ($target) {
-        ### propagate sensitive to: "$target"
-        $target->set ($pname => $self->get($pname));
+        ### propagate: "$pname to $target"
+        $target->set ($pname => $newval);
       }
     }
   }
@@ -247,11 +248,12 @@ sub _do_create_menu_proxy {
   ### visible: $self->get('visible')
 
   $self->{'menuitem'} ||= do {
+    # initial and subsequent sensitivity propagated by GtkToolItem
     my $menuitem = Gtk2::MenuItem->new_with_mnemonic (_mnemonic_text($self));
-    $menuitem->set (sensitive => $self->get('sensitive'));
-    if ($self->find_property('tooltip_text')) { # new in Gtk 2.12
-      $menuitem->set (tooltip_text => $self->get('tooltip_text'));
+    if ($self->find_property('tooltip-text')) { # new in Gtk 2.12
+      $menuitem->set_property (tooltip_text => $self->get('tooltip-text'));
     }
+    # or ConnectProperties ...
     Scalar::Util::weaken (my $weak_self = $self);
     $menuitem->signal_connect (activate => \&_do_menu_activate, \$weak_self);
     $menuitem

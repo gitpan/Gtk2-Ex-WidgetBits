@@ -18,6 +18,7 @@
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+use 5.008;
 use strict;
 use warnings;
 use Test::More tests => 44;
@@ -30,7 +31,7 @@ require Gtk2::Ex::PixbufBits;
 
 #----------------------------------------------------------------------------
 {
-  my $want_version = 39;
+  my $want_version = 40;
   is ($Gtk2::Ex::PixbufBits::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::PixbufBits->VERSION,  $want_version,

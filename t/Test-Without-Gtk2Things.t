@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
+use 5.008;
 use strict;
 use warnings;
 use Test::More tests => 6;
@@ -27,7 +28,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 
 require Test::Without::Gtk2Things;
 {
-  my $want_version = 39;
+  my $want_version = 40;
   is ($Test::Without::Gtk2Things::VERSION, $want_version,
       'VERSION variable');
   is (Test::Without::Gtk2Things->VERSION,  $want_version,

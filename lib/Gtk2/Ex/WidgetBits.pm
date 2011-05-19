@@ -25,7 +25,7 @@ use Gtk2;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 39;
+our $VERSION = 40;
 
 # get_root_position() might be done as
 #
@@ -74,18 +74,28 @@ sub xy_root_to_widget {
   }
 }
 
+#------------------------------------------------------------------------------
+
 sub xy_distance_mm {
   my ($widget, $x1, $y1, $x2, $y2) = @_;
-  my ($xf, $yf) = _widget_mm_factors ($widget);
-  return _hypot ($xf * ($x1 - $x2),
-                 $yf * ($y1 - $y2));
+  my ($xmm, $ymm) = pixel_size_mm ($widget)
+    or return undef;
+  return _hypot ($xmm * ($x1 - $x2),
+                 $ymm * ($y1 - $y2));
+}
+
+sub pixel_aspect_ratio {
+  my ($widget) = @_;
+  my ($xmm, $ymm) = pixel_size_mm ($widget)
+    or return undef;
+  return ($xmm / $ymm);
 }
 
 if (Gtk2::Gdk::Screen->can('get_width')) {
   eval "#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
   ### using widget->screen
 
-sub _widget_mm_factors {
+sub pixel_size_mm {
   my ($widget) = @_;
 
   # gtk_widget_get_screen() returns the default screen if the widget is not
@@ -93,10 +103,14 @@ sub _widget_mm_factors {
   # that default screen would be good enough, but best not to be sloppy with
   # that sort of thing if potentially multi-display.
   #
-  $widget->has_screen or croak 'widget not on a screen yet';
+  $widget->has_screen
+    or return; # no values
   my $screen = $widget->get_screen;
+  return ($screen->get_width_mm / $screen->get_width,
+          $screen->get_height_mm / $screen->get_height);
 
-  # Pointless in Gtk 2.14, the monitor sizes are always -1 ...
+  # Pointless in Gtk 2.14, the monitor sizes are always -1.
+  # Xinerama 1.1 doesn't give monitor sizes in millimetres, only pixel areas.
   #
   # For a multi-monitor screen an individual monitor size is used if
   # available.  Currently the calculation only looks at a single monitor
@@ -119,9 +133,6 @@ sub _widget_mm_factors {
   #       }
   #     }
   #   }
-
-  return ($screen->get_width_mm / $screen->get_width,
-          $screen->get_height_mm / $screen->get_height);
 }
 1
 HERE
@@ -131,7 +142,7 @@ HERE
   ### using Gtk 2.0.x single-screen size
 
 # Gtk 2.0.x single-screen sizes
-sub _widget_mm_factors {
+sub pixel_size_mm {
   return (Gtk2::Gdk->screen_width_mm / Gtk2::Gdk->screen_width,
           Gtk2::Gdk->screen_height_mm / Gtk2::Gdk->screen_height);
 }
@@ -204,25 +215,44 @@ empty list.
 
 =back
 
-=head2 Widget Distance
+=head2 Widget Distances
+
+In the following functions, sizes in millimetres come from the screen
+(L<Gtk2::Gdk::Screen>).  A widget has a screen when it's been added as a
+child somewhere under a toplevel C<Gtk2::Window> etc.  Or in Gtk 2.0.x
+there's only ever one screen and its size is always used (C<< Gtk2->init >>
+required).
 
 =over
+
+=item C<< ($width_mm, $height_mm) = Gtk2::Ex::WidgetBits::pixel_size_mm ($widget) >>
+
+Return the width and height in millimetres of a pixel in C<$widget>.  If
+C<$widget> doesn't have a screen then return no values.
+
+   my ($xmm, $ymm) = Gtk2::Ex::WidgetBits::pixel_size_mm ($widget)
+     or print "no screen yet";
+
+=item C<< $ratio = Gtk2::Ex::WidgetBits::pixel_aspect_ratio ($widget) >>
+
+Return the ratio width/height of pixel size in millimetres in C<$widget>.
+For example if a pixel is 3mm wide by 2mm high then the ratio would be 1.5.
+If C<$widget> doesn't have a screen then return C<undef>.
+
+This ratio is the same way around as C<Gtk2::AspectFrame>.  Setting the
+C<ratio> property to this pixel ratio makes the child square on the monitor.
 
 =item C<< $mm = Gtk2::Ex::WidgetBits::xy_distance_mm ($widget, $x1,$y1, $x2,$y2) >>
 
 Return the distance in millimetres between pixel points C<$x1>,C<$y1> and
-C<$x2>,C<$y2> in C<$widget>.
-
-Pixels are converted to millimetres using the screen size from
-C<Gtk2::Gdk::Screen>.  If C<$widget> isn't yet under a toplevel
-C<Gtk2::Window> (ie. C<< $widget->has_screen >> false) then currently an
-error is thrown.  In Gtk 2.0.x there's only ever one screen so it's always
-used.
+C<$x2>,C<$y2> in C<$widget>.  If C<$widget> doesn't have a screen then
+return C<undef>.
 
 =back
 
 =head1 SEE ALSO
 
+L<Gtk2::Ex::AdjustmentBits>,
 L<Gtk2::Ex::EntryBits>,
 L<Gtk2::Ex::GdkBits>,
 L<Gtk2::Ex::MenuBits>,
