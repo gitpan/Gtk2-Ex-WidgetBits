@@ -27,7 +27,7 @@ use Gtk2::Ex::MenuBits 35;  # v.35 for mnemonic_escape, mnemonic_undo
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 40;
+our $VERSION = 41;
 
 use Glib::Object::Subclass
   'Gtk2::ToolItem',
@@ -89,7 +89,9 @@ sub SET_PROPERTY {
     if ($pname eq 'overflow_mnemonic') {
       # propagate
       if (my $menuitem = $self->{'menuitem'}) {
-        $menuitem->set_label (_mnemonic_text ($self));
+        if (my $label = $menuitem->get_child) { # perhaps gone in destruction
+          $label->set_text_with_mnemonic (_mnemonic_text ($self));
+        }
       }
       if (my $dialog = $self->{'dialog'}) {
         $dialog->update_text;

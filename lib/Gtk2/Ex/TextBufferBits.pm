@@ -24,7 +24,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 40;
+our $VERSION = 41;
 
 sub replace_lines {
   my ($textbuf, $str) = @_;
@@ -153,7 +153,7 @@ no fast way to get them all.
 C<Gtk2::TextView> keeps its window position as a mark at the start of a
 line.  C<replace_lines> preserves that, which means the TextView shows the
 same lines of the buffer whereas a plain C<< $textbuf->set_text($str) >>
-makes it jump to the start of the buffer).
+makes it jump to the start of the buffer.
 
 =back
 

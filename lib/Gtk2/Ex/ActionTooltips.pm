@@ -22,7 +22,7 @@ use warnings;
 use Carp;
 use Gtk2 1.160; # for $widget->set_tooltip_text new in Gtk2 1.152
 
-our $VERSION = 40;
+our $VERSION = 41;
 
 use Exporter;
 our @ISA = ('Exporter');
@@ -138,6 +138,9 @@ up.  For earlier Gtk the functions here do nothing.
 Whether you want tooltips on MenuItems depends on personal preference or how
 much explanation the actions need.  A MenuItem tooltip is fairly unintrusive
 though, and pops up only after the usual delay.
+
+See F<examples/action-tooltips.pl> in the Gtk2-Ex-WidgetBits sources for a
+sample program setting tooltips on menu items.
 
 There's other ways to show what a menu item might do of course.  For
 instance the Gtk manual under the GtkActionGroup connect-proxy signal

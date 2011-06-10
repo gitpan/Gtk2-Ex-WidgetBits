@@ -16,6 +16,10 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+Version 41, June 2011
+    - ToolItem::OverflowToDialog fix set of overflow-mnemonic when
+      menuitem exists
+
 Version 40, May 2011
     - new Gtk2::Ex::AdjustmentBits with scroll_value()
     - WidgetBits new pixel_size_mm(), pixel_aspect_ratio()
@@ -36,6 +40,7 @@ Version 37, February 2011
     - PixbufBits fix save_adapt_options() return, affecting save_adapt() too
 
 Version 36, January 2011
+    - new Gtk2::Ex::ToolItem::OverflowToDialog
     - ContainerBits allow export (of remove_all and remove_widgets)
     - ToolbarBits fix stray 5.010 meant to be 5.008
     - PixbufBits save_adapt() fix tEXt goes to png always

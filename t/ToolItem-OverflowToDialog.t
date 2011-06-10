@@ -33,7 +33,7 @@ Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
 Gtk2->init_check
   or plan skip_all => 'due to Gtk2->init_check() unsuccessful';
 
-plan tests => 29;
+plan tests => 30;
 
 sub force_dialog {
   my ($toolitem) = @_;
@@ -199,6 +199,19 @@ SKIP: {
   my $str = 'Blah blah tooltip text.';
   $toolitem->set (tooltip_text => $str);
   is ($menuitem->get ('tooltip-text'), $str, 'menuitem tooltip-text');
+}
+
+#-----------------------------------------------------------------------------
+# "overflow-mnemonic"
+
+{
+  my $toolitem = Gtk2::Ex::ToolItem::OverflowToDialog->new;
+  $toolitem->set (overflow_mnemonic => '_Foo');
+  my $menuitem = $toolitem->retrieve_proxy_menu_item;
+  $toolitem->set (overflow_mnemonic => '_Bar');
+  force_dialog($toolitem);
+  $toolitem->set (overflow_mnemonic => '_Quux');
+  ok (1, 'overflow-mnemonic setting');
 }
 
 exit 0;

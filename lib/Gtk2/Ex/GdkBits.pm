@@ -29,7 +29,7 @@ our @EXPORT_OK = qw(draw_rectangle_corners
                     window_get_root_position
                     window_clear_region);
 
-our $VERSION = 40;
+our $VERSION = 41;
 
 
 # The loop here is similar to what gtk_widget_translate_coordinates() does

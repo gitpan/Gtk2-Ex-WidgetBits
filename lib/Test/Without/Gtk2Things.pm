@@ -23,7 +23,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 40;
+our $VERSION = 41;
 
 our $VERBOSE = 0;
 
@@ -687,6 +687,11 @@ just skip the tooltip setups for the earlier versions.  See
 C<set_property_maybe> in L<Glib::Ex::ObjectBits> for some help with that.
 
 =back
+
+=head1 BUGS
+
+It's not possible to C<no Test::Without::Gtk2Things> to restore removed
+things.  Once removed they're gone for the whole program run.
 
 =head1 SEE ALSO
 

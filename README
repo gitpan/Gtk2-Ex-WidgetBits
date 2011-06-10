@@ -20,6 +20,7 @@ with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 This is some helpers for working with Gtk2 widgets and stuff.
 
 * Gtk2::Ex::WidgetBits -- misc funcs
+* Gtk2::Ex::AdjustmentBits -- misc funcs
 * Gtk2::Ex::ContainerBits -- misc funcs
 * Gtk2::Ex::EntryBits -- misc funcs
 * Gtk2::Ex::GdkBits -- misc funcs

@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2009, 2010 Kevin Ryde
+# Copyright 2009, 2010, 2011 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -18,7 +18,7 @@
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# Usage: ./action-tooltips.pl
+# Usage: perl action-tooltips.pl
 #
 # This is an example of putting tooltips from Gtk2::Action objects onto
 # Gtk2::MenuItem widgets connected to those actions.
