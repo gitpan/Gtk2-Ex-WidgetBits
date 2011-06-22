@@ -31,7 +31,7 @@ require Gtk2::Ex::PixbufBits;
 
 #----------------------------------------------------------------------------
 {
-  my $want_version = 41;
+  my $want_version = 42;
   is ($Gtk2::Ex::PixbufBits::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::PixbufBits->VERSION,  $want_version,

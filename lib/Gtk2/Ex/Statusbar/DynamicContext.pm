@@ -22,7 +22,7 @@ use warnings;
 use Carp;
 use Scalar::Util;
 
-our $VERSION = 41;
+our $VERSION = 42;
 
 # Data hung on the $statusbar:
 #

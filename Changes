@@ -16,6 +16,9 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+Version 42, June 2011
+    - new Gtk2::Ex::ToolItem::CheckButton
+
 Version 41, June 2011
     - ToolItem::OverflowToDialog fix set of overflow-mnemonic when
       menuitem exists

@@ -22,7 +22,7 @@ use warnings;
 use Carp;
 use Gtk2 1.160; # for $widget->set_tooltip_text new in Gtk2 1.152
 
-our $VERSION = 41;
+our $VERSION = 42;
 
 use Exporter;
 our @ISA = ('Exporter');

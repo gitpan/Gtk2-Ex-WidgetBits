@@ -43,6 +43,7 @@ This is some helpers for working with Gtk2 widgets and stuff.
 
 * Gtk2::Ex::TreeModelFilter::Change -- propagate insert etc to child model
 
+* Gtk2::Ex::ToolItem::CheckButton -- item with CheckButton
 * Gtk2::Ex::ToolItem::OverflowToDialog -- item overflowing to a dialog
 
 * Gtk2::Ex::Units -- widget sizes in units like "em" or "ex"

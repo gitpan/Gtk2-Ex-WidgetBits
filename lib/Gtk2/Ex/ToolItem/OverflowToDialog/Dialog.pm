@@ -26,7 +26,7 @@ use Scalar::Util;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 41;
+our $VERSION = 42;
 
 use Glib::Object::Subclass
   'Gtk2::Dialog',

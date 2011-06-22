@@ -28,7 +28,7 @@ our @EXPORT_OK = qw(column_contents
                     all_column_types
                     iter_prev);
 
-our $VERSION = 41;
+our $VERSION = 42;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;

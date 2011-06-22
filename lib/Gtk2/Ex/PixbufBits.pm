@@ -30,7 +30,7 @@ our @EXPORT_OK = qw(type_to_format
                     save_adapt_options
                     sampled_majority_color);
 
-our $VERSION = 41;
+our $VERSION = 42;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;

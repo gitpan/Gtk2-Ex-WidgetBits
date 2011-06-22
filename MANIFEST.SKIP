@@ -96,6 +96,7 @@
 ^temp-lintian
 # some of my im module testing
 ^tempfile\.png$
+^tempfile\.svg$
 
 
 # my dists

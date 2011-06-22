@@ -61,6 +61,7 @@ lib/Gtk2/Ex/Statusbar/MessageUntilKey.pm
 lib/Gtk2/Ex/SyncCall.pm
 lib/Gtk2/Ex/TextBufferBits.pm
 lib/Gtk2/Ex/ToolbarBits.pm
+lib/Gtk2/Ex/ToolItem/CheckButton.pm
 lib/Gtk2/Ex/ToolItem/OverflowToDialog.pm
 lib/Gtk2/Ex/ToolItem/OverflowToDialog/Dialog.pm
 lib/Gtk2/Ex/TreeModel/ImplBits.pm
@@ -105,6 +106,10 @@ t/Test-Weaken-Gtk2.t
 t/Test-Without-Gtk2Things.t
 t/TextBufferBits.t
 t/ToolbarBits-load.t
+t/ToolItem-CheckButton-builder.t
+t/ToolItem-CheckButton-load.t
+t/ToolItem-CheckButton-weaken.t
+t/ToolItem-CheckButton.t
 t/ToolItem-OverflowToDialog-weaken.t
 t/ToolItem-OverflowToDialog.t
 t/TreeModel-ImplBits-import.t
@@ -118,6 +123,7 @@ t/Units.t
 t/WidgetBits.t
 t/WidgetEvents.t
 xt/0-examples-xrefs.t
+xt/0-file-is-part-of.t
 xt/0-META-read.t
 xt/0-no-debug-left-on.t
 xt/0-Test-ConsistentVersion.t
