@@ -30,7 +30,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 require Gtk2::Ex::TreeModelFilter::Change;
 
 {
-  my $want_version = 42;
+  my $want_version = 43;
   is ($Gtk2::Ex::TreeModelFilter::Change::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::TreeModelFilter::Change->VERSION,  $want_version,

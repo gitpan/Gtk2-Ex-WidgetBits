@@ -24,7 +24,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 42;
+our $VERSION = 43;
 
 sub replace_lines {
   my ($textbuf, $str) = @_;

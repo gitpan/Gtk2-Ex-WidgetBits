@@ -30,7 +30,7 @@ use MyTestHelpers;
 BEGIN { MyTestHelpers::nowarnings() }
 
 {
-  my $want_version = 42;
+  my $want_version = 43;
   is ($Gtk2::Ex::TreeViewBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::TreeViewBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::TreeViewBits->VERSION($want_version); 1 },

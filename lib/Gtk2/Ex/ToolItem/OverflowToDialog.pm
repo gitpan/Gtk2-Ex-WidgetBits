@@ -27,7 +27,7 @@ use Gtk2::Ex::MenuBits 35;  # v.35 for mnemonic_escape, mnemonic_undo
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 42;
+our $VERSION = 43;
 
 use Glib::Object::Subclass
   'Gtk2::ToolItem',

@@ -8,6 +8,7 @@ debian/rules
 debian/source/format
 debian/watch
 devel/action-tooltips.pl
+devel/adjustment-configure.pl
 devel/aspect-frame.pl
 devel/container-remove.pl
 devel/dynamic-context-statusbar.pl
@@ -53,6 +54,7 @@ lib/Gtk2/Ex/EntryBits.pm
 lib/Gtk2/Ex/FreezeChildNotify.pm
 lib/Gtk2/Ex/GdkBits.pm
 lib/Gtk2/Ex/KeySnooper.pm
+lib/Gtk2/Ex/LayoutBits.pm
 lib/Gtk2/Ex/MenuBits.pm
 lib/Gtk2/Ex/MenuItem/Subclass.pm
 lib/Gtk2/Ex/PixbufBits.pm
@@ -80,6 +82,7 @@ README
 SIGNATURE
 t/ActionTooltips-import.t
 t/ActionTooltips.t
+t/AdjustmentBits.t
 t/ContainerBits-import.t
 t/ContainerBits-subclass.t
 t/ContainerBits.t
@@ -88,6 +91,7 @@ t/FreezeChildNotify.t
 t/GdkBits-import.t
 t/GdkBits.t
 t/KeySnooper.t
+t/LayoutBits.t
 t/MenuBits-import.t
 t/MenuBits-load.t
 t/MenuBits.t

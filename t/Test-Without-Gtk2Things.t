@@ -28,7 +28,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 
 require Test::Without::Gtk2Things;
 {
-  my $want_version = 42;
+  my $want_version = 43;
   is ($Test::Without::Gtk2Things::VERSION, $want_version,
       'VERSION variable');
   is (Test::Without::Gtk2Things->VERSION,  $want_version,

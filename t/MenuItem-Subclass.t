@@ -43,7 +43,7 @@ plan tests => 18;
 # VERSION
 
 {
-  my $want_version = 42;
+  my $want_version = 43;
   is ($Gtk2::Ex::MenuItem::Subclass::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::MenuItem::Subclass->VERSION,  $want_version,
