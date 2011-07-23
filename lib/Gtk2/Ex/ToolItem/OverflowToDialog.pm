@@ -27,10 +27,14 @@ use Gtk2::Ex::MenuBits 35;  # v.35 for mnemonic_escape, mnemonic_undo
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 43;
+our $VERSION = 44;
 
 use Glib::Object::Subclass
   'Gtk2::ToolItem',
+  interfaces => [
+                 # Gtk2::Buildable new in Gtk 2.12, omit if not available
+                 Gtk2::Widget->isa('Gtk2::Buildable') ? 'Gtk2::Buildable' : (),
+                ],
   signals => { add => \&_do_add,
                destroy => \&_do_destroy,
                create_menu_proxy => \&_do_create_menu_proxy,
@@ -185,8 +189,7 @@ sub _update_child_position {
 sub _bin_set_child {
   my ($bin, $child) = @_;
   if (my $old_child = $bin->get_child) {
-    if ((Scalar::Util::refaddr($child)||0)
-        == (Scalar::Util::refaddr($old_child)||0)) {
+    if ((Scalar::Util::refaddr($child)||0) == (Scalar::Util::refaddr($old_child)||0)) {
       return;
     }
     $bin->remove ($old_child);
@@ -269,17 +272,18 @@ sub _do_menu_activate {
   my ($menuitem, $ref_weak_self) = @_;
   my $self = $$ref_weak_self || return;
   ### ToolItem-OverflowToDialog _do_menu_activate()
-
-  my $dialog = ($self->{'dialog'} ||= do {
+  _dialog($self)->present_for_menuitem ($menuitem);
+}
+sub _dialog {
+  my ($self) = @_;
+  return ($self->{'dialog'} || do {
     ### create new dialog
     require Gtk2::Ex::ToolItem::OverflowToDialog::Dialog;
     my $d = $self->{'dialog'}
-      = Gtk2::Ex::ToolItem::OverflowToDialog::Dialog->new
-        (toolitem => $self);
+      = Gtk2::Ex::ToolItem::OverflowToDialog::Dialog->new (toolitem => $self);
     _do_hierarchy_changed ($self); # initial transient_for
     $d
   });
-  $dialog->present_for_menuitem ($menuitem);
 }
 
 sub _mnemonic_text {
@@ -292,6 +296,22 @@ sub _mnemonic_text {
   } else {
     return '';
   }
+}
+
+#------------------------------------------------------------------------------
+# Gtk2::Buildable interface
+
+sub GET_INTERNAL_CHILD {
+  my ($self, $builder, $name) = @_;
+  if ($name eq 'overflow_menuitem') {
+    $self->signal_emit ('create-menu-proxy');
+    return $self->retrieve_proxy_menu_item;
+  }
+  if ($name eq 'dialog') {
+    return _dialog($self);
+  }
+  # ENHANCE-ME: Will Gtk2::Buildable wrapping expect anything to chain up?
+  return undef;
 }
 
 1;
@@ -388,13 +408,13 @@ initial properties as per C<< Glib::Object->new >>.
 
 The child widget to show in the toolitem or dialog.
 
-The usual C<Gtk2::Container> C<child> property sets this too.  But C<child>
-is write-only and can only store into an empty ToolItem, whereas
+This is set by the usual C<Gtk2::Container> C<child> property too, but
+C<child> is write-only and can only store to an empty ToolItem, whereas
 C<child-widget> is read/write and setting it replaces any existing child
 widget.
 
-The usual container C<< $toolitem->add($widget) >> sets the child widget
-too, but again only into an empty ToolItem.
+The usual container method C<< $toolitem->add($widget) >> sets this child
+widget too, but again only into an empty ToolItem.
 
 =item C<overflow-mnemonic> (string, default C<undef>)
 
@@ -413,6 +433,49 @@ toolitem insensitive so the menu item is disabled too.
 The ToolItem C<tooltip-text> property (new in Gtk 2.12) is copied to the
 dialog's child area.  A tooltip can also be put just on the child widget
 too.
+
+=head1 BUILDABLE
+
+C<Gtk2::Ex::ToolItem::OverflowToDialog> can be constructed with
+C<Gtk2::Builder> (new in Gtk 2.12).  The class name is
+C<Gtk2__Ex__ToolItem__OverflowToDialog> and properties and signal handlers
+can be set in the usual way.
+
+    <object class="Gtk2__Ex__ToolItem__OverflowToDialog" id="toolitem">
+      <property name="overflow-mnemonic">_Foo</property>
+    </object>
+
+There's two "internal child" widgets available,
+
+    overflow_menuitem    GtkMenuItem for toolbar overflow
+    dialog               GtkDialog opened from there
+
+They can be used to set desired properties on those widgets (things not
+otherwise offered from the ToolItem itself).  Here's a sample fragment,
+
+    <object class="Gtk2__Ex__ToolItem__OverflowToDialog" id="toolitem">
+      <child internal-child="dialog">
+        <object class="GtkDialog" id="ddd">
+          <property name="icon-name">something</property>
+        </object>
+      </child>
+    </object>
+
+C<internal-child> means C<< <child> >> doesn't create a new child object,
+but accesses one already in the parent.  C<< id="ddd" >> is the name to
+refer to it elsewhere in the Builder specification and possible later
+C<< $builder->get_object() >>.  An C<id> must be present even if not used.
+
+Both C<overflow_menuitem> and C<dialog> have the effect of creating those
+sub-parts immediately, where normally they wait until actually needed for a
+toolbar overflow and then when the user clicks on the menu item, both of
+which might never happen of course.
+
+=head1 BUGS
+
+As of Perl-Gtk 1.223 the C<Gtk2::Buildable> interface from Perl code doesn't
+chain up to the parent buildable methods, so some of GtkWidget specifics may
+be lost, such as the C<< <accessibility> >> tags.
 
 =head1 SEE ALSO
 

@@ -114,6 +114,7 @@ t/ToolItem-CheckButton-builder.t
 t/ToolItem-CheckButton-load.t
 t/ToolItem-CheckButton-weaken.t
 t/ToolItem-CheckButton.t
+t/ToolItem-OverflowToDialog-builder.t
 t/ToolItem-OverflowToDialog-weaken.t
 t/ToolItem-OverflowToDialog.t
 t/TreeModel-ImplBits-import.t

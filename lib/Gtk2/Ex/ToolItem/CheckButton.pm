@@ -25,7 +25,7 @@ use Scalar::Util;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 43;
+our $VERSION = 44;
 
 use Glib::Object::Subclass
   'Gtk2::ToolItem',
@@ -309,15 +309,15 @@ from the ToolItem itself).  Here's a sample fragment,
 
     <object class="Gtk2__Ex__ToolItem__CheckButton" id="toolitem">
       <child internal-child="checkbutton">
-        <object class="Gtk2__CheckButton" id="my_checkbutton">
+        <object class="GtkCheckButton" id="my_checkbutton">
           <property name="yalign">0</property>
         </object>
       </child>
     </object>
 
-C<internal-child> means C<< <child> >> is not creating a new child object,
-but accessing one already built.  The C<< id="my_checkbutton" >> is the name
-to refer to it elsewhere in the Builder specification in any later
+C<internal-child> means C<< <child> >> doesn't create a new child object,
+but accesses one already in the parent.  The C<< id="my_checkbutton" >> is
+the name to refer to it elsewhere in the Builder specification and any later
 C<< $builder->get_object() >>.  That C<id> setting must be present even if
 not used.
 

@@ -25,7 +25,7 @@ use Gtk2;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 43;
+our $VERSION = 44;
 
 # get_root_position() might be done as
 #

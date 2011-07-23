@@ -16,6 +16,10 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
+Version 44, July 2011
+    - ToolItem::OverflowToDialog new buildable internal-child
+      overflow_menuitem and dialog
+
 Version 43, June 2011
     - new Gtk2::Ex::LayoutBits move_maybe()
     - AdjustmentBits new set_maybe()

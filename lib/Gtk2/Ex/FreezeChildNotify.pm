@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use Scalar::Util;
 
-our $VERSION = 43;
+our $VERSION = 44;
 
 sub new {
   my $class = shift;
