@@ -1,4 +1,4 @@
-# Copyright 2007, 2008, 2009, 2010, 2011 Kevin Ryde
+# Copyright 2007, 2008, 2009, 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -29,7 +29,7 @@ our @EXPORT_OK = qw(draw_rectangle_corners
                     window_get_root_position
                     window_clear_region);
 
-our $VERSION = 44;
+our $VERSION = 45;
 
 
 # The loop here is similar to what gtk_widget_translate_coordinates() does
@@ -148,7 +148,7 @@ L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 
-Copyright 2008, 2009, 2010, 2011 Kevin Ryde
+Copyright 2008, 2009, 2010, 2011, 2012 Kevin Ryde
 
 Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

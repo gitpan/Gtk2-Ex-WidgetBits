@@ -1,4 +1,4 @@
-# Copyright 2008, 2009, 2010, 2011 Kevin Ryde
+# Copyright 2008, 2009, 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 44;
+our $VERSION = 45;
 
 sub new {
   my ($class, $func, $userdata) = @_;
@@ -67,13 +67,15 @@ Gtk2::Ex::KeySnooper -- keyboard snooper as object
  use Gtk2::Ex::KeySnooper;
  my $snooper = Gtk2::Ex::KeySnooper->new (\&myfunc, $mydata);
 
+ # calls &myfunc($widget,$event,$mydata) as usual 
+
  # myfunc disconnected when object destroyed
  $snooper = undef;
 
 =head1 DESCRIPTION
 
 A C<Gtk2::Ex::KeySnooper> object installs a given function as a key snooper
-in the Gtk main loop and when the KeySnooper object is destroyed it removes
+in the Gtk main loop.  When the KeySnooper object is destroyed it removes
 that function.  The idea is that it can be easier to manage the lifespan of
 an object than to keep an integer ID safe somewhere and remember
 C<< Gtk2->key_snooper_remove >> at the right places.
@@ -131,7 +133,7 @@ L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 
-Copyright 2008, 2009, 2010, 2011 Kevin Ryde
+Copyright 2008, 2009, 2010, 2011, 2012 Kevin Ryde
 
 Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

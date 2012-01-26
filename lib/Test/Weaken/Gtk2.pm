@@ -1,4 +1,4 @@
-# Copyright 2008, 2009, 2010, 2011 Kevin Ryde
+# Copyright 2008, 2009, 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -20,6 +20,7 @@ package Test::Weaken::Gtk2;
 use 5.006;  # for "our" (which Test::Weaken itself uses)
 use strict;
 use warnings;
+use Scalar::Util 'refaddr';
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
@@ -33,7 +34,7 @@ our @EXPORT_OK = qw(contents_container
                     destructor_destroy_and_iterate
                     ignore_default_display);
 
-our $VERSION = 44;
+our $VERSION = 45;
 
 sub contents_container {
   my ($ref) = @_;
@@ -164,36 +165,46 @@ sub _main_iterations {
 #------------------------------------------------------------------------------
 sub ignore_default_display {
   my ($ref) = @_;
-  return (Gtk2::Gdk::Display->can('get_default') # Gtk2 loaded, and Gtk 2.2 up
-          && Gtk2::Gdk::Display->get_default     # if Gtk2 inited
-          && ($ref == (Gtk2::Gdk::Display->get_default)));
+
+  # Gtk2 loaded, and Gtk 2.2 up
+  Gtk2::Gdk::Display->can('get_default') || return 0;
+
+  my $default_display = Gtk2::Gdk::Display->get_default
+    || return 0;  # undef until Gtk2 inited
+
+  return (refaddr($ref) == refaddr($default_display));
 }
 
 sub ignore_default_screen {
   my ($ref) = @_;
-  return (Gtk2::Gdk::Screen->can('get_default') # Gtk2 loaded, and Gtk 2.2 up
-          && Gtk2::Gdk::Screen->get_default     # if Gtk2 inited
-          && ($ref == (Gtk2::Gdk::Screen->get_default)));
+
+ # Gtk2 loaded, and Gtk 2.2 up
+  Gtk2::Gdk::Screen->can('get_default') || return 0;
+
+  my $default_screen = Gtk2::Gdk::Screen->get_default
+    || return 0;  # undef until Gtk2 inited
+
+  return (refaddr($ref) == refaddr($default_screen));
 }
 
 sub ignore_default_root_window {
   my ($ref) = @_;
-  return (
-          # must have Gtk2 loaded
-          Gtk2::Gdk->can('get_default_root_window')
 
-          # in Gtk 2.2 up must have default screen from Gtk2->init_check()
-          # otherwise Gtk2::Gdk->get_default_root_window() gives a g_log()
-          # warning
-          #
-          && (! Gtk2::Gdk::Screen->can('get_default')
-              || Gtk2::Gdk::Screen->get_default)
+  # must have Gtk2 loaded
+  Gtk2::Gdk->can('get_default_root_window') or return 0;
 
-          # in Gtk 2.0 get NULL from gdk_get_default_root_window() if no
-          # Gtk2->init_check() yet
-          && Gtk2::Gdk->get_default_root_window
+  # in Gtk 2.2 up must have default screen from Gtk2->init_check() otherwise
+  # Gtk2::Gdk->get_default_root_window() gives a g_log() warning
+  if (Gtk2::Gdk::Screen->can('get_default')) {
+    Gtk2::Gdk::Screen->get_default || return 0;
+  }
 
-          && ($ref == Gtk2::Gdk->get_default_root_window));
+  # in Gtk 2.0 get NULL from gdk_get_default_root_window() if no
+  # Gtk2->init_check() yet
+  my $default_root_window = Gtk2::Gdk->get_default_root_window
+    || return 0;
+
+  return (refaddr($ref) == refaddr($default_root_window));
 }
 
 
@@ -230,43 +241,45 @@ module also doesn't load C<Test::Weaken>, that's left to a test script.
 =item C<< @widgets = Test::Weaken::Gtk2::contents_container ($ref) >>
 
 If C<$ref> is a C<Gtk2::Container> or subclass then return its widget
-children per C<< $container->get_children >>.  If C<$ref> is not a
+children per C<< $container->get_children() >>.  If C<$ref> is not a
 container, or C<Gtk2> is not loaded, then return an empty list.
 
-The children of a C code container are held in C structures and not
-otherwise reached by the traversal C<Test::Weaken> does.
+Container children are held in C structures (unless the container is
+implemented in Perl) and so generally not reached by the traversal
+C<Test::Weaken> does.
 
 =item C<< @widgets = Test::Weaken::Gtk2::contents_submenu ($ref) >>
 
 If C<$ref> is a C<Gtk2::MenuItem> then return its submenu per
-C<< $item->get_submenu >>, or if it's a C<Gtk2::MenuToolButton> then per
-C<< $item->get_menu >>.  If there's no menu, or C<$ref> is not such a
+C<< $item->get_submenu() >>, or if it's a C<Gtk2::MenuToolButton> then per
+C<< $item->get_menu() >>.  If there's no menu, or C<$ref> is not such a
 widget, then return an empty list.
 
 The submenu in both cases is held in the item's C structure and is not
 otherwise reached by the traversal C<Test::Weaken> does.
 
 Only the MenuItem and MenuToolButton classes are acted on currently, just in
-case a C<get_submenu> / C<get_menu> on some other Gtk class isn't a simple
+case a C<get_submenu()> / C<get_menu()> on some other Gtk class isn't a simple
 property fetch but perhaps some kind of constructor.  Other classes which
-are a simple fetch might be added in the future.
+are a simple fetch could be added here in the future.
 
 =item C<< @widgets = Test::Weaken::Gtk2::contents_cell_renderers ($ref) >>
 
 If C<$ref> is a widget with the C<Gtk2::CellLayout> interface then return
-its C<Gtk2::CellRenderer> objects from C<get_cells>.  Or if C<$ref> is a
-C<Gtk2::TreeViewColumn> or C<Gtk2::CellView> then use C<get_cell_renderers>.
+its C<Gtk2::CellRenderer> objects from C<get_cells()>.  Or if C<$ref> is a
+C<Gtk2::TreeViewColumn> or C<Gtk2::CellView> then C<get_cell_renderers()>.
 For anything else the return is an empty list.
 
-C<get_cells> is new in Gtk 2.12.  C<get_cell_renderers> is the previous
+C<get_cells> is new in Gtk 2.12.  C<get_cell_renderers()> is the previous
 style.  The renderers in a C code viewer widget are held in C structures and
 are not otherwise reached by the traversal C<Test::Weaken> does.
 
 C<Gtk2::CellView> as of Gtk 2.20.1 has a bug or severe misfeature where it
-gives a C<g_assert> failure on attempting get cells when there's no display
-row set, including when no model.  The returned cells are correct, there's
-just an assert logged.  C<contents_cell_renderers> suppresses that warning
-so as to help leak checking of CellViews not yet displaying anything.
+gives a C<g_assert()> failure on attempting get cells when there's no
+display row set, including when no model.  The returned cells are correct,
+there's just an assert logged.  C<contents_cell_renderers()> suppresses that
+warning so as to help leak checking of CellViews not yet displaying
+anything.
 
 =back
 
@@ -281,9 +294,9 @@ even though they may not relate to Perl level code.
 
 =item C<< Test::Weaken::Gtk2::destructor_destroy ($top) >>
 
-Call C<< $top->destroy >>, or if C<$top> is an arrayref then call C<destroy>
-on its first element.  This can be used when a constructed widget or object
-requires an explicit C<destroy>.  For example,
+Call C<< $top->destroy() >>, or if C<$top> is an arrayref then call
+C<destroy()> on its first element.  This can be used when a constructed
+widget or object requires an explicit C<destroy()>.  For example,
 
     my $leaks = leaks({
       constructor => sub { Gtk2::Window->new('toplevel') },
@@ -292,7 +305,7 @@ requires an explicit C<destroy>.  For example,
 
 The arrayref case is designed for multiple widgets etc returned from a
 constructor, the first of which is a toplevel window or similar needing a
-C<destroy>,
+C<destroy()>,
 
     my $leaks = leaks({
       constructor => sub {
@@ -304,15 +317,15 @@ C<destroy>,
       destructor => \&Test::Weaken::Gtk2::destructor_destroy,
     });
 
-All C<Gtk2::Object>s support C<destroy> but most don't need it for garbage
+All C<Gtk2::Object>s support C<destroy()> but most don't need it for garbage
 collection.  C<Gtk2::Window> is the most common which does.  Another is a
 MenuItem which has an AccelLabel and is not in a menu (see notes in
 L<Gtk2::MenuItem>).
 
 =item C<< Test::Weaken::Gtk2::destructor_destroy_and_iterate ($top) >>
 
-The same as C<destructor_destroy> above, but in addition run
-C<< Gtk2->main_iteration_do >> for queued main loop actions.  There's a
+The same as C<destructor_destroy()> above, but in addition run
+C<< Gtk2->main_iteration_do() >> for queued main loop actions.  There's a
 limit on the number of iterations done, so as to protect against a runaway
 main loop.
 
@@ -340,9 +353,9 @@ window, as per
     Gtk2::Gdk->get_default_root_window
 
 If there's no respective default then return false.  This happens if C<Gtk2>
-is not loaded yet, or C<< Gtk2->init >> not called yet, and under Gtk 2.0.x
-there's no C<< Gtk2::Gdk::Display >> class and C<< Gtk2::Gdk::Screen >>
-classes at all (only a default root window).
+is not loaded yet, or C<< Gtk2->init() >> not called yet, and under Gtk
+2.0.x there's no C<Gtk2::Gdk::Display> class and
+C<Gtk2::Gdk::Screen> classes at all (only a default root window).
 
     my $leaks = leaks({
       constructor => sub { make_something },
@@ -379,7 +392,7 @@ L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 
-Copyright 2008, 2009, 2010, 2011 Kevin Ryde
+Copyright 2008, 2009, 2010, 2011, 2012 Kevin Ryde
 
 Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

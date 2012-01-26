@@ -1,4 +1,4 @@
-# Copyright 2007, 2008, 2009, 2010, 2011 Kevin Ryde
+# Copyright 2007, 2008, 2009, 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -30,7 +30,7 @@ our @EXPORT_OK = qw(em ex char_width digit_width line_height
                     size_request_with_subsizes);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-our $VERSION = 44;
+our $VERSION = 45;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
@@ -247,10 +247,10 @@ sub size_request_with_subsizes {
     my ($subwidget, $width, $height) = @$elem;
     my ($save_width, $save_height) = $subwidget->get_size_request;
     my $width_pixels = (defined $width
-                        ? Gtk2::Ex::Units::width($subwidget,$width)
+                        ? width($subwidget,$width)
                         : $save_width);
     my $height_pixels = (defined $height
-                        ? Gtk2::Ex::Units::height($subwidget,$height)
+                        ? height($subwidget,$height)
                         : $save_height);
     push @guard, Scope::Guard->new
       (sub { $subwidget->set_size_request ($save_width, $save_height) });
@@ -481,7 +481,7 @@ L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 
-Copyright 2007, 2008, 2009, 2010, 2011 Kevin Ryde
+Copyright 2007, 2008, 2009, 2010, 2011, 2012 Kevin Ryde
 
 Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

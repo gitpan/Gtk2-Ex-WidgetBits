@@ -1,4 +1,4 @@
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # Gtk2-Ex-WidgetBits is shared by several distributions.
 #
@@ -23,7 +23,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 44;
+our $VERSION = 45;
 
 our $VERBOSE = 0;
 
@@ -248,17 +248,28 @@ sub without_gdkdisplay {
   # In Gtk 2.2 up Gtk2::Gdk->get_default_root_window() gives a g_log()
   # warning if no Gtk2->init() yet.  Wrap it to quietly give undef the same
   # as in Gtk 2.0.0.
+  #
+  # Something in recent Gtk or Perl-Gtk or Perl doesn't like running the
+  # Gtk2::Gdk::Screen->get_default when that package has otherwise been
+  # killed.  How to cleanly test for init-ed?
+  #
   {
     my $get_default_screen = Gtk2::Gdk::Screen->can('get_default');
     my $orig = Gtk2::Gdk->can('get_default_root_window') || die;
     no warnings 'redefine';
     *Gtk2::Gdk::get_default_root_window = sub {
-      if (! Gtk2::Gdk::Screen->$get_default_screen()) {
-        return undef;
-      }
-      # this could have been "goto $orig" but have seen trouble in 5.8.9
-      # jumping to an XSUB like that
+      local $SIG{__WARN__} = sub {};
       return &$orig(@_);
+      
+      # ### Without get_default_root_window() ...
+      # my $x = Gtk2::Gdk::Screen->$get_default_screen();
+      # print "$x\n";
+      # if (! Gtk2::Gdk::Screen->$get_default_screen()) {
+      #   return undef;
+      # }
+      # # this could have been "goto $orig" but have seen trouble in 5.8.9
+      # # jumping to an XSUB like that
+      # return &$orig(@_);
     };
   }
 
@@ -368,7 +379,7 @@ sub _without_properties {
 
   foreach my $without_pname (@without_pnames) {
     (my $method = $without_pname) =~ tr/-/_/;
-    _without_methods ('Gtk2::Widget', "get_$method", "set_$method");
+    _without_methods ($without_class, "get_$method", "set_$method");
   }
 
   my %without_pnames;
@@ -450,7 +461,6 @@ sub _without_properties {
 
 sub _pnames_match {
   my ($pname, $without_pnames) = @_;
-  ### $want
   ### $pname
   $pname =~ tr/_/-/;
   return $without_pnames->{$pname};
@@ -704,7 +714,7 @@ properties.
 
 =head1 COPYRIGHT
 
-Copyright 2010, 2011 Kevin Ryde
+Copyright 2010, 2011, 2012 Kevin Ryde
 
 Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

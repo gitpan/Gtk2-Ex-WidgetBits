@@ -1,4 +1,4 @@
-# Copyright 2007, 2008, 2009, 2010, 2011 Kevin Ryde
+# Copyright 2007, 2008, 2009, 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -28,7 +28,7 @@ use Glib::Ex::SignalIds;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 44;
+our $VERSION = 45;
 
 
 # The following fields are hung on a target widget,
@@ -281,7 +281,7 @@ L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 
-Copyright 2008, 2009, 2010, 2011 Kevin Ryde
+Copyright 2008, 2009, 2010, 2011, 2012 Kevin Ryde
 
 Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

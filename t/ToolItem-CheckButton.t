@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -40,7 +40,7 @@ require Gtk2::Ex::ToolItem::CheckButton;
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 44;
+my $want_version = 45;
 {
   is ($Gtk2::Ex::ToolItem::CheckButton::VERSION,
       $want_version,

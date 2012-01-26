@@ -25,6 +25,7 @@ devel/menu-popup.pl
 devel/messageuntilkey-multi-display.pl
 devel/messageuntilkey.pl
 devel/misc.pl
+devel/overflow-dialog-bug.pl
 devel/overflow-dialog.pl
 devel/pixbuf-max.pl
 devel/plug.pl
@@ -35,6 +36,7 @@ devel/setlocale.pl
 devel/socket.pl
 devel/synccall.pl
 devel/table-attach.pl
+devel/test-without.pl
 devel/treeview-scroll.pl
 devel/units-line-height.pl
 devel/units.pl

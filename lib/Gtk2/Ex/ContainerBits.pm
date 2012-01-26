@@ -1,4 +1,4 @@
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -26,7 +26,7 @@ our @ISA = ('Exporter');
 our @EXPORT_OK = qw(remove_all
                     remove_widgets);
 
-our $VERSION = 44;
+our $VERSION = 45;
 
 sub remove_all {
   my ($container) = @_;
@@ -119,7 +119,7 @@ L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 
-Copyright 2010, 2011 Kevin Ryde
+Copyright 2010, 2011, 2012 Kevin Ryde
 
 Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

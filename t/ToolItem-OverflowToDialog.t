@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2011 Kevin Ryde
+# Copyright 2011, 2012 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -63,6 +63,7 @@ sub force_dialog {
 {
   my $toolitem =  Gtk2::Ex::ToolItem::OverflowToDialog->new;
   Scalar::Util::weaken($toolitem);
+  MyTestHelpers::main_iterations();
   is ($toolitem, undef, 'toolitem weaken away');
 }
 {
@@ -70,6 +71,7 @@ sub force_dialog {
   my $toolitem =  Gtk2::Ex::ToolItem::OverflowToDialog->new
     (child_widget => $child_widget);
   Scalar::Util::weaken($toolitem);
+  MyTestHelpers::main_iterations();
   is ($toolitem, undef, 'toolitem weaken away');
 }
 {
@@ -79,6 +81,7 @@ sub force_dialog {
   my $menuitem = $toolitem->retrieve_proxy_menu_item;
   Scalar::Util::weaken($toolitem);
   Scalar::Util::weaken($menuitem);
+  MyTestHelpers::main_iterations();
   is ($toolitem, undef, 'toolitem with menu weaken away');
   is ($menuitem, undef, 'menuitem weaken away');
 }
@@ -91,6 +94,7 @@ sub force_dialog {
   Scalar::Util::weaken($toolitem);
   Scalar::Util::weaken($menuitem);
   Scalar::Util::weaken($dialog);
+  MyTestHelpers::main_iterations();
   is ($toolitem, undef, 'toolitem with dialog weaken away');
   is ($menuitem, undef, 'menuitem weaken away');
   is ($dialog, undef, 'dialog weaken away');

@@ -1,4 +1,4 @@
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -26,7 +26,7 @@ use Scalar::Util;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 44;
+our $VERSION = 45;
 
 use Glib::Object::Subclass
   'Gtk2::Dialog',

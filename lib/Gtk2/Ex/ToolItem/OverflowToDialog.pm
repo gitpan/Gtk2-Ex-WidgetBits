@@ -1,4 +1,4 @@
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -27,7 +27,8 @@ use Gtk2::Ex::MenuBits 35;  # v.35 for mnemonic_escape, mnemonic_undo
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 44;
+
+our $VERSION = 45;
 
 use Glib::Object::Subclass
   'Gtk2::ToolItem',
@@ -65,11 +66,15 @@ use Glib::Object::Subclass
 sub FINALIZE_INSTANCE {
   my ($self) = @_;
   ### OverflowToDialog FINALIZE_INSTANCE()
+
+  # don't let _update_child_position() store it back again
+  delete $self->{'child_widget'};
+
   if (my $menuitem = delete $self->{'menuitem'}) {
-    $menuitem->destroy;  # circular MenuItem<->AccelLabel
+    $menuitem->destroy;  # circular MenuItem<->AccelLabel, must destroy
   }
   if (my $dialog = delete $self->{'dialog'}) {
-    $dialog->destroy;  # usual explicit Gtk2::Window
+    $dialog->destroy;  # usual explicit Gtk2::Window destroy
   }
 }
 sub _do_destroy {
@@ -106,7 +111,20 @@ sub SET_PROPERTY {
 sub _do_notify {
   my ($self, $pspec) = @_;
   ### ToolItem-OverflowToDialog _do_notify(): $pspec->get_name
+  ### invocation hint: $self->signal_get_invocation_hint
+
+  # my $n;
+  #   if ($n++ > 10) {
+  #   exit 1;
+  # }
+  # if (my $child = $self->get('child-widget')) {
+  #   if ($child->isa('Gtk2::Container')) {
+  #     ### child-widget: join(',', $child->get_children)
+  #   }
+  # }
+
   $self->signal_chain_from_overridden ($pspec);
+  ### chain returned ...
 
   # The GtkToolItem gtk_tool_item_property_notify() propagates 'sensitive'
   # to the menuitem already, whatever is currently set_proxy_menu_item().
@@ -127,6 +145,8 @@ sub _do_notify {
 # 'add' class closure, per $container->add()
 sub _do_add {
   my ($self, $child) = @_;
+  ### ToolItem-OverflowToDialog _do_add(): "$child"
+
   $self->signal_chain_from_overridden ($child);
   $self->set_child_widget ($child);
 }
@@ -144,7 +164,13 @@ sub set_child_widget {
 
   $self->{'child_widget'} = $child_widget;
   _update_child_position ($self);
-  $self->notify('child_widget');
+
+  # go through an idle handler as a workaround for some dodginess in glib
+  # circa 2.30 running a notify closure from within an add closure ...
+  Glib::Idle->add (sub {
+                     $self->notify('child_widget');
+                     return 0; # Glib::SOURCE_REMOVE;
+                   });
 }
 
 sub _update_child_position {
@@ -493,7 +519,7 @@ L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 
-Copyright 2010, 2011 Kevin Ryde
+Copyright 2010, 2011, 2012 Kevin Ryde
 
 Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

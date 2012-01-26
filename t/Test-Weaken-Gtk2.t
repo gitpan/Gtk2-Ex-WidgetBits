@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -37,7 +37,7 @@ Gtk2->init_check
 plan tests => 23;
 
 {
-  my $want_version = 44;
+  my $want_version = 45;
   is ($Test::Weaken::Gtk2::VERSION, $want_version,
       'VERSION variable');
   is (Test::Weaken::Gtk2->VERSION,  $want_version,
