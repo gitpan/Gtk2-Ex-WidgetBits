@@ -26,7 +26,16 @@ use List::Util 'min', 'max';
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 45;
+our $VERSION = 46;
+
+# Names a bit too generic to want to import usually.
+# use Exporter;
+# our @ISA = ('Exporter');
+# our @EXPORT_OK = qw(scroll_value
+#                     scroll_increment
+#                     set_maybe);
+
+#------------------------------------------------------------------------------
 
 sub scroll_value {
   my ($adj, $amount) = @_;
@@ -42,6 +51,34 @@ sub scroll_value {
   }
 }
 
+# Validate $type as "page" or "step" so as not to let dubious input call an
+# arbitrary method.
+my %increment_method = (page => 'page_increment',
+                        step => 'step_increment',
+                        # page_increment => 'page_increment',
+                        # step_increment => 'step_increment',
+                       );
+sub scroll_increment {
+  my ($adj, $inctype, $inverted) = @_;
+  my $method = $increment_method{$inctype}
+    || croak "Unrecognised increment type: ",$inctype;
+  scroll_value ($adj, $adj->$method * ($inverted ? -1 : 1));
+}
+
+my %direction_is_inverted = (up    => 1,  # Gtk2::Gdk::ScrollDirection enum
+                             down  => 0,
+                             left  => 1,
+                             right => 0);
+sub scroll_event {
+  my ($adj, $event, $inverted) = @_;
+  $inverted ^= $direction_is_inverted{$event->direction};
+  Gtk2::Ex::AdjustmentBits::scroll_increment
+      ($adj,
+       ($event->state & 'control-mask' ? 'page' : 'step'),
+       $inverted);
+  return 0; # Gtk2::EVENT_PROPAGATE
+}
+
 #------------------------------------------------------------------------------
 # set_maybe()
 
@@ -50,7 +87,7 @@ BEGIN {
 #
 #   if (Gtk2::Adjustment->can('configure')) {
 #     # new in gtk 2.14 and Perl-Gtk 1.240
-#     eval "#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
+#     eval "\n#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
 # 
 #   sub set_maybe {
 #     my ($adj, %values) = @_;
@@ -82,7 +119,7 @@ BEGIN {
     # In gtk 2.18 emitting 'notify' wastefully emits 'changed' too.
     # Freezing collapses to just one of those.
     require Glib::Ex::FreezeNotify;
-    eval "#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
+    eval "\n#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
 
   sub set_maybe {
     my ($adj, %values) = @_;
@@ -127,7 +164,7 @@ BEGIN {
 HERE
 
   } else {
-    eval "#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
+    eval "\n#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
 
   sub set_maybe {
     my ($adj, %values) = @_;
@@ -188,12 +225,58 @@ Gtk2::Ex::AdjustmentBits -- helpers for Gtk2::Adjustment objects
 
 =head1 FUNCTIONS
 
+=head2 Scroll
+
 =over 4
 
 =item C<< Gtk2::Ex::AdjustmentBits::scroll_value ($adj, $amount) >>
 
 Add C<$amount> to the value in C<$adj>, restricting the result to between
 C<lower> and S<C<upper - page>>, as suitable for a scrollbar range etc.
+
+=item C<< Gtk2::Ex::AdjustmentBits::scroll_increment ($adj, $inctype) >>
+
+=item C<< Gtk2::Ex::AdjustmentBits::scroll_increment ($adj, $inctype, $inverted) >>
+
+Increment the value in C<$adj>.  C<$inctype> (a string) can be either
+
+    "step"         increment by step_increment()
+    "page"         increment by page_increment()
+
+If optional parameter C<$inverted> is true then decrement instead of
+increment.  The scroll is applied per C<scroll_value()> above.
+
+=item C<< $propagate = Gtk2::Ex::AdjustmentBits::scroll_event ($adj, $event) >>
+
+=item C<< $propagate = Gtk2::Ex::AdjustmentBits::scroll_event ($adj, $event, $inverted) >>
+
+Scroll C<$adj> according to C<$event>, a C<Gtk2::Gdk::Event::Scroll>.
+
+C<$event-E<gt>direction()> gives the direction
+
+    "up"          decrement
+    "left"        decrement
+    "down"        increment
+    "right"       increment
+
+If the control key is held down (C<control-mask> in
+C<< $event->state() >>) then the scroll amount is C<page_increment> rather
+than C<step_increment>.
+
+If optional parameter C<$inverted> is true then increment/decrement are
+swapped, so up+left are increment and down+right are decrement.
+
+The return value is C<Gtk2::EVENT_PROPAGATE> which may be convenient if
+called from a widget C<scroll-event> signal handler.
+
+The increment direction corresponds to an adjustment used in a
+C<Gtk2::ScrollBar> (and its C<inverted> property), and similar such widgets.
+
+=back
+
+=head2 Other
+
+=over
 
 =item C<< Gtk2::Ex::AdjustmentBits::set_maybe ($adjustment, field => $value, ...) >>
 

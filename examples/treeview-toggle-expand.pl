@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2009, 2010 Kevin Ryde
+# Copyright 2009, 2010, 2012 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -23,20 +23,23 @@
 # This is a typical use for Gtk2::Ex::TreeViewBits::toggle_expand_row() in
 # the 'row-activated' handler of a TreeView.
 #
-# You can always click on the expander bits at the left of a TreeView to
-# expand or collapse parent rows.  The idea here is to get the same effect
-# on double-clicking the rest of the row too.  The operative part is in
+# Press "Ret" or click the mouse anywhere in a row to toggle the expand, not
+# just in the expander arrow bits at the left.
+#
+# You can always click on the expander bits of a TreeView to expand or
+# collapse parent rows.  The idea here is to get the same effect on
+# double-clicking the rest of the row too.  The operative part is
 # my_row_activated_handler().
 #
 # This sort of thing is good if the tree contents are read-only.  If they're
-# editable then you probably want to leave the double-click to start an edit
-# in the usual way.
+# editable then you probably want to leave double-click to start an edit in
+# the usual way.
 #
 # The "$open_all" parameter to toggle_expand_row() is omitted here, so an
-# expand just expands to the immediate children of a row.  If true then an
-# expand expands everything under the given row.  In a deep tree model that
-# might be a lot of stuff.  You could get creative and only do it only to
-# the second-last level, or something like that.
+# expand just expands to the immediate children of a row.  If that parameter
+# is true then an expand expands everything under the given row.  In a deep
+# tree model that might be a lot of rows.  You could be creative and only do
+# it only to the second-last level, or something like that.
 #
 
 use 5.008;

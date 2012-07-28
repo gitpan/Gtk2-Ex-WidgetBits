@@ -25,7 +25,7 @@ use Gtk2;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 45;
+our $VERSION = 46;
 
 # get_root_position() might be done as
 #
@@ -92,7 +92,7 @@ sub pixel_aspect_ratio {
 }
 
 if (Gtk2::Gdk::Screen->can('get_width')) {
-  eval "#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
+  eval "\n#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
   ### using widget->screen
 
 sub pixel_size_mm {
@@ -138,7 +138,7 @@ sub pixel_size_mm {
 HERE
 
 } else {
-  eval "#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
+  eval "\n#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
   ### using Gtk 2.0.x single-screen size
 
 # Gtk 2.0.x single-screen sizes

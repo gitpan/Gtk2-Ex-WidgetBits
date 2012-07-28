@@ -32,11 +32,11 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 45;
+our $VERSION = 46;
 
 BEGIN {
   if (Gtk2::MenuItem->find_property('label')) {
-    eval "#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
+    eval "\n#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
 
 # GtkMenuItem in 2.16 up has "label" and "use-underline" properties which do
 # the AccelLabel creation stuff.
@@ -60,7 +60,7 @@ HERE
 
 
   } else {
-    eval "#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
+    eval "\n#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
 
 sub new_with_label {
   my ($class, $str) = @_;

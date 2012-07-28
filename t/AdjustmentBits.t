@@ -20,7 +20,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 28;
+use Test::More tests => 37;
 
 use lib 't';
 use MyTestHelpers;
@@ -32,7 +32,7 @@ require Gtk2::Ex::AdjustmentBits;
 # VERSION
 
 {
-  my $want_version = 45;
+  my $want_version = 46;
   is ($Gtk2::Ex::AdjustmentBits::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::AdjustmentBits->VERSION,  $want_version,
@@ -48,6 +48,51 @@ require Gtk2::Ex::AdjustmentBits;
 require Gtk2;
 MyTestHelpers::glib_gtk_versions();
 
+
+#-----------------------------------------------------------------------------
+# scroll_value()
+
+{
+  my $adj = Gtk2::Adjustment->new (50,  # value
+                                   1,   # lower
+                                   100, # upper
+                                   5,   # step_increment
+                                   10,  # page_increment
+                                   20); # page_size
+  Gtk2::Ex::AdjustmentBits::scroll_value ($adj, 5);
+  is ($adj->value, 55);
+  Gtk2::Ex::AdjustmentBits::scroll_value ($adj, 1000);
+  is ($adj->value, 80); # upper-page clamp
+
+  Gtk2::Ex::AdjustmentBits::scroll_value ($adj, -10);
+  is ($adj->value, 70);
+  Gtk2::Ex::AdjustmentBits::scroll_value ($adj, -1000);
+  is ($adj->value, 1);  # lower clamp
+}
+
+#-----------------------------------------------------------------------------
+# scroll_increment()
+
+{
+  my $adj = Gtk2::Adjustment->new (50,  # value
+                                   1,   # lower
+                                   100, # upper
+                                   5,   # step_increment
+                                   10,  # page_increment
+                                   20); # page_size
+  Gtk2::Ex::AdjustmentBits::scroll_increment ($adj, 'step');
+  is ($adj->value, 55);
+  Gtk2::Ex::AdjustmentBits::scroll_increment ($adj, 'page');
+  is ($adj->value, 65);
+
+  Gtk2::Ex::AdjustmentBits::scroll_increment ($adj, 'step', 1);
+  is ($adj->value, 60);
+  Gtk2::Ex::AdjustmentBits::scroll_increment ($adj, 'page', 1);
+  is ($adj->value, 50);
+
+  Gtk2::Ex::AdjustmentBits::scroll_increment ($adj, 'step', 0);
+  is ($adj->value, 55);
+}
 
 #-----------------------------------------------------------------------------
 # set_maybe()

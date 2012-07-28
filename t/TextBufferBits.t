@@ -30,7 +30,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 require Gtk2::Ex::TextBufferBits;
 
 {
-  my $want_version = 45;
+  my $want_version = 46;
   is ($Gtk2::Ex::TextBufferBits::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::TextBufferBits->VERSION,  $want_version, 'VERSION class method');
   ok (eval { Gtk2::Ex::TextBufferBits->VERSION($want_version); 1 },

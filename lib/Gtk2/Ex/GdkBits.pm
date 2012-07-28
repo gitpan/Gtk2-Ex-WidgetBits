@@ -20,7 +20,7 @@ use 5.008;
 use strict;
 use warnings;
 use Carp;
-use List::Util qw(min);
+use List::Util 'min';
 use Gtk2;
 
 use Exporter;
@@ -28,8 +28,7 @@ our @ISA = ('Exporter');
 our @EXPORT_OK = qw(draw_rectangle_corners
                     window_get_root_position
                     window_clear_region);
-
-our $VERSION = 45;
+our $VERSION = 46;
 
 
 # The loop here is similar to what gtk_widget_translate_coordinates() does
@@ -98,14 +97,14 @@ Gtk2::Ex::GdkBits - miscellaneous Gdk helpers
 Return two values C<$x,$y> which are the top left corner of C<$window> in
 root window coordinates.
 
-This is the same as C<< $window->get_origin >>, but it's implemented with
-C<< $window->get_position >> calls and thus uses the most recently recorded
-window positions rather than making an X server round-trip.
+This is the same as C<< $window->get_origin() >>, but it's implemented with
+C<< $window->get_position() >> calls and thus uses the most recently
+recorded window positions rather than making an X server round-trip.
 
-=item C<($x,$y) = Gtk2::Ex::GdkBits::window_clear_region ($window, $region)>
+=item C<Gtk2::Ex::GdkBits::window_clear_region ($window, $region)>
 
-Clear the area of C<$region> in C<$window> to its background pixel colour or
-pixmap contents.
+Clear the area of C<$region> (a C<Gtk2::Gdk::Region>) in C<$window> to the
+window background pixel or pixmap.
 
 =item C<Gtk2::Ex::GdkBits::draw_rectangle_corners ($drawable, $gc, $filled, $x1,$y1, $x2,$y2)>
 
@@ -133,14 +132,15 @@ Nothing is exported by default, but the functions can be requested in usual
 C<Exporter> style,
 
     use Gtk2::Ex::GdkBits 'window_clear_region';
-    position_widget_topcentre ($win, $region);
+    window_clear_region ($win, $target_region);
 
 There's no C<:all> tag since this module is meant as a grab-bag of functions
 and to import as-yet unknown things would be asking for name clashes.
 
 =head1 SEE ALSO
 
-L<Gtk2::Ex::WidgetBits>, L<Gtk2::Gdk>, L<Gtk2::Gdk::Window>
+L<Gtk2::Ex::WidgetBits>, L<Gtk2::Gdk>, L<Gtk2::Gdk::Window>,
+L<Gtk2::Gdk::Region>
 
 =head1 HOME PAGE
 

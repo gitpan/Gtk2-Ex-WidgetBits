@@ -23,7 +23,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 45;
+our $VERSION = 46;
 
 our $VERBOSE = 0;
 
@@ -553,7 +553,7 @@ Test::Without::Gtk2Things - disable selected Gtk2 methods for testing
 =head1 DESCRIPTION
 
 This module removes or disables selected features from C<Gtk2> in order to
-simulate an older version (or other restrictions).  It can be used for
+simulate an older version or other restrictions.  It can be used for
 development or testing to check code which adapts itself to available
 features or which is meant to run on older Gtk.  There's only a couple of
 "without" things as yet.
@@ -563,12 +563,12 @@ an older Gtk, but making a full environment for that can be difficult.
 
 =head2 Usage
 
-From the command line use a C<-M> module load (per L<perlrun>) for a program
-or test script,
+From the command line use a C<-M> module load (as per L<perlrun>) for a
+program or test script,
 
     perl -MTest::Without::Gtk2Things=insert_with_values foo.t
 
-Or the same through C<Test::Harness> in a C<MakeMaker> test run
+Or the same through C<Test::Harness> in a C<MakeMaker> test
 
     HARNESS_PERL_SWITCHES="-MTest::Without::Gtk2Things=blank_cursor" \
       make test
@@ -583,11 +583,11 @@ Or an equivalent explicit import,
     Test::Without::Gtk2Things->import('insert_with_values');
 
 In each case generally the "withouts" should be established before loading
-application code in case it checks features at C<BEGIN> time.
+application code in case that code checks features at C<BEGIN> time.
 
 Currently C<Test::Without::Gtk2Things> loads C<Gtk2> if not already loaded,
-but don't rely on that.  A mangle-after-load instead might be good, if it
-could be done reliably.
+but don't rely on that.  Mangling if/when loaded might be good instead, if
+it could be done reliably.
 
 =head1 WITHOUT THINGS
 
@@ -600,24 +600,28 @@ For example,
 
     perl -MTest::Without::Gtk2Things=verbose,blank_cursor foo.t
 
+    # prints
     Test::Without::Gtk2Things -- without CursorType blank-cursor, per Gtk before 2.16
     ...
 
 =item C<blank_cursor>
 
-Remove C<blank-cursor> from the C<Gtk2::Gdk::CursorType> enumeration.
-Currently this means removing from C<< Glib::Type->list_values >>, and
-making C<< Gtk2::Gdk::Cursor->new >> and C<new_for_display> throw an error
-if asked for that type.
+Remove C<blank-cursor> from the C<Gtk2::Gdk::CursorType> enumeration per Gtk
+before 2.16.
 
-Object properties of type C<Gtk2::Gdk::CursorType> are are not affected
-(they can still be set to C<blank-cursor>), but perhaps that could be done
-in the future.  Blank cursors within Gtk itself are unaffected.
+This means removing it from
+C<< Glib::Type->list_values('Gtk2::Gdk::CursorType') >>, and making
+C<< Gtk2::Gdk::Cursor->new() >> and C<new_for_display()> throw an error if
+asked for that type.
+
+Object properties of type C<Gtk2::Gdk::CursorType> are not affected, so they
+can still be set to C<blank-cursor>, but perhaps that could be caught in the
+future.  Blank cursors within Gtk itself are unaffected.
 
 C<blank-cursor> is new in Gtk 2.16.  In earlier versions an invisible cursor
 can be made by applications with a no-pixels-set bitmap as described by
-C<gdk_cursor_new> in such earlier versions.  (See L<Gtk2::Ex::WidgetCursor>
-for some help with that.)
+C<gdk_cursor_new()> in such earlier versions.  (See
+L<Gtk2::Ex::WidgetCursor> for some help doing that.)
 
 =item C<builder>
 
@@ -627,11 +631,11 @@ before 2.12.
 The Buildable interface is removed by removing the class and by mangling
 C<UNIVERSAL::isa()> to pretend nothing is a Buildable.  Actual package
 C<@ISA> lists are not changed currently.  This should mean Buildable still
-works in C code, but not from Perl (neither currently loaded nor later
-loaded classes).
+works in C code, but not from Perl (neither currently loaded classes nor
+later loaded classes).
 
-In a Perl widget implementation it can be fairly easy to support Gtk
-pre-2.12 by omitting the Buildable interface if not available.
+In a Perl widget implementation it's fairly easy to support Gtk pre-2.12 by
+omitting the Buildable interface if not available.
 
     use Glib::Object::Subclass
       'Gtk2::DrawingArea',
@@ -643,10 +647,12 @@ pre-2.12 by omitting the Buildable interface if not available.
 
 =item C<cell_layout_get_cells>
 
-Remove the C<get_cells> method from the C<Gtk2::CellLayout> interface.  That
-interface method is new in Gtk 2.12 and removal affects all widget classes
-implementing that interface.  In earlier Gtk versions C<Gtk2::CellView> and
-C<Gtk2::TreeViewColumn> have individual C<get_cell_renderers> methods.
+Remove the C<get_cells()> method from the C<Gtk2::CellLayout> interface, per
+Gtk before 2.12.
+
+This method removal affects all widget classes which implement the
+CellLayout interface.  In earlier Gtk versions C<Gtk2::CellView> and
+C<Gtk2::TreeViewColumn> have individual C<get_cell_renderers()> methods.
 Those methods are unaffected by this without.
 
 =item C<draw_as_radio>
@@ -661,47 +667,47 @@ such.  Simply skipping it may be good enough in those prior versions.
 =item C<gdkdisplay>
 
 Remove C<Gtk2::Gdk::Display> and C<Gtk2::Gdk::Screen> classes, and the
-various C<get_display>, C<set_screen>, etc widget methods, as would be the
-case in Gtk 2.0.x.
+various C<get_display()>, C<set_screen()>, etc widget methods, as would be
+the case in Gtk 2.0.x.
 
-In Gtk 2.0.x there was a single implicit screen and display, and some
-methods for querying their attributes (see L<Gtk2::Gdk>).  Most widget code
-doesn't need to do much with a screen or display object, and it can be
-reasonably easy to support 2.0.x by checking for a C<set_screen> method etc
-if say putting a dialog on the same screen as its originating main window.
+In Gtk 2.0.x there is a single implicit screen and display, and some methods
+for querying their attributes (see L<Gtk2::Gdk>).  Most widget code doesn't
+need to do much with a screen or display object, and it can be reasonably
+easy to support 2.0.x by checking for a C<set_screen()> method etc if say
+putting a dialog on the same screen as its originating main window.
 
 =item C<insert_with_values>
 
-Remove the C<insert_with_values> method from C<Gtk2::ListStore> and
+Remove the C<insert_with_values()> method from C<Gtk2::ListStore> and
 C<Gtk2::TreeStore>.  That method is new in Gtk 2.6.  In earlier versions
-separate C<insert> and C<set> calls are necessary.
+separate C<insert()> and C<set()> calls are necessary.
 
 =item C<menuitem_label_property>
 
 Remove from C<Gtk2::MenuItem> C<label> and C<use-underline> properties and
-corresponding explicit C<get_label>, C<set_use_underline> etc methods.
+corresponding explicit C<get_label()>, C<set_use_underline()> etc methods.
 
 C<label> and C<use-underline> are new in Gtk 2.16.  (For prior versions
-C<new_with_label> or C<new_with_mnemonic> create and set a child label
+C<new_with_label()> or C<new_with_mnemonic()> create and set a child label
 widget.)
 
 =item C<widget_tooltip>
 
 Remove from C<Gtk2::Widget> base tooltip support new in Gtk 2.12.  This
 means the C<tooltip-text>, C<tooltip-markup> and C<has-tooltip> properties,
-their direct get/set methods such as C<< $widget->set_tooltip_text >>, and
+their direct get/set methods such as C<< $widget->set_tooltip_text() >>, and
 the C<query-tooltip> signal.
 
 For code supporting both earlier and later than 2.12 it may be enough to
 just skip the tooltip setups for the earlier versions.  See
-C<set_property_maybe> in L<Glib::Ex::ObjectBits> for some help with that.
+C<set_property_maybe()> in L<Glib::Ex::ObjectBits> for some help with that.
 
 =back
 
 =head1 BUGS
 
-It's not possible to C<no Test::Without::Gtk2Things> to restore removed
-things.  Once removed they're gone for the whole program run.
+It's not possible to restore removed things, once removed they're gone for
+the whole program run.
 
 =head1 SEE ALSO
 

@@ -16,7 +16,11 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
-Version 45, July 2011
+Version 46, July 2011
+    - AdjustmentBits new scroll_increment(), scroll_event()
+    - EntryBits new x_to_text_index(), scroll_number(), funcs exportable
+
+Version 45, January 2012
     - Test::Without::Gtk2Things fix for "menuitem_label_property"
       method removal (and perhaps other method removals)
     - ToolItem::OverflowToDialog workaround some glib 2.30 closure dubiousness

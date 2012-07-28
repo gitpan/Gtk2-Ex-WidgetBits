@@ -25,7 +25,7 @@ use Exporter;
 our @ISA = ('Exporter');
 our @EXPORT_OK = qw(move_item_after);
 
-our $VERSION = 45;
+our $VERSION = 46;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;

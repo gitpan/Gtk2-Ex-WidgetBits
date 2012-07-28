@@ -22,9 +22,9 @@ use warnings;
 use Carp;
 use Scalar::Util;
 
-our $VERSION = 45;
+our $VERSION = 46;
 
-# Data hung on the $statusbar:
+# Data hung on each $statusbar:
 #
 #     $statusbar->{'Gtk2::Ex::Statusbar::DynamicContext.free'}
 #         An arrayref containing context strings currently free,
@@ -106,23 +106,33 @@ Gtk2::Ex::Statusbar::DynamicContext -- pool of Gtk2::Statusbar context strings
 =head1 DESCRIPTION
 
 A DynamicContext object is a generated context string and ID number for a
-particular C<Gtk2::Statusbar> widget.  It's designed for message sources or
-contexts created and destroyed dynamically at runtime.
+C<Gtk2::Statusbar> widget.  It's designed for message sources or contexts
+which are created and destroyed dynamically at runtime.
 
 Usually you don't need a dynamic context.  Most libraries or parts of a
-program can just take something distinctive from their name as a string,
-like package name, or package plus component.  Dynamic context is when
-you're doing something like spawning object instances each of which may make
-a status message.  In that case they need a context string each and will
-want to re-use in later instances.
+program can just take something distinctive from their name as a context
+string.  For example a Perl package name, or package name plus component.
 
-When a DynamicContext object is garbage collected its string is returned to
+    # fixed id for package
+    $id = $statusbar->get_context_id(__PACKAGE__.'.warning');
+
+Dynamic context is when you do something like spawn multiple object
+instances each of which might display a status message.  In that case they
+need a separate context string each.
+
+    # dynamic id for each instance of a package
+    $obj = MyPackage->new;
+    $obj->{'dc'} = Gtk2::Ex::Statusbar::DynamicContext->new($statusbar);
+    $id = $obj->{'dc'}->id;
+
+When a DynamicContext object is garbage collected the string is returned to
 a pool for future re-use on the Statusbar widget.  This is important for a
-long-running program because a context string and its ID in a Statusbar make
-permanent additions to the widget memory and the global quark table.
-Something simple like sequentially numbered strings will consume ever more
-memory.  With re-use space is capped at the peak contexts in use at any one
-time.
+long-running program because a context string and its ID in a Statusbar are
+permanent additions to the memory of that widget and to the global quark
+table.  That means a simple approach like sequentially numbered context
+strings is not enough, it would consume ever more memory.  With
+DynamicContext style re-use the space is capped at the peak number of
+contexts used at any one time.
 
 =head2 Weakening
 
@@ -145,19 +155,26 @@ C<< $statusbar->push >> etc.
 
     $statusbar->push ($dc->id, 'Some message');
 
-If the statusbar has been garbage collected then the return from C<id> is
+If the statusbar has been garbage collected then the return from C<id()> is
 unspecified.
 
 =item C<< $str = $dc->str() >>
 
-Return the context description string from C<$dc>.  Usually the integer
-C<id> is all you need.  The ID is simply
+Return the context description string from C<$dc>.  This is not often
+needed, usually the integer C<id()> is enough.  In the current
+implementation the string is like
+
+    "Gtk2::Ex::Statusbar::DynamicContext.123"
+
+but don't depend on its exact form, only that it's unique within the target
+C<$statusbar>.  The C<id()> method above is simply
 
     $statusbar->get_context_id($dc->str)
 
-Strings are unique within a particular C<$statusbar> widget, but not
-globally.  DynamicContext deliberately uses the same strings on different
-statusbars so as to keep the quark table smaller.
+DynamicContext strings are unique within the particular C<$statusbar> but
+are not globally unique, ie. the same string might be used by another
+DynamicContext object on another statusbar.  Doing so keeps down the size of
+the Glib quark table.
 
 =item C<< $statusbar = $dc->statusbar() >>
 
@@ -169,7 +186,8 @@ garbage collected then this is C<undef>.
 =head1 SEE ALSO
 
 L<Gtk2::Statusbar>,
-L<Scalar::Util/weaken>,
+L<Scalar::Util/weaken>
+
 L<Gtk2::Ex::Statusbar::MessageUntilKey>
 
 =head1 HOME PAGE

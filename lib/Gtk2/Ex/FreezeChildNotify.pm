@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use Scalar::Util;
 
-our $VERSION = 45;
+our $VERSION = 46;
 
 sub new {
   my $class = shift;
@@ -173,6 +173,8 @@ L<Unwind::Protect|Unwind::Protect> uses an C<eval> and re-throw.
 
 L<Gtk2::Widget>,
 L<Glib::Ex::FreezeNotify>
+
+L<Wx::WindowUpdateLocker>
 
 =head1 HOME PAGE
 

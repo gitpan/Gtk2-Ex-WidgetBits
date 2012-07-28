@@ -24,7 +24,7 @@ use Carp;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 45;
+our $VERSION = 46;
 
 
 sub toggle_expand_row {
@@ -127,34 +127,36 @@ Gtk2::Ex::TreeViewBits - various helpers for Gtk2::TreeView
 Toggle the row at C<$path> between expanded or collapsed.  C<$path> is a
 C<Gtk2::TreePath>.
 
-This is a simple combination of C<row_expanded> then C<expand_row> or
-C<collapse_row>.  It's handy for making a toggle in the style of the Space
-key C<toggle-cursor-row>, but say on a button press and not necessarily the
-cursor row.  See F<examples/treeview-toggle-expand.pl> for doing it under
-C<row-activate>.
+This is a simple combination of check C<row_expanded> then either
+C<expand_row> or C<collapse_row>.  It's handy for making a toggle in the
+style of the Space key (C<toggle-cursor-row>), but say on a button press
+rather than the cursor row.
+
+See F<examples/treeview-toggle-expand.pl> in the Gtk2-Ex-WidgetBits sources
+for a complete program using this under a C<row-activate> signal.
 
 =item C<< Gtk2::Ex::TreeViewBits::remove_selected_rows ($treeview) >>
 
-Remove the currently selected rows in C<$treeview> from the underlying
+Remove the currently selected rows of C<$treeview> from the underlying
 TreeModel.  If nothing is selected then do nothing.
 
-Rows are removed using C<< $model->remove >> in the style of
-C<Gtk2::ListStore> or C<Gtk2::TreeStore>.  The model doesn't have to be a
-ListStore or TreeStore, only something with a compatible C<remove> method.
+Rows are removed using C<< $model->remove() >> as per C<Gtk2::ListStore> or
+C<Gtk2::TreeStore>.  The model doesn't have to be a ListStore or TreeStore,
+only something with a compatible C<remove()> method.
 
 Currently this is implemented by tracking rows to be removed using a
-C<Gtk2::TreeRowReference> each, and removing them one by one.  This isn't
-fast, but is safe against additional changes to the model or selection
-during the removes.
+C<Gtk2::TreeRowReference> on each and removing them one by one.  This isn't
+fast, but is safe against additional changes to the model or the selection
+during the removals.
 
 =item C<< Gtk2::Ex::TreeViewBits::scroll_cursor_to_path ($treeview, $path) >>
 
 Move the TreeView cursor to C<$path>, expanding and scrolling if necessary
 to ensure the row is then visible.
 
-This function is basically a combination of C<expand_row>, C<set_cursor> and
-C<scroll_to_cell>, except the scroll is skipped if C<$path> is already fully
-visible.  Avoiding a scroll is good because it stops the contents jumping
+This function is a combination of C<expand_row()>, C<set_cursor()> and
+C<scroll_to_cell()>, except the scroll is skipped if C<$path> is already
+fully visible.  Avoiding a scroll is good because it avoids content jumping
 around when merely moving to different nearby rows.
 
 When a scroll is done the row is centred in the C<$treeview> window.  If the
@@ -166,7 +168,7 @@ window.
 =head1 BUGS
 
 As of Gtk 2.12.12, if a TreeView is in C<fixed-height-mode> and the last row
-is unexpanded then a C<scroll_cursor_to_path> to a sub-row of it doesn't
+is unexpanded then a C<scroll_cursor_to_path()> to a sub-row of it doesn't
 scroll correctly.  It expands, moves the cursor, but the scroll goes only to
 that last parent row, not the intended sub-row.  Believe this is a bug in
 Gtk.

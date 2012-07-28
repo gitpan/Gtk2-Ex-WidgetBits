@@ -30,7 +30,7 @@ our @EXPORT_OK = qw(em ex char_width digit_width line_height
                     size_request_with_subsizes);
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-our $VERSION = 45;
+our $VERSION = 46;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
@@ -39,7 +39,7 @@ our $VERSION = 45;
 #------------------------------------------------------------------------------
 
 if (Gtk2::Gdk::Screen->can('get_width')) {
-  eval "#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
+  eval "\n#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
   ### _to_screen() using target->screen
 
 sub _to_screen {
@@ -54,7 +54,7 @@ sub _to_screen {
 
 HERE
 } else {
-  eval "#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
+  eval "\n#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
   ### _to_screen() using Gtk 2.0.x single-screen
 
 {

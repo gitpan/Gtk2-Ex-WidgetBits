@@ -34,7 +34,7 @@ our @EXPORT_OK = qw(contents_container
                     destructor_destroy_and_iterate
                     ignore_default_display);
 
-our $VERSION = 45;
+our $VERSION = 46;
 
 sub contents_container {
   my ($ref) = @_;

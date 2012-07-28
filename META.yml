@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Gtk2-Ex-WidgetBits
-version:            45
+version:            46
 abstract:           Helpers for Gtk2 widgets.
 author:
     - Kevin Ryde <user42@zip.com.au>
@@ -26,6 +26,7 @@ no_index:
     directory:
         - t
         - inc
+        - devel
         - xt
         - devel
         - examples
@@ -33,4 +34,3 @@ generated_by:       ExtUtils::MakeMaker version 6.57_05
 meta-spec:
     url:      http://module-build.sourceforge.net/META-spec-v1.4.html
     version:  1.4
-optional_features:  {}
