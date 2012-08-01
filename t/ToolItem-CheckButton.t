@@ -40,7 +40,7 @@ require Gtk2::Ex::ToolItem::CheckButton;
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 46;
+my $want_version = 47;
 {
   is ($Gtk2::Ex::ToolItem::CheckButton::VERSION,
       $want_version,

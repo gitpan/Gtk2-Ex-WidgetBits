@@ -34,6 +34,7 @@ devel/property-change.pl
 devel/propname-translations.pl
 devel/setlocale.pl
 devel/socket.pl
+devel/statusbar-message.pl
 devel/synccall.pl
 devel/table-attach.pl
 devel/test-without.pl
@@ -61,8 +62,10 @@ lib/Gtk2/Ex/MenuBits.pm
 lib/Gtk2/Ex/MenuItem/Subclass.pm
 lib/Gtk2/Ex/PixbufBits.pm
 lib/Gtk2/Ex/Statusbar/DynamicContext.pm
+lib/Gtk2/Ex/Statusbar/Message.pm
 lib/Gtk2/Ex/Statusbar/MessageUntilKey.pm
 lib/Gtk2/Ex/SyncCall.pm
+lib/Gtk2/Ex/TableBits.pm
 lib/Gtk2/Ex/TextBufferBits.pm
 lib/Gtk2/Ex/ToolbarBits.pm
 lib/Gtk2/Ex/ToolItem/CheckButton.pm
@@ -102,8 +105,10 @@ t/MyTestHelpers.pm
 t/PixbufBits-load.t
 t/PixbufBits.t
 t/Statusbar-DynamicContext.t
+t/Statusbar-Message.t
 t/Statusbar-MessageUntilKey.t
 t/SyncCall.t
+t/TableBits.t
 t/Test-Weaken-Gtk2-ignore-display.t
 t/Test-Weaken-Gtk2-ignore-root.t
 t/Test-Weaken-Gtk2-ignore-screen.t

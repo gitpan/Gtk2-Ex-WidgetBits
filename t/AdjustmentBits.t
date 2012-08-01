@@ -20,7 +20,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 37;
+use Test::More tests => 46;
 
 use lib 't';
 use MyTestHelpers;
@@ -32,7 +32,7 @@ require Gtk2::Ex::AdjustmentBits;
 # VERSION
 
 {
-  my $want_version = 46;
+  my $want_version = 47;
   is ($Gtk2::Ex::AdjustmentBits::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::AdjustmentBits->VERSION,  $want_version,
@@ -170,6 +170,43 @@ MyTestHelpers::glib_gtk_versions();
   is ($changed, 1);
   is ($value_changed, 1);
   is ($notify, 2);
+}
+
+#-----------------------------------------------------------------------------
+# set_empty()
+
+{
+  my $adjustment = Gtk2::Adjustment->new (50, 1, 100, 5, 10, 20);
+
+  my $notify = 0;
+  my $changed = 0;
+  my $value_changed = 0;
+  $adjustment->signal_connect (notify => sub {
+                                 my ($adj, $pspec) = @_;
+                                 diag "notify ",$pspec->get_name;
+                                 $notify++;
+                               });
+  $adjustment->signal_connect (changed => sub {
+                                 diag "changed";
+                                 $changed++;
+                               });
+  $adjustment->signal_connect (value_changed => sub {
+                                 diag "value_changed";
+                                 $value_changed++;
+                               });
+
+  Gtk2::Ex::AdjustmentBits::set_empty ($adjustment);
+
+  cmp_ok ($changed,       '==', 1, 'set_empty() - changed');
+  cmp_ok ($value_changed, '==', 1, 'set_empty() - value_changed');
+  cmp_ok ($notify,        '==', 6, 'set_empty() - notify');
+
+  is ($adjustment->upper,          0, 'set_empty() - upper');
+  is ($adjustment->lower,          0, 'set_empty() - lower');
+  is ($adjustment->page_size,      0, 'set_empty() - page_size');
+  is ($adjustment->page_increment, 0, 'set_empty() - page_increment');
+  is ($adjustment->step_increment, 0, 'set_empty() - step_increment');
+  is ($adjustment->value,          0, 'set_empty() - value');
 }
 
 

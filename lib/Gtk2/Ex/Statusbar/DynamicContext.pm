@@ -22,7 +22,7 @@ use warnings;
 use Carp;
 use Scalar::Util;
 
-our $VERSION = 46;
+our $VERSION = 47;
 
 # Data hung on each $statusbar:
 #
@@ -188,6 +188,7 @@ garbage collected then this is C<undef>.
 L<Gtk2::Statusbar>,
 L<Scalar::Util/weaken>
 
+L<Gtk2::Ex::Statusbar::Message>,
 L<Gtk2::Ex::Statusbar::MessageUntilKey>
 
 =head1 HOME PAGE

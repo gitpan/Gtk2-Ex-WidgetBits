@@ -16,7 +16,12 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
-Version 46, July 2011
+Version 47, August 2012
+    - AdjustmentBits new set_empty()
+    - new Gtk2::Ex::Statusbar::Message
+    - new Gtk2::Ex::TableBits with update_attach()
+
+Version 46, July 2012
     - AdjustmentBits new scroll_increment(), scroll_event()
     - EntryBits new x_to_text_index(), scroll_number(), funcs exportable
 

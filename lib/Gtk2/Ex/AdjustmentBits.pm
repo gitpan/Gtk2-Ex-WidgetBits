@@ -26,14 +26,14 @@ use List::Util 'min', 'max';
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 46;
+our $VERSION = 47;
 
 # Names a bit too generic to want to import usually.
 # use Exporter;
 # our @ISA = ('Exporter');
 # our @EXPORT_OK = qw(scroll_value
 #                     scroll_increment
-#                     set_maybe);
+#                     set_maybe set_empty);
 
 #------------------------------------------------------------------------------
 
@@ -210,6 +210,17 @@ HERE
   }
 }
 
+sub set_empty {
+  my ($adj) = @_;
+  Gtk2::Ex::AdjustmentBits::set_maybe ($adj,
+                                       upper => 0,
+                                       lower => 0,
+                                       page_size => 0,
+                                       page_increment => 0,
+                                       step_increment => 0,
+                                       value => 0);
+}
+
 1;
 __END__
 
@@ -306,6 +317,12 @@ if actually changed.
 Not emitting signals when values are unchanged may save some work in widgets
 controlled by C<$adjustment>, though a good widget might notice unchanged
 values itself.
+
+=item C<< Gtk2::Ex::AdjustmentBits::set_empty ($adj) >>
+
+Make C<$adj> empty by setting its upper, lower, and all values to 0.  This
+is done with C<set_maybe()> above, so if it's already empty no C<changed>
+etc signals are emitted.
 
 =back
 
