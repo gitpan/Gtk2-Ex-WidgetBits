@@ -25,7 +25,7 @@ use Scalar::Util 'refaddr';
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 47;
+our $VERSION = 48;
 
 my @attach_pnames = ('left-attach',
                      'right-attach',

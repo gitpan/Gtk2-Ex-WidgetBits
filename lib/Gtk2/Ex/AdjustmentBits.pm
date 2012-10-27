@@ -23,10 +23,11 @@ use Carp;
 use Gtk2 1.220;
 use List::Util 'min', 'max';
 
+our $VERSION = 48;
+
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 47;
 
 # Names a bit too generic to want to import usually.
 # use Exporter;
@@ -81,18 +82,91 @@ sub scroll_event {
 
 #------------------------------------------------------------------------------
 # set_maybe()
+#
+# Gtk 2.0
+#   $adj->changed() emits "changed" only
+#   $adj->value_changed() emits "value-changed" only
+# Gtk 2.6
+#   $adj->changed() emits "changed" only
+#   $adj->value_changed() emits "value-changed" and "notify::value"
 
-BEGIN {
-# configure() emits notify and changed even if upper/lower etc unchanged
+use constant _NOTIFY_EMITS_CHANGED =>
+  do {
+    my $adj = Gtk2::Adjustment->new (0,0,0,0,0,0);
+    my $result = 0;
+    $adj->signal_connect (changed => sub { $result = 1 });
+    $adj->notify ('upper');
+    $result
+  };
+### _NOTIFY_EMITS_CHANGED is: _NOTIFY_EMITS_CHANGED()
+
+if (_NOTIFY_EMITS_CHANGED) {
+  require Glib::Ex::FreezeNotify;
+}
+
+sub set_maybe {
+  my ($adj, %values) = @_;
+  ### AdjustmentBits set_maybe(): "from ",caller()
+
+  my $value = delete $values{'value'};
+  if (! defined $value) { $value = $adj->value; }
+
+  # compare after storing to see the value converted to double perhaps
+  # from a 64-bit perl integer etc
+  foreach my $key (keys %values) {
+    my $old = $adj->$key;
+    $adj->$key ($values{$key});
+    if ($adj->$key == $old) {
+      delete $values{$key};
+    }
+  }
+  ### set_maybe change: %values
+
+  $value = max ($adj->lower,
+                min ($adj->upper - $adj->page_size,
+                     $value));
+  {
+    my $old = $adj->value;
+    $adj->value ($value);
+    if ($adj->value != $old) {
+      $values{'value'} = 1;
+    }
+  }
+
+  if (%values) {
+    # In gtk 2.18 emitting "notify" wastefully emits "changed" too.
+    # Freezing collapses to just one of those "changed".
+    my $freezer = _NOTIFY_EMITS_CHANGED && Glib::Ex::FreezeNotify->new($adj);
+
+    foreach my $key (keys %values) {
+      $adj->notify ($key);
+    }
+    $value = delete $values{'value'};
+
+    if (! _NOTIFY_EMITS_CHANGED) {
+      if (%values) {
+        $adj->changed;
+      }
+    }
+    if (defined $value) {
+      # use signal_emit() since gtk_adjustment_value_changed() func varies
+      # among gtk versions as to whether it emits "notify::value" too
+      $adj->signal_emit('value-changed');
+    }
+  }
+}
+
+# configure() emits notify and changed even if upper/lower etc unchanged, so
+# no good.
 #
 #   if (Gtk2::Adjustment->can('configure')) {
 #     # new in gtk 2.14 and Perl-Gtk 1.240
 #     eval "\n#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
-# 
+#
 #   sub set_maybe {
 #     my ($adj, %values) = @_;
 #     ### AdjustmentBits set_maybe(), with configure()
-#     
+#
 #     $adj->configure (map {
 #       my $value = delete $values{$_};
 #       (defined $value ? $value : $adj->$_)
@@ -105,110 +179,8 @@ BEGIN {
 #   }
 #   1;
 # HERE
-# 
-#   } els
-  if (do {
-    my $adj = Gtk2::Adjustment->new (0,0,0,0,0,0);
-    my $result = 0;
-    $adj->signal_connect (changed => sub { $result = 1 });
-    $adj->notify ('upper');
-    ### test of notify emits changed: $result
-    $result
-  }) {
 
-    # In gtk 2.18 emitting 'notify' wastefully emits 'changed' too.
-    # Freezing collapses to just one of those.
-    require Glib::Ex::FreezeNotify;
-    eval "\n#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
-
-  sub set_maybe {
-    my ($adj, %values) = @_;
-    ### AdjustmentBits set_maybe() from ",caller()
-    
-    my $value = delete $values{'value'};
-    if (! defined $value) { $value = $adj->value; }
-    
-    # compare after storing to see the value converted to double perhaps
-    # from a 64-bit perl integer etc
-    foreach my $key (keys %values) {
-      my $old = $adj->$key;
-      $adj->$key ($values{$key});
-      if ($adj->$key == $old) {
-        delete $values{$key};
-      }
-    }
-    ### set_maybe change: %values
-    
-    $value = max ($adj->lower,
-                  min ($adj->upper - $adj->page_size,
-                       $value));
-    {
-      my $old = $adj->value;
-      $adj->value ($value);
-      if ($adj->value != $old) {
-        $values{'value'} = 1;
-      }
-    }
-    
-    if (%values) {
-      my $freezer = Glib::Ex::FreezeNotify->new ($adj);
-      foreach my $key (keys %values) {
-        $adj->notify ($key);
-      }
-      if (defined $values{'value'}) {
-        $adj->value_changed;
-      }
-    }
-  }
-  1;
-HERE
-
-  } else {
-    eval "\n#line ".(__LINE__+1)." \"".__FILE__."\"\n" . <<'HERE' or die;
-
-  sub set_maybe {
-    my ($adj, %values) = @_;
-
-    my $value = delete $values{'value'};
-    if (! defined $value) { $value = $adj->value; }
-
-    # compare after storing so as to see the value converted to double
-    # possibly from a 64-bit perl int etc
-    foreach my $key (keys %values) {
-      my $old = $adj->$key;
-      $adj->$key ($values{$key});
-      if ($adj->$key == $old) {
-        delete $values{$key};
-      }
-    }
-    ### set_maybe change: \%values
-
-    $value = max ($adj->lower,
-                  min ($adj->upper - $adj->page_size,
-                       $value));
-    {
-      my $old = $adj->value;
-      $adj->value ($value);
-      if ($adj->value != $old) {
-        $values{'value'} = 1;
-      }
-    }
-
-    foreach my $key (keys %values) {
-      $adj->notify ($key);
-    }
-    my $v = delete $values{'value'};
-    if (%values) {
-      $adj->changed;
-    }
-    if (defined $v) {
-      $adj->value_changed;
-    }
-  }
-  1;
-HERE
-  }
-}
+#------------------------------------------------------------------------------
 
 sub set_empty {
   my ($adj) = @_;

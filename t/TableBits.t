@@ -32,7 +32,7 @@ require Gtk2::Ex::TableBits;
 # VERSION
 
 {
-  my $want_version = 47;
+  my $want_version = 48;
   is ($Gtk2::Ex::TableBits::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::TableBits->VERSION,  $want_version,

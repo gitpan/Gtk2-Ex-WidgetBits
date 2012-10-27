@@ -23,7 +23,7 @@ use warnings;
 use Gtk2 1.200; # for $iter->set()
 use Carp;
 
-our $VERSION = 47;
+our $VERSION = 48;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
@@ -265,12 +265,12 @@ exclude empty rows then the new row is created in the child, but then
 doesn't appear in the filtered view!  You probably don't want to do that.
 
 Currently the functions return C<undef> instead of an iter if the new row is
-not visible.  C<insert_with_values> can be used to do a combination insert
+not visible.  C<insert_with_values()> can be used to do a combination insert
 and set to avoid an empty row.
 
 =item Gtk 2.6 -- C<insert_with_values>
 
-C<insert_with_values> on ListStore and TreeStore is new in Gtk 2.6.  The
+C<insert_with_values()> on ListStore and TreeStore is new in Gtk 2.6.  The
 mix-in method is always provided by TreeModelFilter::Change and always calls
 to the child model but you might have to check what the child model has if
 you're using an oldish Gtk.
@@ -287,26 +287,27 @@ The same one or two arguments are then passed through to the child model.
 
 =item Data access -- C<get>, C<set>
 
-C<get> and C<set> fetch and store row data.  Make sure
+C<get()> and C<set()> fetch and store row data.  Make sure
 C<Gtk2::Ex::TreeModelFilter::Change> is before C<Glib::Object> in your
-C<@ISA> to have these versions instead of the object property C<get> and
-C<set>.  A C<use base> before C<Glib::Object::Subclass> as shown in the
+C<@ISA> to have these versions instead of the object property C<get()> and
+C<set()>.  A C<use base> before C<Glib::Object::Subclass> as shown in the
 synopsis above will accomplish that,
 
     use base 'Gtk2::Ex::TreeModelFilter::Change';
     use Glib::Object::Subclass 'Gtk2::TreeModelFilter';
 
-The object properties are always available under the names C<get_property>
-and C<set_property>, the same as in C<Gtk2::ListStore> and
+The object properties are always available under the names C<get_property()>
+and C<set_property()>, the same as in C<Gtk2::ListStore> and
 C<Gtk2::TreeStore>.
 
     $myfilter->set_property (propname => $propvalue);
 
 =item Filtered out rows -- C<set>, C<set_value>
 
-If a C<set> or C<set_value> of new data causes the child row to be filtered
-out, ie. to not appear in C<$filter>, then the given C<$iter> no longer
-refers to a valid row in the filtered model and cannot be used any more.
+If a C<set()> or C<set_value()> of new data causes the child row to be
+filtered out, ie. to not appear in C<$filter>, then the given C<$iter> no
+longer refers to a valid row in the filtered model and cannot be used any
+more.
 
 Currently the iter is not zapped to zeros, perhaps in the future it will be
 (it's extra work to check if still available, but would help keep you safe).

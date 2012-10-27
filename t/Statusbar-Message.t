@@ -39,7 +39,7 @@ require Gtk2::Ex::Statusbar::Message;
 
 #-----------------------------------------------------------------------------
 {
-  my $want_version = 47;
+  my $want_version = 48;
   is ($Gtk2::Ex::Statusbar::Message::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::Statusbar::Message->VERSION,  $want_version,

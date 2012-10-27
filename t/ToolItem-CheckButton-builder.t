@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2011 Kevin Ryde
+# Copyright 2011, 2012 Kevin Ryde
 
 # This file is part of Gtk2-Ex-WidgetBits.
 #
@@ -45,7 +45,7 @@ $builder->add_from_string (<<'HERE');
   <object class="Gtk2__Ex__ToolItem__CheckButton" id="toolitem">
     <child internal-child="overflow_menuitem">
       <object class="GtkMenuItem" id="overitem">
-        <property name="right-justified">1</property>
+        <property name="border-width">17</property>
       </object>
     </child>
   </object>
@@ -58,8 +58,8 @@ isa_ok ($toolitem, 'Gtk2::Ex::ToolItem::CheckButton',
 
 my $menuitem = $toolitem->retrieve_proxy_menu_item;
 isa_ok ($menuitem, 'Gtk2::MenuItem', 'overflow menuitem');
-is ($menuitem && $menuitem->get('right-justified'), 1,
-    'overflow menuitem right-justified');
+is ($menuitem && $menuitem->get('border-width'), 17,
+    'overflow menuitem border-width');
 
 # Something fishy seen in gtk 2.12.1 (with gtk2-perl 1.180, 1.183 or
 # 1.200) that $builder stays non-undef when weakened, though the objects

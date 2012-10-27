@@ -28,7 +28,7 @@ our @EXPORT_OK = qw(select_region_noclip
                     x_to_text_index
                     scroll_number_handler);
 
-our $VERSION = 47;
+our $VERSION = 48;
 
 sub select_region_noclip {
   my ($entry, $start, $end) = @_;

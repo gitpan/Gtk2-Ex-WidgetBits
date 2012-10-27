@@ -32,7 +32,7 @@ use warnings;
 # uncomment this to run the ### lines
 #use Smart::Comments;
 
-our $VERSION = 47;
+our $VERSION = 48;
 
 BEGIN {
   if (Gtk2::MenuItem->find_property('label')) {
@@ -137,8 +137,8 @@ provides versions of the following class methods
     new_with_mnemonic
 
 which behave like the base C<Gtk2::MenuItem> methods but create a widget of
-the given subclass, not merely a C<Gtk2::MenuItem> like the wrapped C code
-does.  This is designed as a multiple inheritance mix-in.  For example,
+the subclass, not merely a C<Gtk2::MenuItem> like the wrapped C code does.
+This is designed as a multiple inheritance mix-in.  For example,
 
     package My::MenuItem;
     use Glib::Object::Subclass 'Gtk2::MenuItem',
@@ -149,20 +149,20 @@ does.  This is designed as a multiple inheritance mix-in.  For example,
     use Gtk2::Ex::MenuItem::Subclass;
     unshift @ISA, 'Gtk2::Ex::MenuItem::Subclass';
 
-Then in application code create a C<My::MenuItem> widget with
+Then application code can create a C<My::MenuItem> widget with
 
     my $item = My::MenuItem->new ('_Foo');
 
-C<$item> is created as a C<My::MenuItem>, as the call would suggest.
-Similarly C<new_with_label> and C<new_with_mnemonic>.
+C<$item> is created as a C<My::MenuItem>, as the call suggests.  Similarly
+C<new_with_label()> and C<new_with_mnemonic()>.
 
 The same can be done when subclassing from C<Gtk2::CheckMenuItem> too.
 
 =head2 C<ISA> order
 
 The C<unshift @ISA> shown above ensures C<Gtk2::Ex::MenuItem::Subclass> is
-before the C<new_with_label> and C<new_with_mnemonic> from
-C<Gtk2::MenuItem>, and also before the C<new> from
+before the C<new_with_label()> and C<new_with_mnemonic()> from
+C<Gtk2::MenuItem>, and also before the C<new()> from
 C<Glib::Object::Subclass>.  The effect is
 
     @ISA = ('Gtk2::Ex::MenuItem::Subclass',
@@ -196,7 +196,7 @@ with it.
 =item C<< $item = $class->new ($str) >>
 
 Create and return a new menu item widget of C<$class>.  If a C<$str>
-argument is given then this behaves as C<new_with_mnemonic> below.
+argument is given then this behaves as C<new_with_mnemonic()> below.
 
 =item C<< $item = $class->new_with_label () >>
 
@@ -206,8 +206,8 @@ Create and return a new menu item widget of C<$class>.  If a C<$str>
 argument is given then a C<Gtk2::AccelLabel> child is created and added to
 display that string.  C<$str> should not be C<undef>.
 
-If there's no C<$str> argument then C<new_with_label> behaves the same as
-plain C<new> and doesn't create a child widget.
+If there's no C<$str> argument then C<new_with_label()> behaves the same as
+plain C<new()> and doesn't create a child widget.
 
 =item C<< $item = $class->new_with_mnemonic () >>
 
@@ -219,28 +219,28 @@ display that string.  An underscore in the string becomes an underline and
 keyboard shortcut, eg. "_Edit" for underlined "E".  C<$str> should not be
 C<undef>.
 
-If there's no C<$str> argument then C<new_with_mnemonic> behaves the same as
-plain C<new> and doesn't create a child widget.
+If there's no C<$str> argument then C<new_with_mnemonic()> behaves the same
+as plain C<new()> and doesn't create a child widget.
 
 =back
 
-For Gtk 2.16 and up C<new_with_label> simply sets the C<label> property and
-C<new_with_mnemonic> sets the C<label> and C<use-underline> properties.  For
-earlier versions an explicit C<Gtk2::AccelLabel> creation is done as per
-past code in C<gtk_menu_item_new_with_label()> and
+For Gtk 2.16 and up C<new_with_label()> simply sets the C<label> property
+and C<new_with_mnemonic()> sets the C<label> and C<use-underline>
+properties.  For earlier versions an explicit C<Gtk2::AccelLabel> creation
+is done as per past code in C<gtk_menu_item_new_with_label()> and
 C<gtk_menu_item_new_with_mnemonic()>.
 
 For reference, it doesn't work to re-bless the return from the MenuItem
-widgets from the base C<new_with_label> and C<new_with_mnemonic> into a new
-subclass.  Doing so changes the Perl hierarchy but doesn't change the
+widgets from the base C<new_with_label()> and C<new_with_mnemonic()> into a
+new subclass.  Doing so changes the Perl hierarchy but doesn't change the
 underlying C code object C<GType> and therefore doesn't get new properties
 or signals from the subclass.
 
 =head1 OTHER WAYS TO DO IT
 
 When running on Gtk 2.16 the C<label> property can be used instead of
-C<new_with_label> and so in a subclass there's no particular need to have
-the separate C<new_with_label>.
+C<new_with_label()> and so in a subclass there's no particular need to have
+the separate C<new_with_label()>.
 
     package My::MenuItem;
     use Glib::Object::Subclass 'Gtk2::MenuItem';
@@ -249,7 +249,7 @@ the separate C<new_with_label>.
     my $item = My::MenuItem->new (label => 'Hello');
 
 But the benefit of C<Gtk2::Ex::MenuItem::Subclass> is that you don't leave
-exposed a C<new_with_label> which does the wrong thing, and it can work on
+exposed a C<new_with_label()> which does the wrong thing, and it can work on
 Gtk prior to 2.16.
 
 =head1 SEE ALSO

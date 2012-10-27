@@ -23,7 +23,7 @@ use Gtk2;
 use Scalar::Util;
 use Gtk2::Ex::Statusbar::DynamicContext;
 
-our $VERSION = 47;
+our $VERSION = 48;
 
 use Glib::Object::Subclass
   'Glib::Object',
